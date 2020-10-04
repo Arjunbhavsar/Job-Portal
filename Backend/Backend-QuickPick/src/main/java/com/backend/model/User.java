@@ -1,5 +1,6 @@
 package com.backend.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,8 +16,15 @@ public class User {
 	private int id;
 	private String firstName;
 	private String lastName;
+	
+	@Column(unique= true)
+	private String username;
+	
 	private String emailId;
 	private String address;
+	private String password;
+	
+	
 	
 	public int getId() {
 		return id;
@@ -36,6 +44,12 @@ public class User {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	public String getEmailId() {
 		return emailId;
 	}
@@ -47,6 +61,12 @@ public class User {
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 }	

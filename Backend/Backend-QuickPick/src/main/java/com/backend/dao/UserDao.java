@@ -7,6 +7,7 @@ import com.backend.model.User;
 
 @Repository
 public interface UserDao extends JpaRepository<User, Integer>	{
-
+	
+	User findByusername(String username);
 }
 	

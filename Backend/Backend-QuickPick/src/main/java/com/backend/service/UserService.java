@@ -26,4 +26,25 @@ public class UserService implements UserServiceInterface {
 		return (List<User>) userDao.findAll();
 	}
 
+	@Override
+	public String login(User user) {
+		
+		if(user != null) { 
+				
+			if (user.getUsername() != null && user.getPassword() != null ) {
+				User result = userDao.findByusername(user.getUsername());
+				if(result!= null) {
+					if(result.getPassword() != null && result.getPassword().equals(user.getPassword())  ) {
+						
+						return "Login Successful";
+						
+					}
+				}else {
+					return "User Not Found";
+				}
+			}
+		}
+		return "Login Failed";
+	}
+
 }

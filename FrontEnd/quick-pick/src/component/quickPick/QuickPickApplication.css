@@ -1,0 +1,10 @@
+button{
+    color:chartreuse;
+    padding: 25px;
+    size: 15px;
+    background-color:darkmagenta;
+}
+
+.row{
+    padding: 25px 25px 25px 25px;
+}

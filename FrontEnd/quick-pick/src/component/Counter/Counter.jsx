@@ -34,14 +34,14 @@ class Counter extends Component {
 
 class CounterButton extends Component{
 
-    constructor(){
-        super();
-        // this.state = {
-        //     counter : 0 
-        // }
+    // constructor(){
+    //     super();
+    //     // this.state = {
+    //     //     counter : 0 
+    //     // }
 
-        // this.increment = this.increment.bind(this);
-    }
+    //     // this.increment = this.increment.bind(this);
+    // }
 
     render(){
         return(
