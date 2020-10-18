@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AutheticationService from './AuthenticationService.js'
 import UserService from '../../api/UserService';
+import './LoginComponent.css'
 
 class LoginComponenet extends Component {
     constructor(props){
@@ -111,15 +112,15 @@ class LoginComponenet extends Component {
 
             <>
             <div className="LoginFeature align-items-center" >
-                <h1>Login...</h1>
+                
 
                 <div className="container text-center" >
-
                     {/* <ShowInvalidCredentials hasLoginFailed= {this.state.hasLoginFailed}/> */}
                     {/* <ShowLoginSuccessMessage showSuccessMessage = {this.state.showSuccessMessage}/> */}
                     {this.state.noUserFound && <div className="alert alert-warning"> User is not Registered</div>}
                     {this.state.hasLoginFailed && <div className="alert alert-warning"> Invalid Credentials</div>}
                     {this.state.showSuccessMessage && <div> Login Succussful</div>}
+                    <h1 class='row'>Login...</h1>
                     <div className='row' style={{ padding: "5px 5px 5px 5px" }}>
                         Username : <input type="text" 
                                         placeholder="Username..." 
