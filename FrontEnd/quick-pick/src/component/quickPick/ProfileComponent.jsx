@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { Table } from 'reactstrap';
 import UserService from '../../api/UserService';
+import FileUploader from './FileUploader';
+
+import { Paper, Grid, List, ListItem, ListItemText, ListItemAvatar, Avatar, Divider } from '@material-ui/core/';
+import { AccountCircle, Email, ContactMail } from '@material-ui/icons';
 
 class ProfileComponent extends Component {
 	state = {  }
@@ -20,41 +23,69 @@ class ProfileComponent extends Component {
 							.then(result => result.data);
 							console.log('loading data ...');
 		this.setState({userObj : data, isLoading : false});
+		var evt = document.createEvent('Event');  
+        evt.initEvent('load', false, false);  
+        window.dispatchEvent(evt);
 	}
 
 	render() {
-		// const {userObj, isLoading, userName} = this.state;
 		UserService.executeGetUserService(sessionStorage.getItem('authenticatedUser')).then(result => console.log(result.data));
 		const {userObj, isLoading} = this.state;
-		userObj && console.log("YEAH : " + userObj.emailId);
+		
+		const style = {Paper : {padding:20, marginTop:10, marginBottom:10}}
 
 		if(isLoading)
 			return (<div>Loading...</div>);
 		return (
 			<div>
-				<Table className="mt-4">
-					<thead>
-						<tr>
-							<th>
-								<div style={{'display':'inline'},{'align':'left'}}>
-									<img	src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-											width="7.5%" height="7.5%" alt="Blank" style={{'borderRadius':'50px'}}/>
-								</div>
-								<div style={{'display':'inline'},{'whiteSpace':'nowrap'}}>
-									<h2>
-										{userObj.username}
-									</h2>
-								</div>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-							<tr>{userObj.username}</tr>
-							<tr>{userObj.firstName} {userObj.lastName}</tr>
-							<tr>{userObj.emailId}</tr>
-							<tr>{userObj.address}</tr>
-					</tbody>
-				</Table>
+				<Grid container justify="center">
+					<Grid item sm={6}>
+						<Paper style={style.Paper}>
+							<Grid container>
+								<Grid item sm>
+										<img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+												width="200px" height="200px" alt="Blank" style={{'borderRadius':'50px'}}/>
+										<h2>{userObj.username}</h2>
+								</Grid>
+								<Grid item sm>
+									<List>
+										<ListItem>
+											<ListItemAvatar>
+											<Avatar>
+												<AccountCircle />
+											</Avatar>
+											</ListItemAvatar>
+											<ListItemText primary={userObj.firstName+" "+userObj.lastName}/>
+										</ListItem>
+										<Divider variant="inset" component="li" />
+										<ListItem>
+											<ListItemAvatar>
+											<Avatar>
+												<Email />
+											</Avatar>
+											</ListItemAvatar>
+											<ListItemText primary={userObj.emailId}/>
+										</ListItem>
+										<Divider variant="inset" component="li" />
+										<ListItem>
+											<ListItemAvatar>
+											<Avatar>
+												<ContactMail />
+											</Avatar>
+											</ListItemAvatar>
+											<ListItemText primary={userObj.address}/>
+										</ListItem>
+									</List>
+								</Grid>
+							</Grid>
+						</Paper>
+					</Grid>
+				</Grid>
+				<Grid container justify="center">
+					<Grid item sm={6}>
+						<FileUploader/>
+					</Grid>
+				</Grid>
 			</div>
 		);
 	}
