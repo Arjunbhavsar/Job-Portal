@@ -4,14 +4,13 @@ import UserService from '../../api/UserService';
 import './RegisterComponent.css'
 
 class RegisterComponenet extends Component {
-	
-    constructor(props){
-        super(props)
-
-        this.state = {
+	constructor(props){
+		super(props)
+		
+		this.state = {
 			firstName: '',
 			username:'',
-            lastName:'',
+			lastName:'',
 			address: "",
 			emailId: '',
 			password: '',
@@ -20,35 +19,35 @@ class RegisterComponenet extends Component {
 			errorMessage : ''
 		};
 		
-        this.update = this.update.bind(this);
+		this.update = this.update.bind(this);
 		this.registerClicked = this.registerClicked.bind(this);
 		this.handleError = this.handleError.bind(this);
 		this.handleSuccessResponse = this.handleSuccessResponse.bind(this);
-    }
+	}
 
-    update(e) {
+	update(e) {
 		let name = e.target.name;
 		let value = e.target.value;
 		this.setState({
 			[name]: value
 		});
-    }
+	}
 
-    registerClicked(){
+	registerClicked(){
 		
-        const user = {
+		const user = {
 			username:this.state.username,
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            address: this.state.address,
-            emailId: this.state.emailId,
-            password:this.state.password
-    
-        };
-        console.log(`before-${user}`);
+			firstName: this.state.firstName,
+			lastName: this.state.lastName,
+			address: this.state.address,
+			emailId: this.state.emailId,
+			password:this.state.password
+	
+		};
+		console.log(`before-${user}`);
 
-        UserService.executePostUserRegisterService(user)
-        .then(response=>this.handleSuccessResponse(response))
+		UserService.executePostUserRegisterService(user)
+		.then(response=>this.handleSuccessResponse(response))
 		.catch(error => this.handleError(error))
 	}
 	handleSuccessResponse(response){
@@ -74,9 +73,9 @@ class RegisterComponenet extends Component {
 	}
 
 
-    render(){
-        return(
-            <div className="bg-img1">
+	render(){
+		return(
+			<div className="bg-img1">
 				<div className="container text-center">
 					<div className="register margin" >
 						<form className="margin"onSubmit={this.displayLogin} >
@@ -102,7 +101,7 @@ class RegisterComponenet extends Component {
 								/>
 							</div>
 
-                            <div className="lastName margin">
+							<div className="lastName margin">
 								<input
 									type="text"
 									placeholder="Last Name"
@@ -121,8 +120,8 @@ class RegisterComponenet extends Component {
 									onChange={this.update}
 								/>
 							</div>
-                            
-                            <div className="address margin">
+							
+							<div className="address margin">
 								<input
 									type="text"
 									placeholder="address"
@@ -132,7 +131,7 @@ class RegisterComponenet extends Component {
 								/>
 							</div>
 							
-                            <div className="pasword margin">
+							<div className="pasword margin">
 								<input
 									type="password"
 									placeholder="Password"
@@ -159,14 +158,10 @@ class RegisterComponenet extends Component {
 
 						<span className="alert">{this.state.errorMessage}</span>
 					</div>
-
-
 					
 				</div>
 			</div>
-        )
-    }
+		)
+	}
 }
-
-
 export default RegisterComponenet;

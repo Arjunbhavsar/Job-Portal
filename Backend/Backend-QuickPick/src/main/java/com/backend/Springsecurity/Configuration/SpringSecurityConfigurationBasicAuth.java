@@ -13,7 +13,7 @@ public class SpringSecurityConfigurationBasicAuth extends WebSecurityConfigurerA
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 //		logger.debug("Using default configure(HttpSecurity). If subclassed this will potentially override subclass configure(HttpSecurity).");
-
+		http.headers().frameOptions().disable();
 		http
 		    .csrf().disable()
 			.authorizeRequests()

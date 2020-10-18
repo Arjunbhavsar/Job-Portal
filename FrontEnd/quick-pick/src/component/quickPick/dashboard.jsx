@@ -16,7 +16,7 @@ class WelcomeComponent extends Component{
                 Welcome!!
             </h1>
             <div className="container">
-                Hello {this.props.match.params.name}, Welcometo the home Page 
+                Hello {this.props.match.params.name}, Welcome to the home Page 
             </div>
             <button className="btn btn-success" onClick={this.retrieveUserList}>get Users</button>
         </>

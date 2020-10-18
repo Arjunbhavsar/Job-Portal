@@ -25,6 +25,14 @@ public class UserService implements UserServiceInterface {
 		
 		return (List<User>) userDao.findAll();
 	}
+	
+	public User getUser(String username) {
+		User target = null;
+		for(User current : userDao.findAll())
+			if(current.getUsername().equals(username))
+				target = current;
+		return target;
+	}
 
 	@Override
 	public String login(User user) {
