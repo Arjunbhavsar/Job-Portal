@@ -76,9 +76,9 @@
     height: 1.5em;
 }
 
-
 .profileMenu {
     text-decoration: none;
+    color: black;
 }
 
 .loginButton:hover {

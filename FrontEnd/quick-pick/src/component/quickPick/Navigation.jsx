@@ -1,8 +1,9 @@
 import React from 'react';
 import { Component } from 'react';
 import { Link } from 'react-router-dom';
-import './Navigation.css'
-import logo from './quickpick-logo2-transparent-small.png'
+import AuthenticationService from './AuthenticationService';
+import './Navigation.css';
+import logo from './quickpick-logo2-transparent-small.png';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from "@material-ui/core/IconButton";
@@ -71,33 +72,69 @@ const useStyles = makeStyles((theme) => ({
 export default function Navgiation() {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
-  
     const isMenuOpen = Boolean(anchorEl);
     const menuId = "primary-search-account-menu";
-
+    var dash = 'active';
+    var other = 'hidden';
+    const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
-    
+    const handleNavButtonClick = (event) => {
+        // accessible
+        if (event.target.class == "navButton dash" && event.target.id == "hidden"){
+            event.target.id = "active";
+        }
+     };
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
-
-    const renderMenu = (
+    var renderMenu = (
         // Add information here to check if already logged in and have a seperate menu with if conditionals
         <Menu
-          anchorEl={anchorEl}
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          class="thing"
-        //   id={menuId}
-          keepMounted
-          transformOrigin={{ vertical: "top", horizontal: "right" }}
-          open={isMenuOpen}
-          onClose={handleMenuClose}
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        id={menuId}
+        keepMounted
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        open={isMenuOpen}
+
+        onClose={handleMenuClose}
         >
-          <MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><Link to="/login" class="profileMenu">Login</Link></MenuItem>
+            <MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><Link to="/login" class="profileMenu">Login</Link></MenuItem>
+            <MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><Link to="/register" class="profileMenu">Register</Link></MenuItem>
         </Menu>
-      );
+    );
+    function changeActive(path){
+        console.log(other);
+        if (path == "/"){
+            dash = 'active';
+            other = 'hidden';
+        } else if (path == "/other"){
+            dash = 'hidden';
+            other = 'active';
+        }
+    };
+
+    if (isUserLoggedIn == true){
+        renderMenu = (
+            // Add information here to check if already logged in and have a seperate menu with if conditionals
+            
+            <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            id={menuId}
+            keepMounted
+            transformOrigin={{ vertical: "top", horizontal: "right" }}
+            open={isMenuOpen}
+            onClose={handleMenuClose}
+            >
+                <MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><Link to="/profile" class="profileMenu">Profile</Link></MenuItem>
+                <MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><Link to="/" class="profileMenu">Log Out</Link></MenuItem>
+            </Menu>
+        );
+    }
+
     //   id={this.index}
     return (
         <div class="navBar"> 
@@ -105,9 +142,9 @@ export default function Navgiation() {
             <div class="navControls">
                 
                 <table>
-                    <td><NavButton page={"hidden"} name={"Dash"} to={"/"}/></td>
-                    <td><NavButton page={"hidden"} name={"Profile"} to={"/profile"}/></td>
-                    <td><NavButton page={"hidden"} name={"Other"} /></td>
+                    <td><Link class="navButton dash" onClick={handleNavButtonClick} id={dash} to="/">Dash</Link></td>
+                    <td><Link class="navButton other" onClick={handleNavButtonClick} id={other} to="/other">Other</Link></td>
+                    {/* <td><NavButton page={"hidden"} name={"Profile"} to={"/profile"}/></td> */}
                 </table>
             </div>
             <MenuItem onClick={handleProfileMenuOpen} class="account">
@@ -125,28 +162,4 @@ Navigation.defaultProps = {
     index: "dash"
 }
 
-class NavButton extends Component {
-    constructor() {
-        super();
-    }
-    render(){
-        
-        return(
-            <Link class="navButton" id={this.props.page} to={this.props.to}>{this.props.name}</Link>
-        )
-    }
-}
-
-class SmallLogin extends Component {
-    constructor() {
-        super();
-    }
-    render(){
-        return(
-            <div class="smallLog">
-                <Link><AccountCircle class="account"/></Link>
-            </div>
-        )
-    }
-}
 
