@@ -1,2 +1,0 @@
-insert into user values (1, '82043 CA-111, Indio, CA 92201', 'apple@gmail.com', 'Apple','Smith','123app','AppleEater1')
-insert into user values (2, '382 N Clovis Ave, Clovis, CA 93612', 'kiwi@gmail.com', 'Kiwi','Jones','123kiw','KiwiEater2')
