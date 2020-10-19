@@ -105,8 +105,8 @@ export default function Navgiation() {
 
         onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><Link to="/login" class="profileMenu">Login</Link></MenuItem>
-            <MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><Link to="/register" class="profileMenu">Register</Link></MenuItem>
+            <Link to="/login" class="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Login</MenuItem></Link>
+            <Link to="/register" class="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Register</MenuItem></Link>
         </Menu>
     );
     function changeActive(path){
@@ -133,8 +133,8 @@ export default function Navgiation() {
             open={isMenuOpen}
             onClose={handleMenuClose}
             >
-                <MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><Link to={"/profile/"+user} class="profileMenu">Profile</Link></MenuItem>
-                <MenuItem onClick={handleMenuCloseLogout} id="accountIconMenuItem"><Link to="/" class="profileMenu">Log Out</Link></MenuItem>
+                <Link to={"/profile/"+user} class="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Profile</MenuItem></Link>
+                <Link to="/" class="profileMenuLink"><MenuItem onClick={handleMenuCloseLogout} id="accountIconMenuItem">Log Out</MenuItem></Link>
             </Menu>
         );
     }

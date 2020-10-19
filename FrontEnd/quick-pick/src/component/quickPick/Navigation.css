@@ -71,12 +71,17 @@
     font-size: 20px;
     font-weight: 500;
 }
+
+.profileMenuLink{
+    text-decoration: none;
+}
+
 #accountIcon {
     width: 1.5em;
     height: 1.5em;
 }
 
-.profileMenu {
+#accountIconMenuItem{
     text-decoration: none;
     color: black;
 }
