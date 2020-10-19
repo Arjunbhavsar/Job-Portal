@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
+import logo from './logo.svg';
+import AppRouting from './component/quickPick/Routing'
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import QuickPickApplication from './component/quickPick/QuickPickApplication';
 
 class App extends Component {
-  	render() {
-    	return (
-			<div className="App">
-				<QuickPickApplication/>
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div className="App">
+          <AppRouting/>
+      </div>
+    );
+  }
 }
+
 export default App;

@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 }))
 
-function FileUploader() {
+function FileUploadComponent() {
 	const classes = useStyles()
 	const [loading, setLoading] = React.useState(false)	// same thing as defining in constructor and doing this.setState({loading : bool})
 	const [success, setSuccess] = React.useState(false)
@@ -173,4 +173,4 @@ function FileUploader() {
 		</Paper>
 	);
 }
-export default FileUploader;
+export default FileUploadComponent;

@@ -1,34 +1,71 @@
-import React, { Component } from 'react';
-import UserService from '../../api/UserService';
+import React from 'react';
+import { Component } from 'react';
+import './Dashboard.css'
 
-class WelcomeComponent extends Component{
-    constructor(props){
-        super(props)
-
-        this.retrieveUserList = this.retrieveUserList.bind(this);
+class Dashboard extends Component {
+    constructor() {
+        super();
     }
-
 
     render(){
-    return (
-        <>
-            <h1>
-                Welcome!!
-            </h1>
-            <div className="container">
-                Hello {this.props.match.params.name}, Welcome to the home Page 
+        return(
+            <div class="contianer">
+                <div class="left">
+                    <JobListItems />
+                    <JobListItems />
+                    <JobListItems />
+                    <JobListItems />
+                    <JobListItems />
+                    <JobListItems />
+                    <JobListItems />
+                    <JobListItems />
+                    <JobListItems />
+                    <JobListItems />
+                </div>
+                <div class="right">
+                    <SelectedJob />
+                </div>
             </div>
-            <button className="btn btn-success" onClick={this.retrieveUserList}>get Users</button>
-        </>
-    )
-    }
-
-
-    retrieveUserList(){
-        UserService.executeGetUserListService()
-        .then(response => console.log(response))
-        //.catch()
+        )
     }
 }
 
-export default WelcomeComponent
+class JobListItems extends Component {
+    constructor(){
+        super();
+        this.i = 0
+    }
+    render(){
+        return(
+            <div class="test"><p>*Temperary Item*</p></div>
+        )
+    }
+}
+
+
+class SelectedJob extends Component {
+    constructor(){
+        super();
+    }
+    render(){
+        if (this.props.status == null){
+            return(
+                <div class="content" id="job">
+                    <p class="NoJob">Select Job</p>
+                </div>
+            )
+        } else {
+            return(
+                <div class="content" id="job">
+                    {/* Call specific job information here */}
+                </div>
+            )
+        }
+    }
+}
+
+SelectedJob.defaultProps = {
+    status: null
+}
+
+export default Dashboard

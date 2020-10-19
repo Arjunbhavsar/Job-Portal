@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import UserService from '../../api/UserService';
-import FileUploader from './FileUploader';
+import FileUploadComponent from './FileUploadComponent';
 
 import { Paper, Grid, List, ListItem, ListItemText, ListItemAvatar, Avatar, Divider } from '@material-ui/core/';
 import { AccountCircle, Email, ContactMail } from '@material-ui/icons';
+
+import './RegisterComponent.css'
 
 class ProfileComponent extends Component {
 	state = {  }
@@ -23,8 +25,8 @@ class ProfileComponent extends Component {
 							.then(result => result.data);
 							console.log('loading data ...');
 		this.setState({userObj : data, isLoading : false});
-		var evt = document.createEvent('Event');  
-        evt.initEvent('load', false, false);  
+		var evt = document.createEvent('Event');
+        evt.initEvent('load', false, false);
         window.dispatchEvent(evt);
 	}
 
@@ -37,7 +39,7 @@ class ProfileComponent extends Component {
 		if(isLoading)
 			return (<div>Loading...</div>);
 		return (
-			<div>
+			<div className="container">
 				<Grid container justify="center">
 					<Grid item sm={6}>
 						<Paper style={style.Paper}>
@@ -83,7 +85,7 @@ class ProfileComponent extends Component {
 				</Grid>
 				<Grid container justify="center">
 					<Grid item sm={6}>
-						<FileUploader/>
+						<FileUploadComponent/>
 					</Grid>
 				</Grid>
 			</div>
