@@ -1,11 +1,3 @@
-# Quick-Pick - Profile Page
+# Quick-Pick
+<p> Our dream is to help everyone find meaningful and fulfilling employment. Our website will verify a user’s identity to help match them with a job, and then they can create their own job listing. This creates a level of trust between our websites and employers. The website will have a unique feature that can track availability to match the seekers and employers, as well as a function that checks qualifications and skills. Once the connection is made, the seeker and employer can easily communicate to find the best shifts and schedule based on their needs. This website is for anyone who needs a second job, are unable to work on a fixed schedule, or simply have a limit on their availability.</p>
 
-## Changes Made:
-- Added profile page and linked it with the router.
-- Added a function in UserController.java for getting specific users
-- Fixed executeGetUserListService in UserService.js and added executeGetUserService(username) for getting specific username
-- Fixed HeaderComponent.jsx because it said in the URL /Arjun when it should be whoever is logged in
-
-## Working On:
-- Early stage of file uploading
-- Profile page refresh issue
