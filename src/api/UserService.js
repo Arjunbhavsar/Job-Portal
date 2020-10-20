@@ -64,7 +64,21 @@ class getUsersListService{
 				}
 			}
         )
-    }
+	}
+	
+	checkifUsernameAvailable(username){
+
+		let user = 'user'
+		let password = 'password'
+		console.log(username)
+		let basicAuthHeader = 'Basic '+window.btoa(user+':'+password)
+
+	   return axios.get(`http://localhost:9090/user/checkUsername/${username}`,{
+		   headers:{
+			   authorization: basicAuthHeader
+		   }
+	   })
+   }
 }
 
 
