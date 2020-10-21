@@ -42,4 +42,9 @@ public class UserController {
 	public String login(@RequestBody User user){
 		return userService.login(user);
 	}
+	
+	@GetMapping("/checkUsername/{username}")
+	public String checkIfUsernameExists(@PathVariable String username){
+		return userService.checkIfUsernameExists(username);
+	}
 }
