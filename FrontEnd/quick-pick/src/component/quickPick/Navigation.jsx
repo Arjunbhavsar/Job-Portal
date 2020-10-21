@@ -9,6 +9,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { Navigation } from '@material-ui/icons';
+import InputBase from '@material-ui/core/InputBase';
+import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -141,24 +143,55 @@ export default function Navgiation() {
 
     //   id={this.index}
     return (
-        <div class="navBar"> 
-            <img src={logo} alt="logo" class="logo"/>
-            <div class="navControls">
-                
-                <table>
-                    <td><Link class="navButton dash" onClick={handleNavButtonClick} id={dash} to={"/"}>Dash</Link></td>
-                    <td><Link class="navButton other" onClick={handleNavButtonClick} id={other} to="/other">Other</Link></td>
-                    {/* <td><NavButton page={"hidden"} name={"Profile"} to={"/profile"}/></td> */}
-                </table>
+      <div class="navBar"> 
+          <img src={logo} alt="logo" class="logo"/>
+          <div class="navControls">
+              
+              <table>
+                  <td><Link class="navButton dash" onClick={handleNavButtonClick} id={dash} to={"/"}>Dash</Link></td>
+                  <td><Link class="navButton other" onClick={handleNavButtonClick} id={other} to="/other">Other</Link></td>
+                  {/* <td><NavButton page={"hidden"} name={"Profile"} to={"/profile"}/></td> */}
+              </table>
+          </div>
+          <div class="rightNav">
+            <div className={classes.search} id="searchBar">
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Search by title..."
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+                id = "searchInput"
+              />
             </div>
-            <MenuItem onClick={handleProfileMenuOpen} class="account">
-                <IconButton >
-                    <AccountCircle id="accountIcon"/>
-                </IconButton>
-            </MenuItem>
-            {renderMenu}
-        </div>
-    )
+            <div className={classes.search} id="searchBar">
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Search by location…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+                id = "searchInput"
+              />
+            </div>
+          
+          <MenuItem onClick={handleProfileMenuOpen} class="account">
+              <IconButton >
+                  <AccountCircle id="accountIcon"/>
+              </IconButton>
+          </MenuItem>
+          </div>
+          {renderMenu}
+      </div>
+  )
     
 }
 
