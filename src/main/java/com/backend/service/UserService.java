@@ -54,5 +54,16 @@ public class UserService implements UserServiceInterface {
 		}
 		return "Login Failed";
 	}
-
+	
+	public String checkIfUsernameExists(String username) {
+		if(username != null) { 
+			User result = userDao.findByusername(username);
+			if(result!= null) {
+				return "Username not available";
+			}else {
+				return "Username available";
+			}
+		}
+		return "Something went wrong";
+	}
 }
