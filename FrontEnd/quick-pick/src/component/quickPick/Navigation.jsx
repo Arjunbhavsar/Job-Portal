@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import AuthenticationService from './AuthenticationService';
 import './Navigation.css';
@@ -9,7 +9,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { Navigation } from '@material-ui/icons';
-import { createMuiTheme } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -68,15 +67,7 @@ const useStyles = makeStyles((theme) => ({
         }
     }
   }));
-const theme = createMuiTheme({
-    props: {
-    // Name of the component ⚛️
-        MuiButtonBase: {
-            // The properties to apply
-            disableRipple: true, // No more ripple, on the whole application 💣!
-        },
-    },
-});
+
 
 export default function Navgiation() {
     const classes = useStyles();

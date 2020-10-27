@@ -1,6 +1,8 @@
 import React from 'react';
 import { Component } from 'react';
 import './Dashboard.css'
+import SearchBar from './SearchBar';
+
 
 class Dashboard extends Component {
     constructor() {
@@ -11,24 +13,29 @@ class Dashboard extends Component {
         }
     }
 
+    updateInput(value) {
+        console.log(value)
+    }
+    
+    changeJob(id){
+        this.setState(
+            ()=>{
+                return {jobID: id}
+            }
+        )
+    }
+
     render(){
         return(
             <div class="contianer">
                 <div class="left">
+                    <SearchBar  holder="Search by title..." search={this.updateInput}/>
                     <JobListItems />
                 </div>
                 <div class="right">
                     <SelectedJob />
                 </div>
             </div>
-        )
-    }
-
-    changeJob(id){
-        this.setState(
-            ()=>{
-                return {jobID: id}
-            }
         )
     }
 }
@@ -42,20 +49,20 @@ class JobListItems extends Component {
         return(
             <div>
                 <div class="leftItem">
-                    <p class="title">Graphic Designer</p>
-                    <p class="company">MetroNet</p>
-                    <p class="location">Evansville, IN</p>
-                    <ul class="description">
-                        <li>We’re looking for tech-savvy, innovative thinkers to join our team and help us create what's next!</li>
-                    </ul>
-                </div>
-                <div class="leftItem">
                     <p class="title">360 Photographer</p>
                     <p class="company">Threshold 360</p>
                     <p class="location">Indianapolis, IN</p>
                     {/* <p class="description">Those who are active freelance photographers are preferred.</p> */}
                     <ul class="description">
                         <li>Those who are active freelance photographers are preferred.</li>
+                    </ul>
+                </div>
+                <div class="leftItem">
+                    <p class="title">Graphic Designer</p>
+                    <p class="company">MetroNet</p>
+                    <p class="location">Evansville, IN</p>
+                    <ul class="description">
+                        <li>We’re looking for tech-savvy, innovative thinkers to join our team and help us create what's next!</li>
                     </ul>
                 </div>
                 <div class="leftItem">
