@@ -50,7 +50,7 @@
     align-self: center;
     margin: 10px 15px 10px 15px;
     height: fit-content;
-    max-height: 150px;
+    /* max-height: 150px; */
     display: flex;
     border-radius: 5px;
     flex-direction: column;
@@ -59,6 +59,8 @@
     border: grey solid 1px;
     font-family: 'Noto Sans','Helvetica Neue',Helvetica,Arial,sans-serif !important;
     padding: 1.25rem;
+    /* overflow: hidden;
+    text-overflow: ellipsis; */
 }
 
 .leftItem:hover {
@@ -71,6 +73,7 @@
 .title, .description, .location, .company {
     margin: 3px;
     font-size: 18px;
+    
 }
 
 .title {
@@ -87,6 +90,9 @@
     font-size: 14px;
     color: #5e5e5e;
     margin-left: -15px;
+    overflow: hidden;
+    text-overflow: '...';
+    
 }
 
 ::-webkit-scrollbar {
@@ -159,4 +165,12 @@
 
 .searchButton:hover {
     cursor: pointer;
+}
+
+.left button {
+    padding: 8px 20px;
+    width: fit-content;
+    cursor: pointer;
+    margin: auto;
+    margin-bottom: 10px;
 }

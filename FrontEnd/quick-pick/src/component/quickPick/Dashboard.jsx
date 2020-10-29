@@ -11,29 +11,31 @@ class Dashboard extends Component {
         this.state = {
             jobID : 0
         }
+        this.changeJob = this.changeJob.bind(this);
+        this.updateInput = this.updateInput.bind(this);
     }
 
     updateInput(value) {
         console.log(value)
     }
     
-    changeJob(id){
+    changeJob(id) {
         this.setState(
             ()=>{
                 return {jobID: id}
             }
         )
     }
-
+    
     render(){
         return(
             <div class="contianer">
                 <div class="left">
                     <SearchBar  holder="Search by title..." search={this.updateInput}/>
-                    <JobListItems />
+                    <JobListItems jobSelect={this.changeJob} />
                 </div>
                 <div class="right">
-                    <SelectedJob />
+                    <SelectedJob jobID={this.state.jobID}/>
                 </div>
             </div>
         )
@@ -43,10 +45,97 @@ class Dashboard extends Component {
 class JobListItems extends Component {
     constructor(){
         super();
-        this.i = 0
+        this.state = {
+            total: 0
+        }
+        this.handleSelect = this.handleSelect.bind(this);
+        this.loadmore = this.loadmore.bind(this); 
+        this.leftToLoad = 10; // Math.max(10, {call backend of how many jobs are left in the search list})
+        this.allIDs = []; //getIDs(this.leftToLoad)
+        this.jobs = [];
+        this.tempJob = [1023,'360 Photographer', 'Threshold 360', 'Indianapolis, IN', 'Those who are active freelance photographers are preferred.'];
+        while(this.leftToLoad > 0){
+            console.log(this.leftToLoad);
+            this.jobs.push(<BuildJobItem changeJob={this.handleSelect} jobInfo={this.tempJob} />)// title={this.tempJob[1]} company={this.tempJob[2]} location={this.tempJob[3]} desc={this.tempJob[4]} 
+            this.tempJob[0] = this.tempJob[0] + 1;
+            this.leftToLoad = this.leftToLoad - 1;
+            console.log(this.leftToLoad);
+            this.setState({total: this.state.total + 1});
+            // Above is temperary information the information will be called from backend
+        }
     }
+
+    handleSelect(id) {
+        this.props.jobSelect(id);
+    }
+    
+    loadmore() {
+        console.log('load more');
+        this.leftToLoad = this.leftToLoad + 1; // Math.max(10, this.state.total - {call backend of how many jobs are left in the search list})
+    }
+    
     render(){
         return(
+            <div>
+                {this.jobs}
+                <button type="button" onClick={this.loadmore}>Load more</button>
+            </div>
+        )
+    }
+}
+
+class BuildJobItem extends Component{
+    constructor(){
+        super();
+        this.clicked = this.clicked.bind(this);
+    }
+    
+    clicked(event){
+        this.props.changeJob(this.props.jobInfo[0]);
+    }
+
+    render(){
+        return(
+            <div class="leftItem" onClick={this.clicked}>
+                <p class="title">{this.props.jobInfo[1]}</p>
+                <p class="company">{this.props.jobInfo[2]}</p>
+                <p class="location">{this.props.jobInfo[3]}</p>
+                <ul class="description">
+                    <li>{this.props.jobInfo[4]}</li>
+                </ul>
+            </div>
+        )
+    }
+}
+
+
+class SelectedJob extends Component {
+    constructor(){
+        super();
+    }
+    render(){
+        if (this.props.status == 0){
+            return(
+                <div class="content" id="job">
+                    <p class="NoJob">Select Job</p>
+                </div>
+            )
+        } else {
+            return(
+                <div class="content" id="job">
+                    <p>{this.props.jobID}</p>
+                </div>
+            )
+        }
+    }
+}
+
+SelectedJob.defaultProps = {
+    status: null
+}
+
+function temp(){
+    return(
             <div>
                 <div class="leftItem">
                     <p class="title">360 Photographer</p>
@@ -122,34 +211,7 @@ class JobListItems extends Component {
                     </ul>
                 </div>
             </div>
-        )
-    }
-}
-
-
-class SelectedJob extends Component {
-    constructor(){
-        super();
-    }
-    render(){
-        if (this.props.status == null){
-            return(
-                <div class="content" id="job">
-                    <p class="NoJob">Select Job</p>
-                </div>
-            )
-        } else {
-            return(
-                <div class="content" id="job">
-                    {/* Call specific job information here */}
-                </div>
-            )
-        }
-    }
-}
-
-SelectedJob.defaultProps = {
-    status: null
+    )
 }
 
 export default Dashboard
