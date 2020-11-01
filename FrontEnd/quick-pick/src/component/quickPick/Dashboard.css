@@ -1,40 +1,98 @@
+.container {
+    display: flex;
+}
+
 .left {
-    display: inline-block;
     width: 30%;
-    height: calc(100% - 94px);
-    position: absolute;
+    height: calc(100% - 90px);
+    position: fixed;
     left: 0;
-    bottom: 0px;
+    bottom: 0;
+    z-index: -1;
     overflow-y: auto;
-    box-shadow: 1px 0px 8px gray;
+    /* box-shadow: 1px 0px 8px gray; */
+    display: flex;
+    flex-direction: column;
+    align-content: center;
 }
 
 .right {
     display: inline-block;
     width: 70%;
-    height: calc(100% - 94px);
-    position: absolute;
+    height: calc(100% - 90px);
+    position: fixed;
     right: 0;
-    bottom: 0px;
+    bottom: 0;
+    z-index: -1;
     overflow-y: auto;
+    background-color: #d3d3d3;
 }
 .content{
     border: grey 1px solid;
-    width: 50%;
+    width: 60%;
     position: relative;
     margin: 20px auto;
     height: 1000px;
     border-radius: 8px;
+    background-color: white;
 }
 
-.test {
-    margin-top: 10px;
+.searchBox {
+    z-index: -1;
+    width: 100%;
+    height: 100px;
+}
+.barStyle {
+    width: 100%;
+}
+
+.leftItem {
+    align-self: center;
+    margin: 10px 15px 10px 15px;
+    height: fit-content;
+    /* max-height: 150px; */
+    display: flex;
+    border-radius: 5px;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    border: grey solid 1px;
+    font-family: 'Noto Sans','Helvetica Neue',Helvetica,Arial,sans-serif !important;
+    padding: 1.25rem;
+    /* overflow: hidden;
+    text-overflow: ellipsis; */
+}
+
+.leftItem:hover {
+    background-color: #d6d6d6;
+    transition: background-color 0.5s linear 0s;
+    -webkit-transition: background-color 0.5s linear 0s;
+    cursor: pointer;
+}
+
+.title, .description, .location, .company {
+    margin: 3px;
+    font-size: 18px;
+    
+}
+
+.title {
+    font-weight: bold;
     margin-bottom: 10px;
-    width: 70%;
-    height: 150px;
-    display: inline-block;
-    background-color: rgb(255, 242, 166);
-    border-radius: 3px;
+
+}
+.location, .company {
+    font-size: 16px;
+}
+
+.description {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #5e5e5e;
+    margin-left: -15px;
+    overflow: hidden;
+    text-overflow: '...';
+    
 }
 
 ::-webkit-scrollbar {
@@ -54,4 +112,65 @@
 
 ::-webkit-scrollbar-thumb:hover {
     background: #7c7c7c; 
+}
+#searchBar {
+    width: 100%;
+    height: 40px;
+    background-color: rgb(240, 240, 240);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 4px;
+    padding: 10px 0px;
+}
+
+#searchBar:hover {
+    background-color: rgb(223, 223, 223);
+}
+
+
+.searchIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+#svgIcon {
+    width: 30px;
+    height: 30px;
+}
+
+.searchInput {
+    color: black;
+    line-height: 18px;
+    font-size: 16px;
+    width: 80%;
+    height: 100%;
+    border: none;
+    background: none;
+}
+.searchInput:focus {
+    outline: none;
+}
+
+.searchButton {
+    margin: 0px 20px;
+    background-color: rgb(255, 238, 0);
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0px 0px 3px rgb(78, 78, 78);
+}
+
+.searchButton:hover {
+    cursor: pointer;
+}
+
+.left button {
+    padding: 8px 20px;
+    width: fit-content;
+    cursor: pointer;
+    margin: auto;
+    margin-bottom: 10px;
 }

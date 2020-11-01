@@ -1,13 +1,13 @@
+
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Dashboard from './Dashboard';
 import Navgiation from './Navigation';
-// import AuthenticatedRoute from './AuthenticatedRoute';
+import AuthenticatedRoute from './AuthenticatedRoute';
 import RegisterComponent from './RegisterComponent';
-// import WelcomeComponent from './WelcomeComponent';
 import LoginComponent from './LoginComponent';
-// import Profile from './Profile';
 import ErrorComponent from './ErrorComponent';
+import ProfileComponent from './ProfileComponent';
 // import FooterComponent from './FooterComponent';
 
 class AppRouting extends Component {
@@ -19,10 +19,10 @@ class AppRouting extends Component {
                     <Navgiation/>
                     <Switch>
                         <Route path="/" exact component= {Dashboard}/>
-                        {/* <Route path="/profile" component= {Profile}/> */}
                         <Route path="/login" component= {LoginComponent}/>
                         <Route path="/register" component= {RegisterComponent}/>
-                        {/* <AuthenticatedRoute path="/dashboard/:name" component= {WelcomeComponent}/> */}
+                        <Route path="/profile/:name" component= {ProfileComponent}/>
+                        {/* <AuthenticatedRoute path="/dashboard" component= {Dashboard}/> */}
                         <Route component = {ErrorComponent}/>
                     </Switch>
                     {/* <FooterComponent/> */}

@@ -85,7 +85,11 @@ class LoginComponenet extends Component {
                 console.log(response)
                 console.log('Successful Login registered')
                 AutheticationService.registerSuccessfulLogin(this.state.username,this.state.password)
-                this.props.history.push(`/dashboard/${this.state.username}`)
+				this.props.history.push(`/`)
+				//this.props.history.push(`/profile/${this.state.username}`)
+				window.location.reload() // temp solution to user API call bug
+				console.log(this.state.username)
+                // this.props.history.push(`/dashboard/${this.state.username}`)
             }else if (response.data === "Login Failed"){
                // this.setState({showSuccessMessage : false   })
                 this.setState({hasLoginFailed: true})
@@ -137,9 +141,11 @@ class LoginComponenet extends Component {
                     </div>
                     <div className='row' style={{ padding: "5px 5px 5px 5px" }}>
                         <button className="btn btn-success" onClick={this.loginClicked}>Login</button>
+
                     </div>
+                    <button className="btn btn-success" onClick={this.registerClicked}>Register</button>
                 </div>
-                <button className="btn btn-success" onClick={this.registerClicked}>Register</button>
+                
                 
             </div>
             
@@ -151,5 +157,4 @@ class LoginComponenet extends Component {
         this.props.history.push(`/register`)
     }
 }
-
 export default LoginComponenet;

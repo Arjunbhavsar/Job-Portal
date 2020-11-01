@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-
 class AutheticationService{
     registerSuccessfulLogin(username,password){
         sessionStorage.setItem('authenticatedUser',username);
@@ -15,8 +14,7 @@ class AutheticationService{
         let user = sessionStorage.getItem('authenticatedUser');
         if(user===null) return false
         return true
-    }
-
+	}
 
     //Adds authorization Header to every request if user is logged In
     setupAxiosInterceptors(){
@@ -32,9 +30,7 @@ class AutheticationService{
                 }
                 return config;
             }
-
         )
     }
 }
-
 export default new AutheticationService()
