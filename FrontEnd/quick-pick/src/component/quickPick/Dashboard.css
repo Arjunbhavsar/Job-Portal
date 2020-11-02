@@ -68,6 +68,7 @@
     transition: background-color 0.5s linear 0s;
     -webkit-transition: background-color 0.5s linear 0s;
     cursor: pointer;
+    
 }
 
 .title, .description, .location, .company {

@@ -8,6 +8,7 @@ import RegisterComponent from './RegisterComponent';
 import LoginComponent from './LoginComponent';
 import ErrorComponent from './ErrorComponent';
 import ProfileComponent from './ProfileComponent';
+import CreateJob from './CreateJob';
 // import FooterComponent from './FooterComponent';
 
 class AppRouting extends Component {
@@ -21,6 +22,7 @@ class AppRouting extends Component {
                         <Route path="/" exact component= {Dashboard}/>
                         <Route path="/login" component= {LoginComponent}/>
                         <Route path="/register" component= {RegisterComponent}/>
+                        <Route path="/postjob" component= {CreateJob}/>
                         <Route path="/profile/:name" component= {ProfileComponent}/>
                         {/* <AuthenticatedRoute path="/dashboard" component= {Dashboard}/> */}
                         <Route component = {ErrorComponent}/>

@@ -80,7 +80,7 @@ class LoginComponenet extends Component {
             // } else {
             //     window.alert('Something went wrong. Please try again')
             // }
-            debugger
+            
             if (response.data === "Login Successful"){
                 console.log(response)
                 console.log('Successful Login registered')
