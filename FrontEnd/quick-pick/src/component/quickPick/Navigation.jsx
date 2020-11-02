@@ -87,6 +87,8 @@ export default function Navgiation() {
         setAnchorEl(null);
         AuthenticationService.logout();
     };
+
+    var spanStyles = {};
     var renderMenu = (
         // Add information here to check if already logged in and have a seperate menu with if conditionals
         <Menu
@@ -99,12 +101,15 @@ export default function Navgiation() {
 
         onClose={handleMenuClose}
         >
-            <Link to="/login" class="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Login</MenuItem></Link>
-            <Link to="/register" class="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Register</MenuItem></Link>
+            <Link to="/login" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Login</MenuItem></Link>
+            <Link to="/register" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Register</MenuItem></Link>
         </Menu>
     );
 
     if (isUserLoggedIn == true){
+        spanStyles = {
+            color: "#00b60f"
+        };
         renderMenu = (
             // Add information here to check if already logged in and have a seperate menu with if conditionals
             
@@ -117,8 +122,8 @@ export default function Navgiation() {
             open={isMenuOpen}
             onClose={handleMenuClose}
             >
-                <Link to={"/profile/"+user} class="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Profile</MenuItem></Link>
-                <Link to="/" class="profileMenuLink"><MenuItem onClick={handleMenuCloseLogout} id="accountIconMenuItem">Log Out</MenuItem></Link>
+                <Link to={"/profile/"+user} className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Profile</MenuItem></Link>
+                <Link to="/" className="profileMenuLink"><MenuItem onClick={handleMenuCloseLogout} id="accountIconMenuItem">Log Out</MenuItem></Link>
             </Menu>
         );
     }
@@ -126,21 +131,22 @@ export default function Navgiation() {
     var other = 'hidden';
     
 
+
     //   id={this.index}
     return (
         <div className="navBar">
-            <div class="leftNav">
-                <img src={logo} alt="logo" class="logo"/>
-                <nav class="navControls">
-                    <Link class="navButton" id={dash} to={"/"}>Dashboard</Link>
-                    <Link class="navButton" id={other} to="/other">Other</Link>
+            <div className="leftNav">
+                <img src={logo} alt="logo" className="logo"/>
+                <nav className="navControls">
+                    <Link className="navButton" id={dash} to={"/"}>Dashboard</Link>
+                    <Link className="navButton" id={other} to="/other">Other</Link>
                     {/* <td><NavButton page={"hidden"} name={"Profile"} to={"/profile"}/></td> */}
                 </nav>
             </div>
-            <div class="rightNav">
-                <MenuItem onClick={handleProfileMenuOpen} class="account">
+            <div className="rightNav">
+                <MenuItem onClick={handleProfileMenuOpen} className="account">
                     <IconButton >
-                        <AccountCircle id="accountIcon"/>
+                        <AccountCircle id="accountIcon" style={spanStyles}/>
                     </IconButton>
                 </MenuItem>
                 {renderMenu}

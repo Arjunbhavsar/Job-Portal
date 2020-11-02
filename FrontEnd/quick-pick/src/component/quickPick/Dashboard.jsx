@@ -14,32 +14,30 @@ class Dashboard extends Component {
             loading: true
         }
         this.changeJob = this.changeJob.bind(this);
-        this.updateInput = this.updateInput.bind(this);
     }
     
-    updateInput(value){
-		
-	}
+    // async changeJob(id) {
+    //     console.log(id)
+    //     const data = await	JobService
+    //                             .executeGetJob(id)
+    //                             .then(result => result.data);
+    //                             console.log('loading data ...');
+    //     this.setState({job : data, loading: false});
+    //     console.log(this.state.job);
+    // }
+    
+    changeJob(id){
+        this.setState({job : id});
+    }
 
-    async changeJob(id) {
-        console.log(id)
-        const data = await	JobService
-                                .executeGetJob(id)
-                                .then(result => result.data);
-                                console.log('loading data ...');
-        this.setState({job : data, loading: false});
-        console.log(this.state.job);
-    }
-    
     render(){
         return(
-            <div class="contianer">
-                <div class="left">
-                    <SearchBar  holder="Search by title..." search={this.updateInput}/>
+            <div className="contianer">
+                <div className="left">
                     <JobListItems jobSelect={this.changeJob} />
                 </div>
-                <div class="right">
-                    <SelectedJob job={this.state.job} loading={this.state.loading} />
+                <div className="right">
+                    <SelectedJob job={this.state.job} />
                 </div>
             </div>
         )
@@ -50,45 +48,87 @@ class JobListItems extends Component {
     constructor(){
         super();
         this.state = {
-            total: 0
+            jobs: [],
+            isLoading: true
         }
+        this.total = 0;
         this.handleSelect = this.handleSelect.bind(this);
         this.loadmore = this.loadmore.bind(this); 
-        this.leftToLoad = 10; // Math.max(10, {call backend of how many jobs are left in the search list})
-        this.allIDs = []; //getIDs(this.leftToLoad)
-        this.jobs = [];
-        this.tempJob = [1024,'360 Photographer', 'Threshold 360', 'Indianapolis, IN', 'Those who are active freelance photographers are preferred.'];
-        while(this.leftToLoad > 0){
-            console.log(this.leftToLoad);
-            this.jobs.push(<BuildJobItem changeJob={this.handleSelect} jobInfo={this.tempJob} />)// title={this.tempJob[1]} company={this.tempJob[2]} location={this.tempJob[3]} desc={this.tempJob[4]} 
-            this.leftToLoad = this.leftToLoad - 1;
-            console.log(this.leftToLoad);
-            this.setState({total: this.state.total + 1});
-            // Above is temperary information the information will be called from backend
-        }
+        this.updateInput = this.updateInput.bind(this); 
+        this.leftToLoad = 0; // Math.max(10, {call backend of how many jobs are left in the search list})
+        this.allJobs = null;
     }
+
+    async componentDidMount(){
+        const data = await JobService.executeGetJobListService().then(result => result.data);
+        this.allJobs = data;
+        var tempJob = null;
+        const added = [];
+        if(this.allJobs.length >= 10){
+            this.leftToLoad = 10;
+        }else{
+            this.leftToLoad = this.allJobs.length;
+        }
+        this.total = this.leftToLoad;
+        while(this.leftToLoad > 0){
+            tempJob = this.allJobs[this.total - this.leftToLoad];
+            added.push(<BuildJobItem changeJob={this.handleSelect} jobInfo={tempJob} />);
+            this.leftToLoad = this.leftToLoad - 1;
+        }
+        this.setState({jobs: added, isLoading: false});
+        console.log(this.state.jobs);
+    }
+
+    
 
     handleSelect(id) {
         this.props.jobSelect(id);
     }
     
     loadmore() {
-        console.log('load more');
-        this.leftToLoad = this.leftToLoad + 1; // Math.max(10, this.state.total - {call backend of how many jobs are left in the search list})
+        this.setState({isLoading: true});
+        if((this.allJobs.length - this.total) >= 10){
+            this.leftToLoad = 10;
+        }else{
+            this.leftToLoad = this.allJobs.length - this.total;
+        }
+        this.total = this.total + this.leftToLoad;
+        var tempJob = null;
+        const added = this.state.jobs.slice();
         while(this.leftToLoad > 0){
-
-            // this.jobs.push(* More BuildJobItem calls here *)
+            tempJob = this.allJobs[this.total - this.leftToLoad];
+            added.push(<BuildJobItem changeJob={this.handleSelect} jobInfo={tempJob} />);
             this.leftToLoad= this.leftToLoad - 1;
         }
+        this.setState({isLoading: false, jobs: added});
+        console.log(this.state.jobs.length);
+        // this.forceUpdate();
+    }
+
+    updateInput(value){
+
     }
     
     render(){
-        return(
-            <div>
-                {this.jobs}
-                <button type="button" onClick={this.loadmore}>Load more</button>
-            </div>
-        )
+        console.log();
+        if(this.state.isLoading){
+            return(
+                <p>Loading...</p>
+            )
+        }else{
+            if(this.state.jobs.length == 0){
+                return(
+                    <p>No jobs found</p>
+                )
+            }
+            return(
+                <div>
+                    <SearchBar  holder="Search by title..." search={this.updateInput}/>
+                    {this.state.jobs}
+                    <button type="button" onClick={this.loadmore}>Load more</button>
+                </div>
+            )
+        }
     }
 }
 
@@ -96,20 +136,21 @@ class BuildJobItem extends Component{
     constructor(){
         super();
         this.clicked = this.clicked.bind(this);
+        this.job = null;
     }
     
     clicked(event){
-        this.props.changeJob(this.props.jobInfo[0]);
+        this.props.changeJob(this.props.jobInfo);
     }
 
     render(){
         return(
-            <div class="leftItem" onClick={this.clicked}>
-                <p class="title">{this.props.jobInfo[1]}</p>
-                <p class="company">{this.props.jobInfo[2]}</p>
-                <p class="location">{this.props.jobInfo[3]}</p>
-                <ul class="description">
-                    <li>{this.props.jobInfo[4]}</li>
+            <div className="leftItem" onClick={this.clicked}>
+                <p className="title">{this.props.jobInfo.jobTitle}</p>
+                <p className="company">{this.props.jobInfo.organization}</p>
+                <p className="location">{this.props.jobInfo.location}</p>
+                <ul className="description">
+                    <li>{this.props.jobInfo.jobDescription}</li>
                 </ul>
             </div>
         )
@@ -126,8 +167,8 @@ class SelectedJob extends Component {
     render(){
         if (this.props.job == null){
             return(
-                <div class="content" id="job">
-                    <p class="NoJob">Select Job</p>
+                <div className="content" id="job">
+                    <p className="NoJob">Select Job</p>
                 </div>
             )
         } else {
@@ -137,7 +178,7 @@ class SelectedJob extends Component {
                 )
             }else{
                 return(
-                    <div class="content" id="job">
+                    <div className="content" id="job">
                         <p>{this.props.job.jobTitle}</p>
                         <p>{this.props.job.country}</p>
                         <p>{this.props.job.dateAdded}</p>
