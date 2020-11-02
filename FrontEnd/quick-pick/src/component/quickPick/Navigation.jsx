@@ -111,7 +111,7 @@ export default function Navgiation() {
 
     if (isUserLoggedIn == true){
         spanStyles = {
-            color: "#00b60f"
+            color: "#00a2ff"
         };
         noLoggedStyles = {
             visibility: "visible"

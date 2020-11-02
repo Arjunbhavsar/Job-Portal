@@ -25,7 +25,7 @@
     bottom: 0;
     z-index: -1;
     overflow-y: auto;
-    background-color: #d3d3d3;
+    background-color: var(--grey-color);
 }
 .content{
     border: grey 1px solid;
@@ -88,7 +88,7 @@
 .description {
     margin-top: 10px;
     font-size: 14px;
-    color: #5e5e5e;
+    color: black;
     margin-left: -15px;
     overflow: hidden;
     text-overflow: '...';
@@ -100,13 +100,13 @@
 }
 
 ::-webkit-scrollbar-track {
-    background-color: #F3F2F4;
-    box-shadow: inset 0 0 5px grey; 
+    background-color: #f3f2f4;
+    box-shadow: inset 0 0 2px grey; 
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #A4A4A4; 
+    background: #7b8499; 
     border-radius: 10px;
 }
 

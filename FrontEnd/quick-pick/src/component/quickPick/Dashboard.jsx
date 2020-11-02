@@ -136,7 +136,7 @@ class BuildJobItem extends Component{
     constructor(){
         super();
         this.state = {
-            background: "#fffad1"
+            background: "#fffad1",
         }
         this.clicked = this.clicked.bind(this);
         this.job = null;
@@ -144,7 +144,7 @@ class BuildJobItem extends Component{
     }
     
     clicked(event){
-        this.setState({background: "#e5ceff"});
+        this.setState({background: "#98d8fd"});
         this.props.changeJob(this.props.jobInfo);
     }
 

@@ -1,10 +1,19 @@
+:root {
+	--darkest-color: #1F2833;
+	--dark-color: #293a4e;
+	--grey-color: #999999;
+	--light-blue: #98d8fd;
+	--yellow-color: #ffec3e;
+	--dark-blue: #00A29E;
+}
+
 .navBar {
     width: 100%;
-    background-color:  #D0A6FF;
+    background-color: var(--darkest-color);
     position: sticky;
     top: 0;
     /* padding: 12px 12px 0px 12px; */
-    box-shadow: 0px 1px 8px grey;
+    box-shadow: 0px 1px 8px var(--dark-color);
     display: flex;
     /* align-items: center; */
     justify-content: flex-end;
@@ -43,21 +52,15 @@ nav {
 
 .navButton{
     text-decoration: none;
-    width: 140px;
-    margin-bottom: 0;
-    margin-left: 5px;
-    margin-right: 5px;
-    color: black;
+    width: fit-content;
+    margin: 0px 25px;
+    color: white;
     height: 30px;
-    padding: 3px 20px;
     font-size: 20px;
-    background-color: #ffec3e;
-    border: 1px black solid;
-    box-shadow: 1px 1px 3px grey;
 }
 
 .navButton:hover {
-    font-weight: 600;
+    border-bottom: 1px white solid;
 }
 
 .account {
@@ -75,7 +78,7 @@ nav {
 #accountIcon {
     width: 1.5em;
     height: 1.5em;
-    color: black;
+    color: var(--grey-color);
 }
 
 

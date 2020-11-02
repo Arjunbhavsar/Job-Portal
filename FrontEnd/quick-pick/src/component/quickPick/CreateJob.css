@@ -2,10 +2,11 @@
     width: 100%;
     height: calc(100% - 90px);
     z-index: -2;
-    background-color: rgb(0, 162, 255);
+    background-color: var(--grey-color);
     position: fixed;
     bottom: 0;
     left: 0;
+    overflow-y: auto;
 }
 .inner {
     display: flex;
@@ -54,19 +55,19 @@ form {
     transition: 400ms linear;
     transition-property: border-width, border-color, box-shadow;
     border-width: 2px;
-    border-color: rgb(0, 47, 255);
-    box-shadow: 0px 0px 4px rgb(0, 47, 255);
+    border-color: var(--light-blue);
+    box-shadow: 0px 0px 4px var(--light-blue);
 }
 
 #field button{
     margin-top: 20px;
     appearance: none;
-    background-color:  rgb(0, 162, 255);
+    background-color: var(--light-blue);
     width: 100%;
     border: 1px grey solid;
     font-size: 1.2rem;
-    font-weight: 600;
-    color: white;
+    font-weight: 700;
+    color: var(--darkest-color);
     padding: 8px;
     border-radius: 2px;
 }
