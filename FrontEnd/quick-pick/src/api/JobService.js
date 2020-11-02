@@ -33,6 +33,21 @@ class getJobListService{
 			}
 		)
 	}
+
+	executePostJobService(job){
+		const {jobTag} = this.state;
+        let username = 'user'
+		let password =  'password'
+		
+        let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
+        return axios.post(jobTag+'addNewJob',job,
+        {
+            headers:{
+                authorization: basicAuthHeader
+            }
+        }
+        )
+    }
 }
 
 
