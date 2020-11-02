@@ -57,8 +57,7 @@ nav {
 }
 
 .navButton:hover {
-    color: white;
-    background-color: #D0A6FF;
+    font-weight: 600;
 }
 
 .account {
