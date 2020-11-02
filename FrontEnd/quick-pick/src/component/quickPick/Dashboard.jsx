@@ -135,17 +135,22 @@ class JobListItems extends Component {
 class BuildJobItem extends Component{
     constructor(){
         super();
+        this.state = {
+            background: "#fffad1"
+        }
         this.clicked = this.clicked.bind(this);
         this.job = null;
+
     }
     
     clicked(event){
+        this.setState({background: "#e5ceff"});
         this.props.changeJob(this.props.jobInfo);
     }
 
     render(){
         return(
-            <div className="leftItem" onClick={this.clicked}>
+            <div className="leftItem" onClick={this.clicked} style={this.state}>
                 <p className="title">{this.props.jobInfo.jobTitle}</p>
                 <p className="company">{this.props.jobInfo.organization}</p>
                 <p className="location">{this.props.jobInfo.location}</p>

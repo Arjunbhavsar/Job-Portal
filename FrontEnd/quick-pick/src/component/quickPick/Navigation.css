@@ -1,22 +1,15 @@
 .navBar {
     width: 100%;
-    background-color: white;
+    background-color:  #D0A6FF;
     position: sticky;
     top: 0;
     /* padding: 12px 12px 0px 12px; */
     box-shadow: 0px 1px 8px grey;
     display: flex;
     /* align-items: center; */
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
-.leftNav {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 400px;
-    justify-content: space-between;
-}
 .rightNav {
     display: flex;
     align-items: center;
@@ -29,6 +22,8 @@
 }
 
 .logo {
+    position: absolute;
+    left: 0;
     height: 70px;
     padding: 10px 20px;
 }
@@ -38,36 +33,30 @@ nav {
     width: 300px;
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+    align-items: center;
     /* justify-content: flex-end;
     align-items: baseline; */
-    justify-content: flex-end;
+    justify-content: center;
+    /* background-color: #ffec3e; */
+    margin-right: 20px;
 }
 
 .navButton{
     text-decoration: none;
+    width: 140px;
     margin-bottom: 0;
     margin-left: 5px;
     margin-right: 5px;
-    color: white;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+    color: black;
     height: 30px;
     padding: 3px 20px;
-    
     font-size: 20px;
+    background-color: #ffec3e;
+    border: 1px black solid;
+    box-shadow: 1px 1px 3px grey;
 }
 
-#active {
-    background-color: #A85BFF;
-    font-size: 20px;
-}
-
-#hidden {
-    background-color: #D0A6FF;
-}
-
-#hidden:hover {
+.navButton:hover {
     color: white;
     background-color: #D0A6FF;
 }
@@ -87,6 +76,7 @@ nav {
 #accountIcon {
     width: 1.5em;
     height: 1.5em;
+    color: black;
 }
 
 

@@ -142,11 +142,11 @@ export default function Navgiation() {
     //   id={this.index}
     return (
         <div className="navBar">
+            <img src={logo} alt="logo" className="logo"/>
             <div className="leftNav">
-                <img src={logo} alt="logo" className="logo"/>
                 <nav className="navControls">
-                    <Link className="navButton" id={dash} to="/">Dashboard</Link>
                     <Link className="navButton" id={other} to="/postjob" style={noLoggedStyles}>Post Job</Link>
+                    <Link className="navButton" id={dash} to="/">Dashboard</Link>
                     {/* <td><NavButton page={"hidden"} name={"Profile"} to={"/profile"}/></td> */}
                 </nav>
             </div>

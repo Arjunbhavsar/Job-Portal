@@ -56,11 +56,10 @@
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
-    border: grey solid 1px;
+    border: gray solid 1px;
+    box-shadow: 1px 1px 3px gray;
     font-family: 'Noto Sans','Helvetica Neue',Helvetica,Arial,sans-serif !important;
     padding: 1.25rem;
-    /* overflow: hidden;
-    text-overflow: ellipsis; */
 }
 
 .leftItem:hover {
