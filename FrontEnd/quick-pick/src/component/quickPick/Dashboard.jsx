@@ -49,7 +49,7 @@ class JobListItems extends Component {
         this.state = {
             jobs: [],
             jobsIndex: [],
-            activeIndex: 0,
+            activeIndex: null,
             isLoading: true,
             currentJob: null
         }
