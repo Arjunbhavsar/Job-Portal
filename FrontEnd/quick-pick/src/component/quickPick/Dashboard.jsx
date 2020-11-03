@@ -51,7 +51,8 @@ class JobListItems extends Component {
             jobsIndex: [],
             activeIndex: null,
             isLoading: true,
-            currentJob: null
+            currentJob: null,
+            moreToLoad: true
         }
         this.total = 0;
         // this.handleSelect = this.handleSelect.bind(this);
@@ -88,6 +89,10 @@ class JobListItems extends Component {
             indexes.push(tempJob);
             this.leftToLoad = this.leftToLoad - 1;
         }
+        if(this.allJobs.length - this.total == 0){
+            this.setState({moreToLoad: false});
+            
+        }
         this.setState({jobs: added, isLoading: false, jobsIndex: indexes});
         console.log(this.state.jobs);
     }
@@ -117,6 +122,9 @@ class JobListItems extends Component {
             added.push(<BuildJobItem changeJob={this.handleSelect} jobInfo={tempJob}/>);
             indexes.push(tempJob);
             this.leftToLoad= this.leftToLoad - 1;
+        }
+        if(this.allJobs.length - this.total == 0){
+            this.setState({moreToLoad: false});
         }
         this.setState({isLoading: false, jobs: added, jobsIndex: indexes});
         console.log(this.state.jobs.length);
@@ -152,7 +160,7 @@ class JobListItems extends Component {
                             );
                         }, this)
                     }
-                    <button type="button" onClick={this.loadmore}>Load more</button>
+                    {this.state.moreToLoad && <button type="button" onClick={this.loadmore}>Load more</button>}
                 </div>
             )
         }
