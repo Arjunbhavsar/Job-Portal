@@ -89,9 +89,7 @@ export default function Navgiation() {
     };
 
     var spanStyles = {};
-    var noLoggedStyles = {
-        visibility: "hidden"
-    };
+    var noLoggedStyles = {visibility: "hidden"};
     var renderMenu = (
         // Add information here to check if already logged in and have a seperate menu with if conditionals
         <Menu
@@ -145,6 +143,7 @@ export default function Navgiation() {
             <img src={logo} alt="logo" className="logo"/>
             <div className="leftNav">
                 <nav className="navControls">
+                    {/* <Link className="navButton" id={other} to="/" >Manage</Link> */}
                     <Link className="navButton" id={other} to="/postjob" style={noLoggedStyles}>Post Job</Link>
                     <Link className="navButton" id={dash} to="/">Dashboard</Link>
                     {/* <td><NavButton page={"hidden"} name={"Profile"} to={"/profile"}/></td> */}

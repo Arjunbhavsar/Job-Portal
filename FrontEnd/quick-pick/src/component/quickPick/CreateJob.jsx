@@ -3,6 +3,7 @@ import { Component } from 'react';
 import './CreateJob.css';
 import AuthenticationService from './AuthenticationService';
 import JobService from '../../api/JobService';
+import { Link } from 'react-router-dom';
 
 class CreateJob extends Component {
     constructor(){
@@ -54,46 +55,60 @@ class CreateJob extends Component {
     }
 
     render(){
-        return(
-            <div className='jobContainer'>
-                <div className="inner">
-                    {this.state.isSubmitted && <div className="confirmation"><p>Job successfully posted</p></div>}
-                    <form >
-                        <div id='field'>
-                            <label for="jobTitle">Job title: </label>
-                            <input type="text" id="jobTitle" onChange={this.handleChange} required></input>
-                        </div>
-                        <div id='field'>
-                            <label for="organization">Company: </label>
-                            <input type="text" id="organization" autocomplete="on" onChange={this.handleChange} required></input>
-                        </div>
-                        <div id='field'>
-                            <label for="country">Country: </label>
-                            <input type="text" id="country" autocomplete="on" onChange={this.handleChange} required></input>
-                        </div>
-                        <div id='field'>
-                            <label for="location">Job location: </label>
-                            <input type="text" id="location" onChange={this.handleChange} required></input>
-                        </div>
-                        <div id='field'>
-                            <label for="jobSalary">Salary for job: </label>
-                            <input type="text" id="jobSalary" onChange={this.handleChange} required></input>
-                        </div>
-                        <div id='field'>
-                            <label for="pageUrl">Company URL: </label>
-                            <input type="url" id="pageUrl" onChange={this.handleChange}></input>
-                        </div>
-                        <div id="description">
-                            <label for="jobDescription">Job descrption: </label>
-                            <textarea rows="10" cols="41" id="jobDescription" onChange={this.handleChange} required>Enter descrption here...</textarea>
-                        </div>
-                        <div id='field'>
-                            <button type="button" onClick={this.handleSubmit}>Post Job</button>
-                        </div>
-                    </form>
+        if(this.state.isSubmitted){
+            return(
+                <div className='jobContainer'>
+                    <div className="inner">
+                        <form className="successForm">
+                            <div className="alert alert-success">Job successfully posted</div>
+                            <div id='field'>
+                                <Link to="/"><button type="button">Okay</button></Link>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        )
+            )
+        }else{
+            return(
+                <div className='jobContainer'>
+                    <div className="inner">
+                        <form >
+                            <div id='field'>
+                                <label for="jobTitle">Job title: </label>
+                                <input type="text" id="jobTitle" onChange={this.handleChange} required></input>
+                            </div>
+                            <div id='field'>
+                                <label for="organization">Company: </label>
+                                <input type="text" id="organization" autocomplete="on" onChange={this.handleChange} required></input>
+                            </div>
+                            <div id='field'>
+                                <label for="country">Country: </label>
+                                <input type="text" id="country" autocomplete="on" onChange={this.handleChange} required></input>
+                            </div>
+                            <div id='field'>
+                                <label for="location">Job location: </label>
+                                <input type="text" id="location" onChange={this.handleChange} required></input>
+                            </div>
+                            <div id='field'>
+                                <label for="jobSalary">Salary for job: </label>
+                                <input type="text" id="jobSalary" onChange={this.handleChange} required></input>
+                            </div>
+                            <div id='field'>
+                                <label for="pageUrl">Company URL: </label>
+                                <input type="url" id="pageUrl" onChange={this.handleChange}></input>
+                            </div>
+                            <div id="description">
+                                <label for="jobDescription">Job descrption: </label>
+                                <textarea rows="10" cols="41" id="jobDescription" onChange={this.handleChange} required>Enter descrption here...</textarea>
+                            </div>
+                            <div id='field'>
+                                <button type="button" onClick={this.handleSubmit}>Post Job</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )
+        }
     }
 }
 
