@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Data
-@Table(name="Job")
+@Table(name="\"Job\"")
 public class Job {
 
 	private String country;
