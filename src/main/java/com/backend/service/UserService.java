@@ -28,9 +28,12 @@ public class UserService implements UserServiceInterface {
 	
 	public User getUser(String username) {
 		User target = null;
-		for(User current : userDao.findAll())
-			if(current.getUsername().equals(username))
+		for(User current : userDao.findAll()) {
+			if(current.getUsername().equals(username)) {
 				target = current;
+				System.out.println(current.getProfile() != null ? current.getProfile().getName() : current.getProfile());
+			}
+		}
 		return target;
 	}
 
