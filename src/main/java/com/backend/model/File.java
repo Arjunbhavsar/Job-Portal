@@ -32,7 +32,7 @@ public class File {
 
 	private String type;
 
-	@Lob
+	@Lob @Basic(fetch=LAZY)
 	private byte[] data;
 	
 	@OneToOne//(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "profile")
