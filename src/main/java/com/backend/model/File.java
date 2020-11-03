@@ -34,10 +34,10 @@ public class File {
 
 	private String type;
 
-	@Lob @Basic(fetch=FetchType.LAZY)
+	@Lob //@Basic(fetch=FetchType.LAZY)
 	private byte[] data;
 	
-	@OneToOne//(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "profile")
+	@OneToOne //(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "profile")
 	private User user;
 //	@OneToOne(fetch = FetchType.LAZY, optional = false)
 //	@JoinColumn(name = "user_id", nullable = false)
