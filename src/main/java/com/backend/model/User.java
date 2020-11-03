@@ -21,8 +21,8 @@ import lombok.NoArgsConstructor;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
-//@Table(name="\"User\"")	// heroku
-@Table(name="User")	// local
+@Table(name="\"User\"")	// heroku
+//@Table(name="User")	// local
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
