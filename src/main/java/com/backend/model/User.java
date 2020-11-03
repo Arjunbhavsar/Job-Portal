@@ -42,11 +42,11 @@ public class User {
 	private String address;
 	private String password;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "profile_id")
     private File profile;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "resume_id")
     private File resume;
 	
