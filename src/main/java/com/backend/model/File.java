@@ -1,7 +1,5 @@
 package com.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,7 +33,6 @@ public class File {
 	private String type;
 
 	@Lob
-	@Type(type = "org.hibernate.type.ImageType")
 	private byte[] data;
 	
 	@OneToOne//(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "profile")
