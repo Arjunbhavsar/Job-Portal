@@ -38,8 +38,7 @@ public class File {
 	private byte[] data;
 	
 
-	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY, optional = false)
-	//@JoinColumn(name = "user_id")
+	@OneToOne
 	private User user;
 //	@OneToOne(fetch = FetchType.LAZY, optional = false)
 //	@JoinColumn(name = "user_id", nullable = false)
