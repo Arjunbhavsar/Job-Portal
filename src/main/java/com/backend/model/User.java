@@ -42,12 +42,14 @@ public class User {
 	private String address;
 	private String password;
 	
-	@OneToOne(cascade = CascadeType.ALL, optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "profile_id")
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	//@OneToOne(cascade = CascadeType.ALL, optional = true, fetch = FetchType.LAZY)
+	@JoinColumn(name = "profile_id", nullable = true)
     private File profile;
 	
-	@OneToOne(cascade = CascadeType.ALL, optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "resume_id")
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	//@OneToOne(cascade = CascadeType.ALL, optional = true, fetch = FetchType.LAZY)
+	@JoinColumn(name = "resume_id", nullable = true)
     private File resume;
 	
 //	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
