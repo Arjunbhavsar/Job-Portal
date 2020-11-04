@@ -18,7 +18,7 @@ import com.backend.service.UserService;
 @RestController
 @RequestMapping("/user")
 //@CrossOrigin(origins = "http://localhost:3000")	// local
-@CrossOrigin(origins = "https://quick-pick-job.herokuapp.com")	// heroku
+@CrossOrigin(origins = "*")	// heroku
 public class UserController {
 	
 	@Autowired
