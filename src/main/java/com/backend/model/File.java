@@ -1,5 +1,6 @@
 package com.backend.model;
 
+import javax.persistence.MapsId;
 import javax.persistence.FetchType;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -37,6 +38,7 @@ public class File {
 	@Lob //@Basic(fetch=FetchType.LAZY)
 	private byte[] data;
 	
+	@MapsId
 	@OneToOne //(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "profile")
 	private User user;
 //	@OneToOne(fetch = FetchType.LAZY, optional = false)
