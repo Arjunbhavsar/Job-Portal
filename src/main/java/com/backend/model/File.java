@@ -38,7 +38,8 @@ public class File {
 	private byte[] data;
 	
 
-	@OneToOne //(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "profile")
+	@OneToOne
+	@JoinColumn(name = "user_id") (optional)
 	private User user;
 //	@OneToOne(fetch = FetchType.LAZY, optional = false)
 //	@JoinColumn(name = "user_id", nullable = false)
