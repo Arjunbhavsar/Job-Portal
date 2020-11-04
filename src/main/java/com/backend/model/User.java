@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
+import javax.persistence.MapsId;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -42,15 +42,15 @@ public class User {
 	private String address;
 	private String password;
 	
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	//@OneToOne(cascade = CascadeType.ALL, optional = true, fetch = FetchType.LAZY)
+	@OneToOne
+	@MapsId
 	@JoinColumn(name = "profile_id", nullable = true)
-    private File profile;
+    	private File profile;
 	
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	//@OneToOne(cascade = CascadeType.ALL, optional = true, fetch = FetchType.LAZY)
+	@OneToOne
+	@MapsId
 	@JoinColumn(name = "resume_id", nullable = true)
-    private File resume;
+    	private File resume;
 	
 //	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
 //    private File profile;
