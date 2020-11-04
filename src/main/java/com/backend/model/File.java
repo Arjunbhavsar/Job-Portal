@@ -39,7 +39,7 @@ public class File {
 	
 
 	@OneToOne
-	@JoinColumn(name = "user_id") (optional)
+	@JoinColumn(name = "user_id")
 	private User user;
 //	@OneToOne(fetch = FetchType.LAZY, optional = false)
 //	@JoinColumn(name = "user_id", nullable = false)
