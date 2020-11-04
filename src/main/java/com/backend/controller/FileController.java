@@ -24,7 +24,7 @@ import com.backend.service.UserService;
 
 @Controller
 //@CrossOrigin("http://localhost:3000")	// local
-@CrossOrigin("https://quick-pick-job.herokuapp.com")	// heroku
+@CrossOrigin("*")	// heroku
 public class FileController {
 
 	@Autowired
