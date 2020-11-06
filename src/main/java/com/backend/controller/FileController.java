@@ -30,7 +30,7 @@ public class FileController {
 	@Autowired
 	private UserDao userDao;
 
-	@PostMapping("/uploadProfile/{username}")
+@PostMapping("/uploadProfile/{username}")
 	public UploadFileResponse uploadProfile(@PathVariable String username, @RequestParam("file") MultipartFile file) {
 		String message = "";
 		try {
@@ -43,12 +43,9 @@ public class FileController {
 	                .path(newFile.getId())
 	                .toUriString();
 			return new UploadFileResponse(newFile.getName(), fileLoadUri, file.getContentType(), file.getSize());
-//			message = "Uploaded the file successfully: " + file.getOriginalFilename();
-//			return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
 		} catch (Exception e) {
 			message = "Could not upload the file: " + file.getOriginalFilename() + "!";
 			return new UploadFileResponse(message);
-//			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
 		}
 	}
 
@@ -58,19 +55,16 @@ public class FileController {
 		try {
 			File newFile = fileService.storeResume(username, file);
 			User user = userDao.findByusername(username);
-			user.setProfileFileId(newFile.getId());
+			user.setResumeFileId(newFile.getId());
 			userDao.save(user);
 			String fileLoadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
 	                .path("/load/")
 	                .path(newFile.getId())
 	                .toUriString();
 			return new UploadFileResponse(newFile.getName(), fileLoadUri, file.getContentType(), file.getSize());
-//			message = "Uploaded the file successfully: " + file.getOriginalFilename();
-//			return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
 		} catch (Exception e) {
 			message = "Could not upload the file: " + file.getOriginalFilename() + "!";
 			return new UploadFileResponse(message);
-//			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
 		}
 	}
 
