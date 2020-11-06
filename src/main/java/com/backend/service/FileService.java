@@ -1,7 +1,6 @@
 package com.backend.service;
 
 import java.io.IOException;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.backend.dao.FileDao;
+import com.backend.dao.UserDao;
 import com.backend.model.File;
 import com.backend.model.User;
 
@@ -17,38 +17,65 @@ public class FileService {
 
 	@Autowired
 	private FileDao fileDao;
-	
-	// Only updates when given applications	 (pdf, docx, ...)
-	public File storeResume(MultipartFile mfile, User user) throws IOException {
-		String fileName = StringUtils.cleanPath(mfile.getOriginalFilename());
-		File file = new File(fileName, mfile.getContentType(), mfile.getBytes());
-		String type = file.getType();
-		String[] typeSplit = type.split("/");
-		if(typeSplit.length == 2 && typeSplit[0].equals("application")) {
-			user.setResume(file);
-			return fileDao.save(file);
+	@Autowired
+	private UserDao userDao;
+
+	public File storeProfile(String username, MultipartFile file) throws IOException {
+		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+		File newFile = new File(fileName, file.getContentType(), file.getBytes());
+		if(newFile.getType().contains("image")) {
+			return fileDao.save(newFile);
 		}
 		return null;
 	}
 	
-	// Only updates when given images (png, jpg, ...)
-	public File storeProfile(MultipartFile mfile, User user) throws IOException {
-		String fileName = StringUtils.cleanPath(mfile.getOriginalFilename());
-		File file = new File(fileName, mfile.getContentType(), mfile.getBytes());
-		String type = file.getType();
-		String[] typeSplit = type.split("/");
-		if(typeSplit.length == 2 && typeSplit[0].equals("image")) {
-			user.setProfile(file);
-			return fileDao.save(file);
+	public File storeResume(String username, MultipartFile file) throws IOException {
+		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+		File newFile = new File(fileName, file.getContentType(), file.getBytes());
+		if(!newFile.getType().contains("image")) {
+			return fileDao.save(newFile);
+		}
+		return null;
+	}
+
+	public File getProfile(String username) {
+		User user = userDao.findByusername(username);
+		if(user != null) {
+			File file = fileDao.findById(user.getProfileFileId());
+			return file;
+		}
+		return null;
+	}
+	
+	public File getResume(String username) {
+		User user = userDao.findByusername(username);
+		if(user != null) {
+			File file = fileDao.findById(user.getResumeFileId());
+			if(file != null) {
+				return file;
+			}
 		}
 		return null;
 	}
 
 	public File getFile(String id) {
-		return fileDao.findById(id).get();
-	}
-
-	public Stream<File> getAllFiles() {
-		return fileDao.findAll().stream();
+		return fileDao.findById(id);
 	}
 }
+//@Override
+//public String saveProfile(String username, MultipartFile file) {
+//	FileInfo thing;//Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+//	thing.
+//	User user = userDao.findByusername(username);
+//	user.setProfileFileId(file);
+//	userDao.save(user);
+//	return "Success";
+//}
+//
+//@Override
+//public String saveResume(String username, MultipartFile file) {
+//	User user = userDao.findByusername(username);
+//	user.setResume(file);
+//	userDao.save(user);
+//	return "Success";
+//}
