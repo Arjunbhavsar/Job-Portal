@@ -67,24 +67,6 @@ public class FileController {
 			return new UploadFileResponse(message);
 		}
 	}
-
-	@GetMapping("/getProfile/{username}")
-	public ResponseEntity<byte[]> getProfile(@PathVariable String username) {
-		File file = fileService.getProfile(username);
-
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
-				.body(file.getData());
-	}
-
-	@GetMapping("/getResume/{username}")
-	public ResponseEntity<byte[]> getResume(@PathVariable String username) {
-		File file = fileService.getResume(username);
-
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
-				.body(file.getData());
-	}
 	
 	@GetMapping("/load/{id}")
 	public ResponseEntity<byte[]> getFile(@PathVariable String id) {
