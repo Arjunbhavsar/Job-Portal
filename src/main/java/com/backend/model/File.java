@@ -1,31 +1,23 @@
 package com.backend.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Entity
+@Data
 @Table(name = "\"files\"")
 public class File {
 	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	private String id;
@@ -34,19 +26,47 @@ public class File {
 
 	private String type;
 
-	@Lob //@Basic(fetch=FetchType.LAZY)
+	@Lob
+	@Type(type = "org.hibernate.type.ImageType")
 	private byte[] data;
-	
 
-	@OneToOne
-	private User user;
-//	@OneToOne(fetch = FetchType.LAZY, optional = false)
-//	@JoinColumn(name = "user_id", nullable = false)
-//	private User user;
 
 	public File(String name, String type, byte[] data) {
 		this.name = name;
 		this.type = type;
 		this.data = data;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public byte[] getData() {
+		return data;
+	}
+
+	public void setData(byte[] data) {
+		this.data = data;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 }
