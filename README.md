@@ -2,6 +2,9 @@
 
 ----
 
+- Tested Deployment and it works!
+- All URL's have been changed to heroku
+
 - UserController.java:
 	- updateUser function added
 	- Job.java connected to User.java
@@ -11,5 +14,5 @@
 	- acceptJob function added
 	- createJob function added
 
-- UserController.java
+- UserController.java:
 	- updateUser function added
