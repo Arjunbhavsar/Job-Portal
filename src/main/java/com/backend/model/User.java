@@ -23,8 +23,8 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "user_id")
-	private int id;
+	private String uniqueId;
+	
 	private String firstName;
 	private String lastName;
 	
@@ -85,6 +85,9 @@ public class User {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getUniqueId() {
+		return uniqueId;
 	}
 	
 }

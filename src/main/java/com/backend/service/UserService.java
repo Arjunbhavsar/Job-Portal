@@ -59,7 +59,7 @@ public class UserService implements UserServiceInterface {
 	}
 	
 	public String checkIfUsernameExists(String username) {
-		if(username != null) { 
+		if(username != null) {
 			User result = userDao.findByusername(username);
 			if(result!= null) {
 				return "Username not available";

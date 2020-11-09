@@ -1,8 +1,6 @@
 package com.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.backend.dao.FileDao;
 import com.backend.dao.UserDao;
 import com.backend.message.UploadFileResponse;
 import com.backend.service.FileService;
@@ -28,14 +27,18 @@ public class FileController {
 	@Autowired
 	private FileService fileService;
 	@Autowired
+	private FileDao fileDao;
+	@Autowired
 	private UserDao userDao;
 
-@PostMapping("/uploadProfile/{username}")
+	@PostMapping("/uploadProfile/{username}")
 	public UploadFileResponse uploadProfile(@PathVariable String username, @RequestParam("file") MultipartFile file) {
 		String message = "";
 		try {
 			File newFile = fileService.storeProfile(username, file);
 			User user = userDao.findByusername(username);
+			if(user.getProfileFileId() != null)
+				fileDao.deleteById(user.getProfileFileId());
 			user.setProfileFileId(newFile.getId());
 			userDao.save(user);
 			String fileLoadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -55,6 +58,8 @@ public class FileController {
 		try {
 			File newFile = fileService.storeResume(username, file);
 			User user = userDao.findByusername(username);
+			if(user.getResumeFileId() != null)
+				fileDao.deleteById(user.getResumeFileId());
 			user.setResumeFileId(newFile.getId());
 			userDao.save(user);
 			String fileLoadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
