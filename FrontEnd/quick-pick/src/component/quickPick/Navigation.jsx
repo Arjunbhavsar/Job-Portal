@@ -140,7 +140,7 @@ export default function Navgiation() {
     //   id={this.index}
     return (
         <div className="navBar">
-            <img src={logo} alt="logo" className="logo"/>
+            <Link to="/"><img src={logo} alt="logo" className="logo"/></Link>
             <div className="leftNav">
                 <nav className="navControls">
                     {/* <Link className="navButton" id={other} to="/" >Manage</Link> */}

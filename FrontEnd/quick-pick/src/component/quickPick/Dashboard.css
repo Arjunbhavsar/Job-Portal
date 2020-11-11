@@ -28,13 +28,14 @@
     background-color: var(--grey-color);
 }
 .content{
+    font-family: 'Noto Sans','Helvetica Neue',Helvetica,Arial,sans-serif !important;
     border: grey 1px solid;
     max-width: 60%;
     position: relative;
     padding: 30px;
     margin: 20px auto;
     max-height: 1000px;
-    border-radius: 8px;
+    border-radius: 3px;
     background-color: white;
     display: flex;
     flex-direction: column;

@@ -4,6 +4,7 @@ import './CreateJob.css';
 import AuthenticationService from './AuthenticationService';
 import JobService from '../../api/JobService';
 import { Link } from 'react-router-dom';
+import { Paper, Grid } from '@material-ui/core/';
 
 class CreateJob extends Component {
     constructor(){
@@ -55,6 +56,21 @@ class CreateJob extends Component {
     }
 
     render(){
+		const style = {Paper : {padding:20, marginTop:10, marginBottom:10}}
+		const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
+		if(!isUserLoggedIn) {
+			return( <Grid container justify="center">
+						<Grid item sm={6}>
+							<Paper style={style.Paper}>
+								<Grid container>
+									<Grid item sm>
+										Not Logged In
+									</Grid>
+								</Grid>
+							</Paper>
+						</Grid>
+					</Grid>)
+		}
         if(this.state.isSubmitted){
             return(
                 <div className='jobContainer'>

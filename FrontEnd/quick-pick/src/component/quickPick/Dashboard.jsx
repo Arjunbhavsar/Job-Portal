@@ -13,6 +13,7 @@ class Dashboard extends Component {
             job : null
         }
         this.changeJob = this.changeJob.bind(this);
+        console.log(window.location.origin);
     }
     
     // async changeJob(id) {
@@ -154,7 +155,7 @@ class JobListItems extends Component {
                         this.state.jobs.map(function(JobItem, index) {
                             const style = this.state.activeIndex === index ? this.active : this.inactive;
                             return(
-                            <div className="leftItem" onClick={this.handleUpdateCurrent.bind(this, index, this.props)} style={style}>
+                            <div className="leftItem" onClick={this.handleUpdateCurrent.bind(this, index, this.props)} style={style} key={index}>
                                 {JobItem}
                             </div>
                             );

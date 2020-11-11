@@ -17,7 +17,9 @@
     display: flex;
     /* align-items: center; */
     justify-content: flex-end;
+    z-index: 5;
 }
+
 
 .rightNav {
     display: flex;

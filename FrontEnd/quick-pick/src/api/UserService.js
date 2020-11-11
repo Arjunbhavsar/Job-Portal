@@ -2,6 +2,7 @@ import axios from 'axios'
 
 class getUsersListService{
 	state = {  
+		//userTag : 'https://quick-pick1.herokuapp.com/user/'
 		userTag : 'http://localhost:9090/user/'
 	}
 
@@ -38,19 +39,36 @@ class getUsersListService{
 	}
    
     executePostUserRegisterService(user){
-		const {userTag} = this.state;
-        let username = 'user'
-		let password =  'password'
+	const {userTag} = this.state;
+    let username = 'user'
+	let password =  'password'
 		
         let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
         return axios.post(userTag+'register',user,
         {
             headers:{
-                authorization: basicAuthHeader
+                authorization: basicAuthHeader,
+				'Content-Type': 'application/json'
             }
         }
         )
     }
+
+	executePostUserFacebookRegisterService(user){
+		const {userTag} = this.state;
+		let username = 'user'
+		let password =  'password'
+			
+			let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
+			return axios.post(userTag+'register',user,
+			{
+				headers:{
+					authorization: basicAuthHeader,
+					'Content-Type': 'application/json'
+				}
+			}
+			)
+		}
 
     registerLogin(user) {
 		const {userTag} = this.state;
@@ -64,21 +82,7 @@ class getUsersListService{
 				}
 			}
         )
-	}
-	
-	checkifUsernameAvailable(username){
-		const {userTag} = this.state;
-		let user = 'user'
-		let password = 'password'
-		console.log(username)
-		let basicAuthHeader = 'Basic '+window.btoa(user+':'+password)
-
-	   return axios.get(`${userTag}checkUsername/${username}`,{
-		   headers:{
-			   authorization: basicAuthHeader
-		   }
-	   })
-   }
+    }
 }
 
 
