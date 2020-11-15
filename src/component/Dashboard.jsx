@@ -137,7 +137,14 @@ class JobListItems extends Component {
         }else{
             if(this.state.jobs.length === 0){
                 return(
-                    <p>No jobs found</p>
+                    <div className="search-list-container">
+                        <SearchBar  holder="Search by title..." search={this.updateInput}/>
+                        <div className="job-list">
+                            <div className="leftItem" style={this.inactive}>
+                                <p style={{'margin': '16px auto'}}>No jobs found</p>
+                            </div>
+                        </div>
+                    </div>
                 )
             }
             return(
@@ -208,7 +215,7 @@ class SelectedJob extends Component {
         if (this.props.job == null){
             return(
                 <div className="content" id="selectJob">
-                    <p className="NoJob">No jobs available</p>
+                    <p style={{'margin': '20px auto', 'width' : 'fit-content'}}>No jobs available</p>
                 </div>
             )
         } else {
