@@ -21,3 +21,4 @@
 - Profile UI update
 - Added job lists in profile
 	- Working on adding editing
+- Added bio in user
