@@ -27,9 +27,14 @@ class Dashboard extends Component {
             <div className="dash-contianer">
                 <div className="background-container"/>
                 <div className="dash-inner">
-                    <JobListItems jobSelect={this.changeJob}/>
-                    <div className="content-container">
-                        <SelectedJob job={this.state.job} />
+                    {/* <div className="search-section">
+                        <SearchBar  holder="Search by title..." search={this.updateInput}/>
+                    </div> */}
+                    <div className="content-sections">
+                        <JobListItems jobSelect={this.changeJob}/>
+                        <div className="content-container">
+                            <SelectedJob job={this.state.job} />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -136,18 +141,21 @@ class JobListItems extends Component {
                 )
             }
             return(
-                <div className="job-list">
-                    {
-                        this.state.jobs.map(function(JobItem, index) {
-                            const style = this.state.activeIndex === index ? this.active : this.inactive;
-                            return(
-                            <div className="leftItem" onClick={this.handleUpdateCurrent.bind(this, index, this.props)} style={style} key={index}>
-                                {JobItem}
-                            </div>
-                            );
-                        }, this)
-                    }
-                    {this.state.moreToLoad && <button type="button" onClick={this.loadmore}>Load more</button>}
+                <div className="search-list-container">
+                    <SearchBar  holder="Search by title..." search={this.updateInput}/>
+                    <div className="job-list">
+                        {
+                            this.state.jobs.map(function(JobItem, index) {
+                                const style = this.state.activeIndex === index ? this.active : this.inactive;
+                                return(
+                                <div className="leftItem" onClick={this.handleUpdateCurrent.bind(this, index, this.props)} style={style} key={index}>
+                                    {JobItem}
+                                </div>
+                                );
+                            }, this)
+                        }
+                        {this.state.moreToLoad && <button type="button" onClick={this.loadmore}>Load more</button>}
+                    </div>
                 </div>
             )
         }
