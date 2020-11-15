@@ -12,7 +12,7 @@ export default class ProfileUploader extends Component {
 		super(props);
 		
 		this.state = {
-			urlTag: 'http://localhost:9090/load/',
+			urlTag: process.env.REACT_APP_API_URL_LOAD,
 			selectedFiles: undefined,
 			currentFile: undefined,
 			progress: 0,
@@ -61,8 +61,7 @@ export default class ProfileUploader extends Component {
 				profile: response.data,
 				profileCond: true
 			});
-			// window.location.reload();
-			// this.props.updater()
+			window.location.reload();
 		})
 		.catch(() => {
 			this.setState({

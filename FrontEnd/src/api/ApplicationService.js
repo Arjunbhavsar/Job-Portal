@@ -2,10 +2,7 @@ import axios from 'axios'
 
 class ApplicationService{
 	state = {  
-		appsTag : 'http://localhost:9090/apps/'
-		// appsTag : 'https://quickpick-back.herokuapp.com/apps/'
-		// appsTag : 'https://quick-pick1.herokuapp.com/apps/'
-		// appsTag : 'https://backend-test-quickpick.herokuapp.com/apps/'
+		appsTag : process.env.REACT_APP_API_URL_APPS,
     }
     executeApplication(application){
 		const {appsTag} = this.state;

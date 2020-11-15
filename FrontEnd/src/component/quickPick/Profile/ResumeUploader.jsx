@@ -12,7 +12,7 @@ export default class ResumeUploader extends Component {
 		super(props);
 		
 		this.state = {
-			urlTag: 'http://localhost:9090/load/',
+			urlTag: process.env.REACT_APP_API_URL_LOAD,
 			selectedFiles: undefined,
 			currentFile: undefined,
 			progress: 0,

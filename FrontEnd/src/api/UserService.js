@@ -2,10 +2,7 @@ import axios from 'axios'
 
 class getUsersListService{
 	state = {  
-		userTag : 'http://localhost:9090/user/'
-		// userTag : 'https://quickpick-back.herokuapp.com/user/'
-		// userTag : 'https://quick-pick1.herokuapp.com/user/'
-		// userTag : 'https://backend-test-quickpick.herokuapp.com/user/'
+		userTag : process.env.REACT_APP_API_URL_USER
 	}
 
     executeGetUserListService(){

@@ -20,7 +20,7 @@ export default class CreatedJobList extends Component{
 	constructor(props) {
 		super(props);
 		this.state = {
-			urlTag: 'http://localhost:9090/load/',
+			urlTag: process.env.REACT_APP_API_URL_LOAD,
 			isLoading: true,
 			userObj: null,
 			jobs: null,
