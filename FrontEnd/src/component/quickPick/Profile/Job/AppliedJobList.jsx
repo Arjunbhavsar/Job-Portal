@@ -50,7 +50,7 @@ export default class AppliedJobList extends Component{
 	}
 
 	render() {
-		console.log(this.state.jobs);
+		// console.log(this.state.jobs);
 		if(this.state.isLoading)
 			return(<p>Loading...</p>)
 		return (

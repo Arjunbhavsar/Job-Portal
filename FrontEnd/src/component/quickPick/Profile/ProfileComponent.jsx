@@ -44,7 +44,7 @@ class ProfileComponent extends Component {
 							console.log('loading data ...');
 		
 		this.setState({userObj : data, isLoading : false});
-		console.log(data);
+		// console.log(data);
 		var evt = document.createEvent('Event');
         evt.initEvent('load', false, false);
 		window.dispatchEvent(evt);
@@ -159,7 +159,7 @@ class ProfileComponent extends Component {
 													</Grid>
 												</Grid>
 												<Grid item sm={1}>
-													{!this.state.edit_mode ? <EditIcon onClick={this.editing}/> : <SaveIcon onClick={this.editing}/>}
+													{!this.state.edit_mode ? <EditIcon style={{cursor: "pointer"}} onClick={this.editing}/> : <SaveIcon style={{cursor: "pointer"}} onClick={this.editing}/>}
 												</Grid>
 											</Grid>
 											<Grid container direction="row">

@@ -1,1 +1,1 @@
-# Quick-Pick - Frontend - Heroku
+# Quick-Pick - Frontend

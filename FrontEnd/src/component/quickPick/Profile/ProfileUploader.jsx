@@ -41,7 +41,6 @@ export default class ProfileUploader extends Component {
 	}
 
 	selectFile(event) {
-		console.log(event.target);
 		this.setState({
 			selectedFiles: event.target.files,
 			progress: 0
@@ -49,7 +48,6 @@ export default class ProfileUploader extends Component {
 	}
 
 	async uploadProfile() {
-		console.log("WOOO");
 		let currentFile = this.state.selectedFiles[0];
 		this.setState({ progress: 0, currentFile: currentFile});
 
@@ -63,8 +61,7 @@ export default class ProfileUploader extends Component {
 				profile: response.data,
 				profileCond: true
 			});
-			window.location.reload();
-			console.log(response)
+			// window.location.reload();
 			// this.props.updater()
 		})
 		.catch(() => {

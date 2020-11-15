@@ -62,8 +62,8 @@ export default class ResumeUploader extends Component {
 				resume: response.data,
 				resumeCond: true
 			});
-			window.location.reload();
-			console.log(response)
+			// window.location.reload();
+			// console.log(response)
 			// this.props.updater()
 		})
 		.catch(() => {
