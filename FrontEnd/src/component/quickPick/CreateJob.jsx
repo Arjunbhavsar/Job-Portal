@@ -48,7 +48,8 @@ class CreateJob extends Component {
             location : this.state.location,
             pageUrl : this.state.pageUrl,
             jobSalary : this.state.jobSalary,
-            sector : this.state.sector
+            sector : this.state.sector,
+            author : sessionStorage.getItem('authenticatedUser')
         }
         JobService.executePostJobService(job);
 		

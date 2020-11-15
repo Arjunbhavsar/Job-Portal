@@ -2,8 +2,9 @@ import axios from 'axios'
 
 class getUsersListService{
 	state = {  
-		// userTag : 'http://localhost:9090/user/'
-		userTag : 'https://quick-pick1.herokuapp.com/user/'
+		userTag : 'http://localhost:9090/user/'
+		// userTag : 'https://quickpick-back.herokuapp.com/user/'
+		// userTag : 'https://quick-pick1.herokuapp.com/user/'
 		// userTag : 'https://backend-test-quickpick.herokuapp.com/user/'
 	}
 
@@ -22,7 +23,22 @@ class getUsersListService{
 			}
 		)
 	}
-	
+	executeCheckRegisteredExternal(username) {
+		const {userTag} = this.state;
+
+		let usernameAuth = 'user'
+		let passwordAuth =  'password'
+		let basicAuthHeader = 'Basic '+window.btoa(usernameAuth+':'+passwordAuth)
+
+		return axios.get(userTag+'checkUsername/'+username,
+			{
+				headers:{
+					authorization: basicAuthHeader
+				}
+			}
+		)
+	}
+
 	executeGetUserService(username) {
 		const {userTag} = this.state;
 
@@ -59,7 +75,6 @@ class getUsersListService{
 		const {userTag} = this.state;
         let username = 'user'
         let password = 'password'
-        console.log(user)
         let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
         return axios.post(userTag+'login', user , {
 				headers:{
@@ -82,6 +97,7 @@ class getUsersListService{
 				}
 			}
         )
-    }
+	}
+
 }
 export default new getUsersListService();

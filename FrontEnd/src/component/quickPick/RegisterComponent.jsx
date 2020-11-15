@@ -1,7 +1,46 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import UserService from '../../api/UserService';
-import './RegisterComponent.css'
+import './RegisterComponent.css';
+
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Link from '@material-ui/core/Link';
+import { Alert } from '@material-ui/lab';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = theme => ({
+	body: {
+		"z-index": "-1",
+		backgroundColor: theme.palette.common.red
+	},
+	paper: {
+		marginTop: theme.spacing(8),
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+	},
+	avatar: {
+		alignItems: 'center',
+		margin: theme.spacing(1),
+		backgroundColor: theme.palette.secondary.main,
+	},
+	form: {
+		width: '100%', // Fix IE 11 issue.
+		marginTop: theme.spacing(1),
+	},
+	submit: {
+		margin: theme.spacing(3, 0, 2),
+		backgroundColor: theme.palette.common.blue,
+	},
+});
 
 class RegisterComponenet extends Component {
 	constructor(props){
@@ -76,94 +115,163 @@ class RegisterComponenet extends Component {
 
 
 	render(){
+		const { classes } = this.props;
 		return(
-			<div className="bg-img1">
-				<div className="container text-center">
-					<div className="register margin" >
-						<form className="margin"onSubmit={this.displayLogin} >
-							<h2>Register</h2>
-							
-							<div className="username margin">
-								<input
-									type="text"
-									placeholder="username"
-									name="username"
-									value={this.state.username}
-									onChange={this.update}
-								/>
-							</div>
-
-							<div className="firstName margin">
-								<input
-									type="text"
-									placeholder="first Name"
-									name="firstName"
-									value={this.state.firstName}
-									onChange={this.update}
-								/>
-							</div>
-
-							<div className="lastName margin">
-								<input
-									type="text"
-									placeholder="Last Name"
-									name="lastName"
-									value={this.state.lastName}
-									onChange={this.update}
-								/>
-							</div>
-
-							<div className="email margin">
-								<input
-									type="text"
-									placeholder="Enter your email"
-									name="emailId"
-									value={this.state.emailId}
-									onChange={this.update}
-								/>
-							</div>
-							
-							<div className="address margin">
-								<input
-									type="text"
-									placeholder="address"
-									name="address"
-									value={this.state.address}
-									onChange={this.update}
-								/>
-							</div>
-							
-							<div className="pasword margin">
-								<input
-									type="password"
-									placeholder="Password"
-									name="password"
-									value={this.state.password}
-									onChange={this.update}
-								/>
-							</div>
-
-							<div className="password margin">
-								<input 
-									type="password" 
-									placeholder="Confirm Password" 
-									name="retype_password"
-									value={this.state.retype_password}
-									onChange={this.update}
-								/>
-							</div>
-
-							<button className="btn btn-success margin" onClick={this.registerClicked}>Register</button>
-						</form>
-
-						<h5>Already have an Account?	<Link className="nav-link" to="/login">Login</Link></h5>
-
-						<span className="alert">{this.state.errorMessage}</span>
-					</div>
-					
+			<Container component="main" maxWidth="xs" style={{"z-index":-1}}>
+					<div className="registerBack"></div>
+				<CssBaseline />
+				<div className={classes.paper}>
+				<Avatar className={classes.avatar}>
+					<LockOutlinedIcon />
+				</Avatar>
+				<Typography component="h1" variant="h5">
+					Register
+				</Typography>
+				<form className={classes.form} noValidate >
+				{this.state.registerFailure && <Alert severity="error">User Not Registered. Try using diffrent Username!!</Alert>}
+				{this.state.registerSuccess && <Alert severity="success">User Successfully Registered !!</Alert>}
+					<TextField
+						variant="outlined"
+						margin="normal"
+						required
+						fullWidth
+						id="username"
+						label="Username"
+						name="username"
+						autoComplete="username"
+						value={this.state.username}
+						autoFocus
+						inputProps={{
+							type: "text",
+							onChange: this.update,
+							autoComplete: "off"
+						}}
+					/>
+					<TextField
+						variant="outlined"
+						margin="normal"
+						required
+						fullWidth
+						id="firstName"
+						label="First Name"
+						name="firstName"
+						autoComplete="firstName"
+						value={this.state.firstName}
+						autoFocus
+						inputProps={{
+							type: "text",
+							onChange: this.update,
+							autoComplete: "off"
+						}}
+					/>
+					<TextField
+						variant="outlined"
+						margin="normal"
+						required
+						fullWidth
+						id="lastName"
+						label="Last Name"
+						name="lastName"
+						autoComplete="lastName"
+						value={this.state.lastName}
+						autoFocus
+						inputProps={{
+							type: "text",
+							onChange: this.update,
+							autoComplete: "off"
+						}}
+					/>
+					<TextField
+						variant="outlined"
+						margin="normal"
+						required
+						fullWidth
+						id="address"
+						label="Address"
+						name="address"
+						autoComplete="address"
+						value={this.state.address}
+						autoFocus
+						inputProps={{
+							type: "text",
+							onChange: this.update,
+							autoComplete: "off"
+						}}
+					/>
+					<TextField
+						variant="outlined"
+						margin="normal"
+						required
+						fullWidth
+						id="email"
+						label="Email Address"
+						name="emailId"
+						autoComplete="email"
+						value={this.state.emailId}
+						autoFocus
+						inputProps={{
+							type: "text",
+							onChange: this.update,
+							autoComplete: "off"
+						}}
+					/>
+					<TextField
+						variant="outlined"
+						margin="normal"
+						required
+						fullWidth
+						name="password"
+						label="Password"
+						type="password"
+						id="password"
+						value={this.state.password}
+						autoComplete="current-password"
+						inputProps={{
+							type: "password",
+							onChange: this.update,
+							autoComplete: "off"
+						}}
+					/>
+					<TextField
+						variant="outlined"
+						margin="normal"
+						required
+						fullWidth
+						name="retype_password"
+						label="Retype Password"
+						type="password"
+						id="retype_password"
+						value={this.state.retype_password}
+						autoComplete="current-password"
+						inputProps={{
+							type: "password",
+							onChange: this.update,
+							autoComplete: "off"
+						}}
+					/>
+					<Button
+						type="button"
+						fullWidth
+						variant="contained"
+						color="primary"
+						className={classes.submit}
+						onClick={this.registerClicked}
+					>
+					Register
+					</Button>
+					<Grid container>
+					<Grid item >
+						<Link href="login" variant="body2">
+						{"Already have an Account? Sign In"}
+						</Link>
+					</Grid>
+					</Grid>
+				</form>
 				</div>
-			</div>
+				<Box mt={8}>
+				</Box>
+			</Container>
 		)
 	}
 }
-export default RegisterComponenet;
+export default withStyles(styles, { withTheme: true })(RegisterComponenet);

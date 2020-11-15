@@ -1,7 +1,5 @@
 package com.backend.model;
 
-import java.util.ArrayList;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,6 +24,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	
 	private String firstName;
 	private String lastName;
 	
@@ -36,11 +35,10 @@ public class User {
 	private String address;
 	private String password;
 	
+	private String biography;
+	
 	public String profileFileId;
 	public String resumeFileId;
-	
-	public ArrayList<String> createdJobId = new ArrayList<>();
-	public ArrayList<String> acceptedJobId = new ArrayList<>();
 	
 	public String getProfileFileId() {
 		return profileFileId;
@@ -90,5 +88,4 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
 }

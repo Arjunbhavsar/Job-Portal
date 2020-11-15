@@ -7,23 +7,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.backend.dao.UserDao;
-import com.backend.message.UploadFileResponse;
-import com.backend.model.File;
 import com.backend.model.User;
 import com.backend.service.UserService;
 
 @RestController
 @RequestMapping("/user")
-//@CrossOrigin(origins = "http://localhost:3000")	// local
 @CrossOrigin(origins = "*")	// heroku
 public class UserController {
 	
@@ -41,7 +34,7 @@ public class UserController {
 	@PostMapping("/register")
 	public String registerUser(@RequestBody User user) {
 		userService.registerUser(user);
-		return "Saved Successfully ";
+		return "Saved Successfully";
 	}
 	
 	@GetMapping("/getUsers")
@@ -56,7 +49,11 @@ public class UserController {
 	
 	@GetMapping("/checkUsername/{username}")
 	public String checkIfUsernameExists(@PathVariable String username){
-		return userService.checkIfUsernameExists(username);
+		if(userService.checkIfUsernameExists(username).contains("not")) {
+			return "registered";
+		}else {
+			return "new";
+		}
 	}
 	
 	@PostMapping("/updateUser/{username}")
@@ -78,6 +75,10 @@ public class UserController {
 				currentUser.setProfileFileId(user.getProfileFileId());
 			if(user.getResumeFileId() != null && !user.getResumeFileId().isEmpty())
 				currentUser.setResumeFileId(user.getResumeFileId());
+			if(user.getBiography() != null && !user.getBiography().isEmpty())
+				currentUser.setBiography(user.getBiography());
+			if(user.getUsername() != null && !user.getUsername().isEmpty())
+				try {currentUser.setUsername(user.getUsername());} catch (Exception e) {}
 			userDao.save(currentUser);
 			return "Updated";
 		} catch (Exception e) {

@@ -2,17 +2,8 @@
 
 ----
 
-- Tested Deployment and it works!
-- All URL's have been changed to heroku
+- Tested locally as of now
 
-- UserController.java:
-	- updateUser function added
-	- Job.java connected to User.java
-		- Added ArrayList<String> createdJobId and acceptedJobId
-
-- JobController.java:
-	- acceptJob function added
-	- createJob function added
-
-- UserController.java:
-	- updateUser function added
+- Profile UI update
+- Added job lists in profile
+	- Working on adding editing

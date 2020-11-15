@@ -3,6 +3,8 @@ import { Component } from 'react';
 import './Dashboard.css'
 import SearchBar from './SearchBar';
 import JobService from '../../api/JobService';
+import ApplicationService from '../../api/ApplicationService';
+import AuthenticationService from './AuthenticationService';
 
 
 class Dashboard extends Component {
@@ -49,17 +51,15 @@ class JobListItems extends Component {
         this.state = {
             jobs: [],
             jobsIndex: [],
-            activeIndex: null,
+            activeIndex: 0,
             isLoading: true,
             currentJob: null,
             moreToLoad: true
         }
         this.total = 0;
-        // this.handleSelect = this.handleSelect.bind(this);
-        this.loadmore = this.loadmore.bind(this); 
-        this.updateInput = this.updateInput.bind(this); 
+        this.loadmore = this.loadmore.bind(this);
         this.handleUpdateCurrent = this.handleUpdateCurrent.bind(this); 
-        this.leftToLoad = 0; // Math.max(10, {call backend of how many jobs are left in the search list})
+        this.leftToLoad = 0;
         this.allJobs = null;
         this.inactive = {
             border: "gray solid 2px",
@@ -94,7 +94,7 @@ class JobListItems extends Component {
             
         }
         this.setState({jobs: added, isLoading: false, jobsIndex: indexes});
-        console.log(this.state.jobs);
+        this.props.jobSelect(this.state.jobsIndex[0]);
     }
 
     handleSelect(id) {
@@ -129,10 +129,6 @@ class JobListItems extends Component {
         this.setState({isLoading: false, jobs: added, jobsIndex: indexes});
         console.log(this.state.jobs.length);
         // this.forceUpdate();
-    }
-
-    updateInput(value){
-
     }
     
     render(){
@@ -170,16 +166,11 @@ class JobListItems extends Component {
 class BuildJobItem extends Component{
     constructor(){
         super();
-        this.clicked = this.clicked.bind(this);
-    }
-    
-    clicked(){
-        this.props.changeJob(this.props.jobInfo);
     }
 
     render(){
         return(
-            <div className="leftInner" onclick={this.clicked}>
+            <div className="leftInner" >
                 <p className="title">{this.props.jobInfo.jobTitle}</p>
                 <p className="company">{this.props.jobInfo.organization}</p>
                 <p className="location">{this.props.jobInfo.location}</p>
@@ -193,11 +184,34 @@ class BuildJobItem extends Component{
 
 
 class SelectedJob extends Component {
-    // constructor(){
-    //     super();
-    // }
+    constructor(){
+        super();
+        this.state = {
+            appResponse: '',
+            appStatus: false
+        }
+        this.apply = this.apply.bind(this);
+    }
+
+
+    async apply(){
+        const application = {
+            jobID : this.props.job.uniqueId,
+            username : sessionStorage.getItem('authenticatedUser')
+        }
+        console.log(application);
+        await ApplicationService.executeApplication(application)
+        .then((response) => {
+			this.setState({
+				appResponse: response.data,
+				appStatus: true
+			});
+		})
+		.catch(() => {});
+    }
 
     render(){
+        const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
         if (this.props.job == null){
             return(
                 <div className="content" id="selectJob">
@@ -210,6 +224,23 @@ class SelectedJob extends Component {
                     <p>Loading...</p>
                 )
             }else{
+                if(!this.state.appStatus){
+                    const application = {
+                        jobID : this.props.job.uniqueId,
+                        username : sessionStorage.getItem('authenticatedUser')
+                    }
+                    ApplicationService.checkApplied(application)
+                    .then((response) => {
+                        console.log(response);
+                        if(response.data !== ""){
+                            this.setState({
+                                appResponse: 'Application ' + response.data,
+                                appStatus: true
+                            });
+                        }
+                    })
+                    .catch(() => {});
+                }
                 return(
                     <div className="content" id="job">
                         <h2>{this.props.job.jobTitle}</h2>
@@ -218,6 +249,8 @@ class SelectedJob extends Component {
                         <p>{this.props.job.jobDescription}</p>
                         <p>{this.props.job.jobSalary}</p>
                         <p>{this.props.job.pageUrl}</p>
+                        {!this.state.appStatus && isUserLoggedIn && <button type="button" onClick={this.apply}>Apply</button>}
+                        {this.state.appStatus && isUserLoggedIn && <div>{this.state.appResponse}</div>}
                     </div>
                 )
             }
@@ -228,6 +261,5 @@ class SelectedJob extends Component {
 SelectedJob.defaultProps = {
     status: null
 }
-
 
 export default Dashboard
