@@ -9,7 +9,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
 import output from '../api/connections';
 import '../css/RegisterComponent.css'
-import '../css/Profile.css'
+//import '../css/Profile.css'
 
 import AuthenticationService from '../api/AuthenticationService';
 
