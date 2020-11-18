@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AuthenticationService from '../api/AuthenticationService';
+import SearchBar from './SearchBar';
 import '../css/Navigation.css';
 import logo from '../img/quickpick-logo2-transparent-small.png';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -77,22 +78,24 @@ export default function Navgiation() {
     //   id={this.index}
     return (
         <div className="navBar">
-            <Link to="/"><img src={logo} alt="logo" className="logo"/></Link>
+            <div className="nav-search-logo">
+                <Link to="/"><img src={logo} alt="logo" className="logo"/></Link>
+                <SearchBar  holder="Search by title..."/>
+                <SearchBar  holder="Search by location..."/>
+            </div>
             <div className="leftNav">
                 <nav className="navControls">
                     {/* <Link className="navButton" id={other} to="/" >Manage</Link> */}
                     <Link className="navButton" id={other} to="/postjob" style={noLoggedStyles}>Post Job</Link>
                     <Link className="navButton" id={dash} to="/">Dashboard</Link>
                     {/* <td><NavButton page={"hidden"} name={"Profile"} to={"/profile"}/></td> */}
-                </nav>
-            </div>
-            <div className="rightNav">
-                <MenuItem onClick={handleProfileMenuOpen} className="account">
+                    <MenuItem onClick={handleProfileMenuOpen} className="account">
                     <IconButton >
                         <AccountCircle id="accountIcon" style={spanStyles}/>
                     </IconButton>
                 </MenuItem>
                 {renderMenu}
+                </nav>
             </div>
         </div>
     )

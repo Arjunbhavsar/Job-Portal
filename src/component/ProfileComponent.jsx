@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
-import UserService from '../api/UserService';
-import FileComponent from './FileComponent';
-import blank_profile from '../img/blank-profile.png';
-import { Paper, Grid, List, ListItem, ListItemText, ListItemAvatar, Avatar, Divider } from '@material-ui/core/';
-import { AccountCircle, Email, ContactMail } from '@material-ui/icons';
+import { Paper, Grid, List, ListItem, ListItemText, ListItemAvatar, Divider } from '@material-ui/core/';
+import { PersonOutline as AccountCircle, MailOutline as Email, LocationOnOutlined as ContactMail } from '@material-ui/icons';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
-import output from '../api/connections';
-import '../css/RegisterComponent.css'
-//import '../css/Profile.css'
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 
+import ResumeUploader from './ResumeUploader';
+import ProfileUploader from './ProfileUploader';
+import CreatedJobList from './CreatedJobList';
+import AppliedJobList from './AppliedJobList';
+import UserService from '../api/UserService';
 import AuthenticationService from '../api/AuthenticationService';
+import '../css/RegisterComponent.css'
+
 
 class ProfileComponent extends Component {
 	constructor() {
@@ -21,16 +23,15 @@ class ProfileComponent extends Component {
 			userObj: null,
 			resumeName: '',
 			profileName: '',
-			resume_loaded: false,
-			profile_loaded: false,
 			edit_mode: false,
 			isSubmitted: false,
 			newFirstName: '',
 			newLastName: '',
 			newEmail: '',
-			newAddress: ''
+			newAddress: '',
+			newBiography: '',
+			newUsername: ''
 		}
-		this.update = this.update.bind(this);
 		this.editing = this.editing.bind(this);
 		this.updateUser = this.updateUser.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -44,40 +45,12 @@ class ProfileComponent extends Component {
 							console.log('loading data ...');
 		
 		this.setState({userObj : data, isLoading : false});
-		try {
-			if(data.resumeFileId !== null){
-				this.setState({resume_loaded: true});
-			}
-		} catch(error) {}
-		try {
-			if(data.profileFileId !== null){
-				this.setState({profile_loaded: true});
-			}
-		} catch(error) {}
+		// console.log(data);
 		var evt = document.createEvent('Event');
         evt.initEvent('load', false, false);
 		window.dispatchEvent(evt);
 	}
-
-	async update() {
-		const data = await	UserService
-							.executeGetUserService(sessionStorage
-							.getItem('authenticatedUser'))
-							.then(result => result.data);
-							console.log('loading data ...');
-		this.setState({userObj : data, isLoading : false});
-		try {
-			if(data.resumeFileId !== null){
-				this.setState({resume_loaded: true});
-			}
-		} catch(error) {}
-		try {
-			if(data.profileFileId !== null){
-				this.setState({profile_loaded: true});
-			}
-		} catch(error) {}
-	}
-
+	
 	editing() {
 		this.setState({edit_mode : true});
 		if(this.state.edit_mode === true) {
@@ -90,7 +63,9 @@ class ProfileComponent extends Component {
             firstName : this.state.newFirstName,
             lastName : this.state.newLastName,
             emailId : this.state.newEmail,
-            address : this.state.newAddress
+			address : this.state.newAddress,
+			biography : this.state.newBiography,
+			username : this.state.newUsername,
         }
 		await UserService.updateUser(user);
 		this.componentDidMount();
@@ -109,116 +84,116 @@ class ProfileComponent extends Component {
 		const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
 		const style = {
 			Paper : {padding:20, marginTop:10, marginBottom:10},
-			image : {'borderRadius':'50px', width:"200px", height:"200px", "objectfit":"cover"}
+			image : {'borderRadius':'50%', width:"200px", height:"200px", "objectfit":"cover"}
 		}
+
+		const editingFalse = () => (
+			<List>
+				<ListItem>
+					<ListItemAvatar><AccountCircle fontSize="large" /></ListItemAvatar>
+					<ListItemText primary={this.state.userObj.firstName+" "+this.state.userObj.lastName}/>
+				</ListItem>
+				<Divider variant="inset" component="li" />
+				<ListItem>
+					<ListItemAvatar><Email fontSize="large" /></ListItemAvatar>
+					<ListItemText primary={this.state.userObj.emailId}/>
+				</ListItem>
+				<Divider variant="inset" component="li" />
+				<ListItem>
+					<ListItemAvatar><ContactMail fontSize="large"/></ListItemAvatar>
+					<ListItemText primary={this.state.userObj.address}/>
+				</ListItem>
+			</List>
+		);
+
+		const editingTrue = () => (
+			<List>
+				<ListItem>
+					<ListItemAvatar><AccountCircle fontSize="large" /></ListItemAvatar>
+					<TextField label={this.state.userObj.firstName} placeholder="firstname" name="newFirstName" onChange={this.handleChange}/>
+					<TextField label={this.state.userObj.lastName} placeholder="lastname" name="newLastName" onChange={this.handleChange}/>
+				</ListItem>
+				<Divider variant="inset" component="li" />
+				<ListItem>
+					<ListItemAvatar><Email fontSize="large" /></ListItemAvatar>
+					<TextField label={this.state.userObj.emailId} placeholder="email" name="newEmail" onChange={this.handleChange}/>
+				</ListItem>
+				<Divider variant="inset" component="li" />
+				<ListItem>
+					<ListItemAvatar><ContactMail fontSize="large" /></ListItemAvatar>
+					<TextField label={this.state.userObj.address} placeholder="address" name="newAddress" onChange={this.handleChange}/>
+				</ListItem>
+			</List>
+		);
+
 		if(this.state.isLoading)
 			return (<div>Loading...</div>);
 		return (
 			<div className="container">
-				<Grid container justify="center">
-					<Grid item sm={6}>
-						<Paper style={style.Paper}>
-							{!isUserLoggedIn &&
+				<Grid container direction="row">
+					<Grid container justify="center">
+						<Grid item sm={3}></Grid>
+						<Grid item sm={6}>
+							<Paper style={style.Paper}>
 								<Grid container>
-									<Grid item sm>
-										Not Logged In
-									</Grid>
-								</Grid>
-							}
-							{isUserLoggedIn &&
-								<Grid container>
-									<Grid item sm className="profile-image-section">
-											{this.state.profile_loaded && (
-												<img src={output + '/load/' + this.state.userObj.profileFileId} alt={this.state.userObj.username + "-profile-image"} style={style.image}/>
-											)}
-											{!this.state.profile_loaded && (
-												<img src={blank_profile} alt="profile-blank" style={style.image}/>
-											)}
-											<h2>{this.state.userObj.username}</h2>
-									</Grid>
-									{!this.state.edit_mode &&
-										<Grid container direction="row">
-											<Grid item sm>
-												<List>
-													<ListItem>
-														<ListItemAvatar>
-															<Avatar>
-																<AccountCircle />
-															</Avatar>
-														</ListItemAvatar>
-														<ListItemText primary={this.state.userObj.firstName+" "+this.state.userObj.lastName}/>
-													</ListItem>
-													<Divider variant="inset" component="li" />
-													<ListItem>
-														<ListItemAvatar>
-															<Avatar>
-																<Email />
-															</Avatar>
-														</ListItemAvatar>
-														<ListItemText primary={this.state.userObj.emailId}/>
-													</ListItem>
-													<Divider variant="inset" component="li" />
-													<ListItem>
-														<ListItemAvatar>
-															<Avatar>
-																<ContactMail />
-															</Avatar>
-														</ListItemAvatar>
-														<ListItemText primary={this.state.userObj.address}/>
-													</ListItem>
-												</List>
-											</Grid>
-											<Grid item sm={1}>
-												<EditIcon onClick={this.editing}/>
-											</Grid>
+									{!isUserLoggedIn ?
+										<Grid item sm>
+											Not Logged In
 										</Grid>
-									}
-									{this.state.edit_mode &&
-										<Grid container direction="row">
-											<Grid item sm>
-												<List>
-													<ListItem>
-														<ListItemAvatar>
-															<Avatar>
-																<AccountCircle />
-															</Avatar>
-														</ListItemAvatar>
-														<TextField label={this.state.userObj.firstName} placeholder="firstname" name="newFirstName" onChange={this.handleChange}/>
-														<TextField label={this.state.userObj.lastName} placeholder="lastname" name="newLastName" onChange={this.handleChange}/>
-													</ListItem>
-													<Divider variant="inset" component="li" />
-													<ListItem>
-														<ListItemAvatar>
-															<Avatar>
-																<Email />
-															</Avatar>
-														</ListItemAvatar>
-														<TextField label={this.state.userObj.emailId} placeholder="email" name="newEmail" onChange={this.handleChange}/>
-													</ListItem>
-													<Divider variant="inset" component="li" />
-													<ListItem>
-														<ListItemAvatar>
-															<Avatar>
-																<ContactMail />
-															</Avatar>
-														</ListItemAvatar>
-														<TextField label={this.state.userObj.address} placeholder="address" name="newAddress" onChange={this.handleChange}/>
-													</ListItem>
-												</List>
+										:
+										<>
+											<Grid container direction="row" spacing={6}>
+												<Grid item sm={3}>
+													<ProfileUploader/>
+												</Grid>
+												<Grid item sm={8}>
+													<Grid container direction="column" alignItems="flex-start" spacing={2}>
+														<Grid item>
+															<h2>{this.state.userObj.username}</h2> 
+														</Grid>
+														<Grid item >
+															{!this.state.edit_mode ?
+																<div align="left" style={{'word-break': 'break-word'}}>{this.state.userObj.biography !== null ? this.state.userObj.biography : "bio"}</div> :
+																<div width="10%"><TextareaAutosize cols="50" rows="4" name="newBiography" defaultValue={this.state.userObj.biography} onChange={this.handleChange}/></div>
+															}
+														</Grid>
+													</Grid>
+												</Grid>
+												<Grid item sm={1}>
+													{!this.state.edit_mode ? <EditIcon style={{cursor: "pointer"}} onClick={this.editing}/> : <SaveIcon style={{cursor: "pointer"}} onClick={this.editing}/>}
+												</Grid>
 											</Grid>
-											<Grid item sm={1}>
-												<SaveIcon onClick={this.editing}/>
+											<Grid container direction="row">
+												<Grid item sm>
+													{!this.state.edit_mode ? editingFalse() : editingTrue()}
+												</Grid>
 											</Grid>
-										</Grid>
+										</>
 									}
 								</Grid>
-							}
-						</Paper>
+							</Paper>
+						</Grid>
+						<Grid item sm={3}>
+							<Grid container direction="row">
+								<Paper style={style.Paper}>
+									<ResumeUploader/>
+								</Paper>
+							</Grid>
+						</Grid>
 					</Grid>
-				</Grid>
-				<Grid container justify="center">
-					<Grid item sm={3}>
-						<FileComponent updater={this.update}/>
+					<Grid container justify="center">
+						<Grid item sm={6}>
+							<Paper style={style.Paper}>
+								<CreatedJobList/>
+							</Paper>
+						</Grid>
+					</Grid>
+					<Grid container justify="center">
+						<Grid item sm={6}>
+							<Paper style={style.Paper}>
+								<AppliedJobList/>
+							</Paper>
+						</Grid>
 					</Grid>
 				</Grid>
 			</div>
