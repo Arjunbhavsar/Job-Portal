@@ -75,6 +75,10 @@ public class UserController {
 				currentUser.setProfileFileId(user.getProfileFileId());
 			if(user.getResumeFileId() != null && !user.getResumeFileId().isEmpty())
 				currentUser.setResumeFileId(user.getResumeFileId());
+			if(user.getBiography() != null && !user.getBiography().isEmpty())
+				currentUser.setBiography(user.getBiography());
+			if(user.getUsername() != null && !user.getUsername().isEmpty())
+				try {currentUser.setUsername(user.getUsername());} catch (Exception e) {}
 			userDao.save(currentUser);
 			return "Updated";
 		} catch (Exception e) {
