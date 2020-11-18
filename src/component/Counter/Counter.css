@@ -1,0 +1,10 @@
+button{
+    color:chartreuse;
+    padding: 25px;
+    size: 50px;
+    background-color: blue;
+}
+
+.count{
+    font-size: 50px;
+}

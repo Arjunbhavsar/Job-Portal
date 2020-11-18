@@ -1,9 +1,11 @@
 import axios from 'axios'
-import output from './connections';
 
 class getAppssListService{
 	state = {  
-		appsTag : output + '/apps/'
+		// appsTag : 'http://localhost:9090/apps/'
+		// appsTag : 'https://quickpick-back.herokuapp.com/apps/'
+		appsTag : 'https://quick-pick1.herokuapp.com/apps/'
+		// appsTag : 'https://backend-test-quickpick.herokuapp.com/apps/'
     }
     executeApplication(application){
 		const {appsTag} = this.state;

@@ -1,3 +1,1 @@
-# Quick-Pick-Frontend-Deployment
-
-- Frontend Deployment
+# Quick-Pick - Frontend - Heroku
