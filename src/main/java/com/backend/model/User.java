@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -34,6 +35,9 @@ public class User {
 	private String emailId;
 	private String address;
 	private String password;
+	
+	@Lob
+	private String biography;
 	
 	public String profileFileId;
 	public String resumeFileId;
@@ -86,4 +90,11 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public String getBiography() {
+		return biography;
+	}
+	public void setBiography(String biography) {
+		this.biography = biography;
+	}
+	
 }
