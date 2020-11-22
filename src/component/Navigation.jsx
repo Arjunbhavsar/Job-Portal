@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import AuthenticationService from '../api/AuthenticationService';
 import SearchBar from './SearchBar';
@@ -8,15 +8,61 @@ import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from "@material-ui/core/IconButton";
 import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import { Navigation } from '@material-ui/icons';
+import { withRouter } from "react-router";
+
+class Navgiation extends Component {
+    constructor(){
+        super();
+        this.state = {
+            path: false
+        }
+        this.isUserLoggedIn = AuthenticationService.isUserLoggedIn();
+    }
+
+    componentWillReceiveProps(newProps){
+        this.setState({
+            path: window.location.href.includes('dash')
+        });
+    }
+
+    async componentDidMount() {
+        this.setState({
+            path: window.location.href.includes('dash')
+        });
+    }
+
+    render(){
+        var noLoggedStyles = {visibility: "hidden"};
+        if (this.isUserLoggedIn === true){
+            noLoggedStyles = {
+                visibility: "visible"
+            };
+        }
+        return(
+            <div className="navBar">
+            <div className="nav-search-logo">
+                <Link to="/"><img src={logo} alt="logo" className="logo"/></Link>
+                {this.state.path && <SearchBar />}
+            </div>
+            <div className="leftNav">
+                <nav className="navControls">
+                    <Link className="navButton" to="/postjob" style={noLoggedStyles} >Post Job</Link>
+                    <Link className="navButton" to="/dash" >Dashboard</Link>
+                    <Nav/>
+                </nav>
+            </div>
+        </div>
+        )
+    }
+} 
 
 
-export default function Navgiation() {
+function Nav(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
     const menuId = "primary-search-account-menu";
     const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
-    // let user = sessionStorage.getItem('authenticatedUser');
+    let user = sessionStorage.getItem('authenticatedUser');
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -30,7 +76,6 @@ export default function Navgiation() {
     };
 
     var spanStyles = {};
-    var noLoggedStyles = {visibility: "hidden"};
     var renderMenu = (
         <Menu
         anchorEl={anchorEl}
@@ -51,13 +96,8 @@ export default function Navgiation() {
         spanStyles = {
             color: "#00a2ff"
         };
-        noLoggedStyles = {
-            visibility: "visible"
-        };
-
         renderMenu = (
             // Add information here to check if already logged in and have a seperate menu with if conditionals
-            
             <Menu
             anchorEl={anchorEl}
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -67,40 +107,22 @@ export default function Navgiation() {
             open={isMenuOpen}
             onClose={handleMenuClose}
             >
-                <Link to={"/profile"} className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Profile</MenuItem></Link>
+                <Link to={"/profile/"+user} className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Profile</MenuItem></Link>
                 <Link to="/" className="profileMenuLink"><MenuItem onClick={handleMenuCloseLogout} id="accountIconMenuItem">Log Out</MenuItem></Link>
             </Menu>
         );
     }
-    var dash = 'active';
-    var other = 'hidden';
     
-    //   id={this.index}
     return (
-        <div className="navBar">
-            <div className="nav-search-logo">
-                <Link to="/"><img src={logo} alt="logo" className="logo"/></Link>
-                <SearchBar  holder="Search by title..."/>
-                <SearchBar  holder="Search by location..."/>
-            </div>
-            <div className="leftNav">
-                <nav className="navControls">
-                    {/* <Link className="navButton" id={other} to="/" >Manage</Link> */}
-                    <Link className="navButton" id={other} to="/postjob" style={noLoggedStyles}>Post Job</Link>
-                    <Link className="navButton" id={dash} to="/">Dashboard</Link>
-                    {/* <td><NavButton page={"hidden"} name={"Profile"} to={"/profile"}/></td> */}
-                    <MenuItem onClick={handleProfileMenuOpen} className="account">
-                    <IconButton >
-                        <AccountCircle id="accountIcon" style={spanStyles}/>
-                    </IconButton>
-                </MenuItem>
-                {renderMenu}
-                </nav>
-            </div>
-        </div>
+        <>
+        <MenuItem onClick={handleProfileMenuOpen} className="account">
+            <IconButton >
+                <AccountCircle id="accountIcon" style={spanStyles}/>
+            </IconButton>
+        </MenuItem>
+        {renderMenu}
+        </>
     )
 }
 
-Navigation.defaultProps = {
-    index: "dash"
-}
+export default withRouter(Navgiation)

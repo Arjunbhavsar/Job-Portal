@@ -30,21 +30,42 @@ class ProfileComponent extends Component {
 			newEmail: '',
 			newAddress: '',
 			newBiography: '',
-			newUsername: ''
+			newUsername: '',
+			editable: false
 		}
 		this.editing = this.editing.bind(this);
 		this.updateUser = this.updateUser.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}
-
-	async componentDidMount() {
+	
+	async componentWillReceiveProps(newProps){ // Handles when the path updates as that does not call a remount of the component
+		const pathUser = newProps.match.params.name;
 		const data = await	UserService
-							.executeGetUserService(sessionStorage
-							.getItem('authenticatedUser'))
+							.executeGetUserService(pathUser)
 							.then(result => result.data);
 							console.log('loading data ...');
-		
-		this.setState({userObj : data, isLoading : false});
+		let edit = false;
+		if(pathUser === sessionStorage.getItem('authenticatedUser')){
+			edit = true
+		}
+		this.setState({userObj : data, isLoading : false, editable : edit});
+		// console.log(data);
+		var evt = document.createEvent('Event');
+        evt.initEvent('load', false, false);
+		window.dispatchEvent(evt);
+	}
+
+	async componentDidMount() {
+		const pathUser = window.location.href.split('profile/')[1];
+		const data = await	UserService
+							.executeGetUserService(pathUser)
+							.then(result => result.data);
+							console.log('loading data ...');
+		let edit = false;
+		if(pathUser === sessionStorage.getItem('authenticatedUser')){
+			edit = true
+		}
+		this.setState({userObj : data, isLoading : false, editable : edit});
 		// console.log(data);
 		var evt = document.createEvent('Event');
         evt.initEvent('load', false, false);
@@ -52,9 +73,11 @@ class ProfileComponent extends Component {
 	}
 	
 	editing() {
-		this.setState({edit_mode : true});
-		if(this.state.edit_mode === true) {
-			this.updateUser();
+		if(this.state.editable){
+			this.setState({edit_mode : true});
+			if(this.state.edit_mode === true) {
+				this.updateUser();
+			}
 		}
 	}
 
@@ -67,8 +90,14 @@ class ProfileComponent extends Component {
 			biography : this.state.newBiography,
 			username : this.state.newUsername,
         }
-		await UserService.updateUser(user);
-		this.componentDidMount();
+		await UserService.updateUser(this.state.userObj.id, user)
+		.then((response) => {
+			AuthenticationService.updateUsername(response.data.username)
+			this.setState({
+				userObj: response.data
+			});
+		});
+		// this.componentDidMount();
         this.setState({edit_mode: false});
     }
 
@@ -143,18 +172,23 @@ class ProfileComponent extends Component {
 										:
 										<>
 											<Grid container direction="row" spacing={6}>
-												<Grid item sm={4}>
+												<Grid item sm={3}>
 													<ProfileUploader/>
 												</Grid>
-												<Grid item sm={7}>
+												<Grid item sm={8}>
 													<Grid container direction="column" alignItems="flex-start" spacing={2}>
 														<Grid item>
-															<h2>{this.state.userObj.username}</h2> 
+															{!this.state.edit_mode ?
+																<h2>{this.state.userObj.username}</h2> :
+																<TextField label={this.state.userObj.username} placeholder="Username" name="newUsername" onChange={this.handleChange}/>
+															}
 														</Grid>
 														<Grid item >
 															{!this.state.edit_mode ?
-																<div align="left" style={{'word-break': 'break-word'}}>{this.state.userObj.biography !== null ? this.state.userObj.biography : "bio"}</div> :
-																<div width="10%"><TextareaAutosize cols="50" rows="4" name="newBiography" defaultValue={this.state.userObj.biography} onChange={this.handleChange}/></div>
+																<div align="left" style={{'wordBreak': 'break-word'}}>{this.state.userObj.biography !== null ? this.state.userObj.biography : "bio"}</div> :
+																<div width="10%">
+																	<TextareaAutosize cols="50" rows="4" name="newBiography" defaultValue={this.state.userObj.biography} onChange={this.handleChange}/>
+																</div>
 															}
 														</Grid>
 													</Grid>

@@ -21,6 +21,7 @@ class Dashboard extends Component {
     
     changeJob(id){
         this.setState({job : id});
+        if(id !== undefined){
         const application = {
             jobID : id.uniqueId,
             username : sessionStorage.getItem('authenticatedUser')
@@ -39,6 +40,7 @@ class Dashboard extends Component {
                     });
                 }
             })
+        }
     }
 
     render(){
@@ -85,29 +87,32 @@ class JobListItems extends Component {
     }
 
     async componentDidMount(){
-        const data = await JobService.executeGetJobListService().then(result => result.data);
-        this.allJobs = data;
-        var tempJob = null;
-        const added = [];
-        const indexes = [];
-        if(this.allJobs.length >= 10){
-            this.leftToLoad = 10;
-        }else{
-            this.leftToLoad = this.allJobs.length;
-        }
-        this.total = this.leftToLoad;
-        while(this.leftToLoad > 0){
-            tempJob = this.allJobs[this.total - this.leftToLoad];
-            added.push(<BuildJobItem jobInfo={tempJob}/>);
-            indexes.push(tempJob);
-            this.leftToLoad = this.leftToLoad - 1;
-        }
-        if(this.allJobs.length - this.total === 0){
-            this.setState({moreToLoad: false});
-            
-        }
-        this.setState({jobs: added, isLoading: false, jobsIndex: indexes});
-        this.props.jobSelect(this.state.jobsIndex[0]);
+        await JobService.executeGetJobListService()
+        .then(result => {
+            const data = result.data
+            this.allJobs = data;
+            var tempJob = null;
+            const added = [];
+            const indexes = [];
+            if(this.allJobs.length >= 10){
+                this.leftToLoad = 10;
+            }else{
+                this.leftToLoad = this.allJobs.length;
+            }
+            this.total = this.leftToLoad;
+            while(this.leftToLoad > 0){
+                tempJob = this.allJobs[this.total - this.leftToLoad];
+                added.push(<BuildJobItem jobInfo={tempJob}/>);
+                indexes.push(tempJob);
+                this.leftToLoad = this.leftToLoad - 1;
+            }
+            if(this.allJobs.length - this.total === 0){
+                this.setState({moreToLoad: false});
+                
+            }
+            this.setState({jobs: added, isLoading: false, jobsIndex: indexes});
+            this.props.jobSelect(this.state.jobsIndex[0]);
+        });
     }
 
     handleSelect(id) {
