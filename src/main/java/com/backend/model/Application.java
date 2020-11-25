@@ -1,8 +1,11 @@
 package com.backend.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -14,12 +17,21 @@ import lombok.NoArgsConstructor;
 public class Application {
 	
 	@Id
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	private String id;
+	
 	private String jobID;
 	
 	private String username;	
 	
 	private String status;
 	
+	
+	public Application() {
+		super();
+	}
+
 	public Application(String jobID, String username) {
 		this.jobID = jobID;
 		this.username = username;
