@@ -39,6 +39,9 @@ public class User {
 	public String profileFileId;
 	public String resumeFileId;
 	
+	//Forget Password Functionality
+	private String resetToken;
+	
 	public String getProfileFileId() {
 		return profileFileId;
 	}
@@ -93,5 +96,6 @@ public class User {
 	public void setBiography(String biography) {
 		this.biography = biography;
 	}
+	
 	
 }
