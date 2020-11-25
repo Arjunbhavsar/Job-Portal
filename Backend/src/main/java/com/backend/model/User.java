@@ -23,7 +23,7 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private String uniqueId;
 	
 	private String firstName;
 	private String lastName;
@@ -34,7 +34,6 @@ public class User {
 	private String emailId;
 	private String address;
 	private String password;
-	
 	private String biography;
 	
 	public String profileFileId;
@@ -88,4 +87,11 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public String getBiography() {
+		return biography;
+	}
+	public void setBiography(String biography) {
+		this.biography = biography;
+	}
+	
 }

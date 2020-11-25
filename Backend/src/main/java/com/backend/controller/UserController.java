@@ -27,7 +27,7 @@ public class UserController {
 	private UserDao userDao;
 	
 	@PostMapping("/login")
-	public String login(@RequestBody User user){
+	public User login(@RequestBody User user){
 		return userService.login(user);
 	}
 	
@@ -56,11 +56,11 @@ public class UserController {
 		}
 	}
 	
-	@PostMapping("/updateUser/{username}")
-	public String updateUser(@PathVariable String username, @RequestBody User user) {
+	@PostMapping("/updateUser/{uniqueId}")
+	public String updateUser(@PathVariable String uniqueId, @RequestBody User user) {
 		try {
 			// Updating all fields but the username and id
-			User currentUser = userDao.findByusername(username);
+			User currentUser = userDao.findByUniqueId(uniqueId);
 			if(user.getAddress() != null && !user.getAddress().isEmpty())
 				currentUser.setAddress(user.getAddress());
 			if(user.getEmailId() != null && !user.getEmailId().isEmpty())

@@ -1,0 +1,141 @@
+.dash-contianer {
+    width: 100%;
+    height: calc(100% - 90px);
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    /* z-index: -12; */
+    /* overflow-y: scroll; */
+}
+.background-container {
+    background-image: url(../img/dashBack.jpg);
+    background-position: center top;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: -12;
+    top: 0;
+    left: 0;
+}
+
+.dash-inner {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.content-sections{
+    /* max-width: fit-content; */
+    display: flex;
+    overflow-y: scroll;
+    position: relative;
+    height: 100%;
+    /* flex-direction: row;
+    justify-content: center; */
+}
+
+.content-container{
+    overflow-y: scroll;
+    display: flex;
+    position: relative;
+    /* top: 0px; */
+    height: 100%;
+    margin-left: 0;
+}
+.content-sections::-webkit-scrollbar {
+    width: 0;
+}
+.content-container::-webkit-scrollbar {
+    width: 0;
+}
+
+.content{
+    font-family: 'Noto Sans','Helvetica Neue',Helvetica,Arial,sans-serif !important;
+    border: grey 1px solid;
+    position: relative;
+    padding: 50px;
+    width: 800px;
+    height: fit-content;
+    margin: 20px;
+    border-radius: 3px;
+    background-color: var(--white-transparent);
+    backdrop-filter: blur(2px);
+}
+
+.job-list {
+    margin: 20px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+#selectJob {
+    align-items: center;
+    font-size: 20px;
+    font-weight: 700;
+}
+.barStyle {
+    width: 100%;
+}
+
+.leftItem {
+    align-self: center;
+    display: flex;
+    flex-grow: 1;
+    margin: 0px 0px 20px 0px;
+    border-radius: 4px;
+    box-shadow: 1px 1px 3px gray;
+    padding: 0px;
+    backdrop-filter: blur(5px);
+    width: 100%;
+}
+
+.leftItem:hover {
+    transition: background-color 0.5s linear 0s;
+    -webkit-transition: background-color 0.5s linear 0s;
+    cursor: pointer;
+}
+
+.leftInner {
+    font-family: 'Noto Sans','Helvetica Neue',Helvetica,Arial,sans-serif !important;
+    position: relative;
+    height: fit-content;
+    width: fit-content;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.title, .location, .company {
+    margin: 3px;
+    font-size: 18px;
+    
+}
+
+.title {
+    font-weight: bold;
+    margin-bottom: 10px;
+
+}
+.location, .company {
+    font-size: 16px;
+}
+
+.left button {
+    padding: 8px 20px;
+    width: fit-content;
+    cursor: pointer;
+    margin: auto;
+    margin-bottom: 10px;
+}
+.description {
+    text-align: unset;
+    display: inline;
+    width: 100%;
+}

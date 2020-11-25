@@ -1,8 +1,9 @@
 import axios from 'axios'
+import output from './connections';
 
 class ApplicationService{
 	state = {  
-		appsTag : process.env.REACT_APP_API_URL_APPS,
+		appsTag : output + '/apps/'
     }
     executeApplication(application){
 		const {appsTag} = this.state;
