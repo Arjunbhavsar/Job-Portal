@@ -31,9 +31,9 @@ public class ShiftService {
 		return shiftDao.findByApplicationId(applicationId);
 	}
 
-	public String updateShift(String uniqueId, Shift shift) {
+	public String updateShift(String id, Shift shift) {
 		try {
-			Shift currentShift = shiftDao.findByUniqueId(uniqueId);
+			Shift currentShift = shiftDao.findById(id).orElse(null);
 			currentShift.setHourStart(shift.getHourStart() != null ? shift.getHourStart() : currentShift.getHourStart());
 			currentShift.setHourEnd(shift.getHourEnd() != null ? shift.getHourEnd() : currentShift.getHourEnd());
 			currentShift.setMinuteStart(shift.getMinuteStart() != null ? shift.getMinuteStart() : currentShift.getMinuteStart());
@@ -45,10 +45,10 @@ public class ShiftService {
 		}
 	}
 
-	public String approveShift(String uniqueId) {
+	public String approveShift(String id) {
 		Shift shift = new Shift();
 		shift.setApproved(true);
-		return updateShift(uniqueId, shift);
+		return updateShift(id, shift);
 	}
 
 }

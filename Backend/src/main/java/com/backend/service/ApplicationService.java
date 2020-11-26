@@ -20,16 +20,16 @@ public class ApplicationService {
 		return appDao.save(newApp);
 	}
 	
-	public List<Application> getApplicants(String jobID) {
-		return appDao.findAllByJobID(jobID);
+	public List<Application> getApplicants(String jobId) {
+		return appDao.findAllByJobId(jobId);
 	}
 	
 	public List<Application> getUserApps(String username){
 		return appDao.findAllByUsername(username);
 	}
 	
-	public Application acceptApplicant(String jobID, String username) {
-		List<Application> appList = appDao.findAllByJobID(username);
+	public Application acceptApplicant(String jobId, String username) {
+		List<Application> appList = appDao.findAllByJobId(jobId);
 		for(Application app : appList) {
 			if(app.getUsername().equals(username) && app.getStatus().equals("Pending")) {
 				app.setStatus("Accepted");
@@ -39,8 +39,8 @@ public class ApplicationService {
 		return null;
 	}
 	
-	public Application denyApplicant(String jobID, String username) {
-		List<Application> appList = appDao.findAllByJobID(jobID);
+	public Application denyApplicant(String jobId, String username) {
+		List<Application> appList = appDao.findAllByJobId(jobId);
 		for(Application app : appList) {
 			if(app.getUsername().equals(username) && app.getStatus().equals("Pending")) {
 				app.setStatus("Denied");
@@ -52,7 +52,7 @@ public class ApplicationService {
 	
 	public String checkIfApplied(Application app) {
 		if(app != null) {
-			List<Application> appList = appDao.findAllByJobID(app.getJobID());
+			List<Application> appList = appDao.findAllByJobId(app.getJobId());
 			for(Application apps : appList) {
 				if(apps.getUsername().equals(app.getUsername())) {
 					return apps.getStatus();

@@ -23,9 +23,9 @@ public class ApplicationController {
 	ApplicationService appService;
 	
 	@PostMapping("/acceptApp/{username}")
-	public String acceptJob(@PathVariable String username, @RequestBody String jobID) {
+	public String acceptJob(@PathVariable String username, @RequestBody String id) {
 		try {
-			appService.acceptApplicant(jobID, username);
+			appService.acceptApplicant(id, username);
 			return "Job Accepted Successfully";
 		} catch (Exception e) {
 			return "Could Not Accept Job";

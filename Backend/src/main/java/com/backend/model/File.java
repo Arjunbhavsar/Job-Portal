@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Data
-@Table(name = "\"files\"")
+@Table(name = "\"Files\"")
 public class File {
 	@Id
 	@GeneratedValue(generator = "uuid")

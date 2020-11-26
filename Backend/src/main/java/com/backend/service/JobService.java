@@ -25,10 +25,10 @@ public class JobService implements JobServiceInterface {
 	}
 
 	@Override
-	public Job getJobByID(String uniqueId) {
+	public Job getJobById(String id) {
 		
-		if(uniqueId != null) { 
-			Job result = jobDao.findByUniqueId(uniqueId);
+		if(id != null) { 
+			Job result = jobDao.findById(id).orElse(null);;
 			if(result!= null) {
 				return result;
 			}

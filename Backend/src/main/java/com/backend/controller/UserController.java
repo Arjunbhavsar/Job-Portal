@@ -46,10 +46,8 @@ public class UserController {
 	@GetMapping("/checkUsername/{username}")
 	public String checkIfUsernameExists(@PathVariable String username){
 		if(userService.checkIfUsernameExists(username).contains("not")) {
-			System.out.println("YEP");
 			return "registered";
 		} else {
-			System.out.println("NOP");
 			return "new";
 		}
 	}
@@ -62,13 +60,15 @@ public class UserController {
 			return "new";
 	}
 	
-	@PostMapping("/updateUser/{uniqueId}")
-	public User updateUser(@PathVariable String uniqueId, @RequestBody User user) {
+	@PostMapping("/updateUser/{id}")
+	public String updateUser(@PathVariable String id, @RequestBody User user) {
+		String out = "no function";
 		try {
 			// Updating all fields but the username and id
-			return userService.updateUser(uniqueId, user);
+			out = userService.updateUser(id, user);
+			return "updated : " + out;
 		} catch (Exception e) {
-			return null;
+			return "failed to update : " + out;
 		}
 	}
 }

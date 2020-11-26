@@ -32,13 +32,13 @@ public class ShiftController {
 		return shiftService.getShift(applicationId);
 	}
 	
-	@PostMapping("/approveShift/{uniqueId}")
-	public String approveShift(@PathVariable String uniqueId){
-		return shiftService.approveShift(uniqueId);
+	@PostMapping("/approveShift/{id}")
+	public String approveShift(@PathVariable String id){
+		return shiftService.approveShift(id);
 	}
 	
-	@PostMapping("/updateShift/{uniqueId}")
-	public String updateShift(@PathVariable String uniqueId, @RequestBody Shift shift){
-		return shiftService.updateShift(uniqueId, shift);
+	@PostMapping("/updateShift/{id}")
+	public String updateShift(@PathVariable String id, @RequestBody Shift shift){
+		return shiftService.updateShift(id, shift);
 	}
 }
