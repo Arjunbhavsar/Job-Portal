@@ -1,4 +1,4 @@
-# Quick-Pick-Sprint 5-Byun
+# Quick-Pick-Sprint 5-Byun (tested locally as of now)
 
 ## Added Changes
 - Backend for shift setup
