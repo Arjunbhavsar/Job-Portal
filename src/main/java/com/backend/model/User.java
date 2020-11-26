@@ -3,9 +3,12 @@ package com.backend.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -22,8 +25,9 @@ import lombok.NoArgsConstructor;
 public class User {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	private String id;
 	
 	private String firstName;
 	private String lastName;
@@ -31,9 +35,14 @@ public class User {
 	@Column(unique= true)
 	private String username;
 	
+	@Column(unique= true)
 	private String emailId;
+	
 	private String address;
 	private String password;
+	
+	@Lob
+	@Type(type = "org.hibernate.type.CharacterArrayType")
 	private String biography;
 	
 	public String profileFileId;
@@ -96,6 +105,14 @@ public class User {
 	public void setBiography(String biography) {
 		this.biography = biography;
 	}
-	
+	public String getId() {
+		return id;
+	}
+	public String getResetToken() {
+		return resetToken;
+	}
+	public void setResetToken(String resetToken) {
+		this.resetToken = resetToken;
+	}
 	
 }
