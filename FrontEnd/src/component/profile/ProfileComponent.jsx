@@ -114,8 +114,9 @@ class ProfileComponent extends Component {
 			Paper : {padding:20, marginTop:10, marginBottom:10},
 			image : {'borderRadius':'50%', width:"200px", height:"200px", "objectfit":"cover"}
 		}
-
-		if(!this.state.exists)
+		if(this.state.isLoading)
+			return (<div>Loading...</div>);
+		if(!isUserLoggedIn || !this.state.exists)
 			return (
 				<Grid container direction="row">
 					<Grid container justify="center">
@@ -123,14 +124,13 @@ class ProfileComponent extends Component {
 						<Grid item sm={6}>
 							<Paper style={style.Paper}>
 								<Grid container>
-									<Grid item sm> User Not Found </Grid>
+									{!isUserLoggedIn ? <Grid item sm> Not Logged In </Grid> : <Grid item sm> User Not Found </Grid>}
 								</Grid>
 							</Paper>
 						</Grid>
 					</Grid>
 				</Grid>
 			)
-
 		const editingFalse = () => (
 			<List>
 				<ListItem>
@@ -149,7 +149,6 @@ class ProfileComponent extends Component {
 				</ListItem>
 			</List>
 		);
-
 		const editingTrue = () => (
 			<List>
 				<ListItem>
@@ -170,24 +169,6 @@ class ProfileComponent extends Component {
 				</ListItem>
 			</List>
 		);
-
-		if(!isUserLoggedIn)
-			return (
-				<Grid container direction="row">
-					<Grid container justify="center">
-						<Grid item sm={3}></Grid>
-						<Grid item sm={6}>
-							<Paper style={style.Paper}>
-								<Grid container>
-									<Grid item sm> Not Logged In </Grid>
-								</Grid>
-							</Paper>
-						</Grid>
-					</Grid>
-				</Grid>
-			)
-		if(this.state.isLoading)
-			return (<div>Loading...</div>);
 		return (
 			<div className="container">
 				<Grid container direction="row">

@@ -45,7 +45,7 @@ public class UserService implements UserServiceInterface {
 		User fail = new User();
 		if(user != null) { 
 			if (user.getUsername() != null && user.getPassword() != null ) {
-				User result = userDao.findByusername(user.getUsername());
+				User result = userDao.findByUsername(user.getUsername());
 				if(result!= null) {
 					if(result.getPassword() != null && result.getPassword().equals(user.getPassword())  ) {
 						return result;
@@ -87,15 +87,16 @@ public class UserService implements UserServiceInterface {
 	}
 	
 	public String checkIfUsernameExists(String username) {
-		if(username != null) {
-			User result = userDao.findByusername(username);
+		try {
+			User result = userDao.findByUsername(username);
 			if(result!= null) {
 				return "Username not available";
 			}else {
 				return "Username available";
 			}
+		} catch(Exception e) {
+			return "Something went wrong";
 		}
-		return "Something went wrong";
 	}
 	
 	public String checkIfEmailExists(String emailId) {

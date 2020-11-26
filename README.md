@@ -1,5 +1,4 @@
-
-# Quick-Pick-Sprint 5-Byun (tested locally as of now)
+# Quick-Pick-Sprint 5-Byun (tested on heroku and it works... kinda)
 
 ## Added Changes
 - I changed all instances primary key @Id names to simply "id"
@@ -19,6 +18,19 @@
 		- You cannot edit information
 
 ## Known Bugs
+- Profile breaks if there is a space in the username
+	- This is because it is pulling the name from the url and if there is a space there it will show as "%20"
+	- We can either prevent people from making names with spaces or just check for spaces in the url
+	- Replicate:
+		- Have a username with a space
+		- Go to profile once logged in
+		- Observe that you can't edit anymore and applied jobs no longer shows
+- Biography doesn't update on save
+	- Replicate:
+		- Go to profile once logged in
+		- Enter edit mode
+		- Fill out biography section
+		- Save and observe the biography field
 - User can sign up with the same email
 	- Replicate:
 		- Go to register
@@ -45,9 +57,10 @@
 		- Check backend and there should be two versions that were uploaded
 
 ## Known Issues
-- Can't change email
+- User can't change email
 	- Email changing is currently locked
 	- This is due to the fact that people who sign in through Gmail will get locked out if they change their email
+	- We could keep it this way or change the backend
 - No error message if username exists for profile and signup
 	- Replicate on Profile:
 		- Go to profile page

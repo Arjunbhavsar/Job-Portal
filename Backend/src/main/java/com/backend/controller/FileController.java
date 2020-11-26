@@ -36,7 +36,7 @@ public class FileController {
 		String message = "";
 		try {
 			File newFile = fileService.storeProfile(username, file);
-			User user = userDao.findByusername(username);
+			User user = userDao.findByUsername(username);
 			if(user.getProfileFileId() != null)
 				fileDao.deleteById(user.getProfileFileId());
 			user.setProfileFileId(newFile.getId());
@@ -57,7 +57,7 @@ public class FileController {
 		String message = "";
 		try {
 			File newFile = fileService.storeResume(username, file);
-			User user = userDao.findByusername(username);
+			User user = userDao.findByUsername(username);
 			if(user.getResumeFileId() != null)
 				fileDao.deleteById(user.getResumeFileId());
 			user.setResumeFileId(newFile.getId());

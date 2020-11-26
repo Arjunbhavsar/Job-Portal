@@ -109,6 +109,7 @@ class getUsersListService{
 		let basicAuthHeader = 'Basic '+window.btoa(usernameAuth+':'+passwordAuth)
 		let result = 'new';
 		await axios.get(userTag+'checkUsername/'+username, {headers:{authorization: basicAuthHeader}}).then(val => result = val.data);
+		console.log("EXISTS? " + result);
 		return result === 'registered';
 	}
 }

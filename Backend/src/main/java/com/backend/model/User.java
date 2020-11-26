@@ -8,6 +8,8 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -38,6 +40,7 @@ public class User {
 	private String password;
 	
 	@Lob
+	@Type(type = "org.hibernate.type.CharacterArrayType")
 	private String biography;
 	
 	public String profileFileId;
