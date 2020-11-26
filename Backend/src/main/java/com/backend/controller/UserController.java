@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.backend.dao.UserDao;
 import com.backend.model.User;
 import com.backend.service.UserService;
 
@@ -22,9 +21,6 @@ public class UserController {
 	
 	@Autowired
 	UserService userService;
-	
-	@Autowired
-	private UserDao userDao;
 	
 	@PostMapping("/login")
 	public User login(@RequestBody User user){
@@ -50,39 +46,29 @@ public class UserController {
 	@GetMapping("/checkUsername/{username}")
 	public String checkIfUsernameExists(@PathVariable String username){
 		if(userService.checkIfUsernameExists(username).contains("not")) {
+			System.out.println("YEP");
 			return "registered";
-		}else {
+		} else {
+			System.out.println("NOP");
 			return "new";
 		}
 	}
 	
+	@GetMapping("/checkEmail/{emailId}")
+	public String checkIfEmailExists(@PathVariable String emailId){
+		if(userService.checkIfEmailExists(emailId).contains("not"))
+			return "registered";
+		else
+			return "new";
+	}
+	
 	@PostMapping("/updateUser/{uniqueId}")
-	public String updateUser(@PathVariable String uniqueId, @RequestBody User user) {
+	public User updateUser(@PathVariable String uniqueId, @RequestBody User user) {
 		try {
 			// Updating all fields but the username and id
-			User currentUser = userDao.findByUniqueId(uniqueId);
-			if(user.getAddress() != null && !user.getAddress().isEmpty())
-				currentUser.setAddress(user.getAddress());
-			if(user.getEmailId() != null && !user.getEmailId().isEmpty())
-				currentUser.setEmailId(user.getEmailId());
-			if(user.getFirstName() != null && !user.getFirstName().isEmpty())
-				currentUser.setFirstName(user.getFirstName());
-			if(user.getLastName() != null && !user.getLastName().isEmpty())
-				currentUser.setLastName(user.getLastName());
-			if(user.getPassword() != null && !user.getPassword().isEmpty())
-				currentUser.setPassword(user.getPassword());
-			if(user.getProfileFileId() != null && !user.getProfileFileId().isEmpty())
-				currentUser.setProfileFileId(user.getProfileFileId());
-			if(user.getResumeFileId() != null && !user.getResumeFileId().isEmpty())
-				currentUser.setResumeFileId(user.getResumeFileId());
-			if(user.getBiography() != null && !user.getBiography().isEmpty())
-				currentUser.setBiography(user.getBiography());
-			if(user.getUsername() != null && !user.getUsername().isEmpty())
-				try {currentUser.setUsername(user.getUsername());} catch (Exception e) {}
-			userDao.save(currentUser);
-			return "Updated";
+			return userService.updateUser(uniqueId, user);
 		} catch (Exception e) {
-			return "Could not update information";
+			return null;
 		}
 	}
 }

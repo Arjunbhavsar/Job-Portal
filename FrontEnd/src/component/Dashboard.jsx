@@ -4,7 +4,8 @@ import '../css/Dashboard.css'
 import JobService from '../api/JobService';
 import ApplicationService from '../api/ApplicationService';
 import AuthenticationService from '../api/AuthenticationService';
-import { Paper, Grid, Container, Button} from '@material-ui/core/';
+// import { Paper, Grid, Container } from '@material-ui/core/';
+import { Button} from '@material-ui/core/';
 
 class Dashboard extends Component {
     constructor() {

@@ -8,10 +8,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name="\"Application\"")
 public class Application {
@@ -26,6 +24,11 @@ public class Application {
 	private String username;	
 	
 	private String status;
+	
+	
+	public Application() {
+		super();
+	}
 
 	public Application(String jobID, String username) {
 		this.jobID = jobID;

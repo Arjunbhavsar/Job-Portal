@@ -15,7 +15,7 @@ public class JobService implements JobServiceInterface {
 	private JobDao jobDao;
 
 	@Override
-	public Job addNewJob(Job jobDetails ) {
+	public Job addNewJob(Job jobDetails) {
 		return jobDao.save(jobDetails);
 	}
 

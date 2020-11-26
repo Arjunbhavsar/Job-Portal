@@ -87,6 +87,7 @@ public class UserService implements UserServiceInterface {
 	}
 	
 	public String checkIfUsernameExists(String username) {
+		System.out.println("\n\n CHECKING " + username + "\n");
 		if(username != null) {
 			User result = userDao.findByusername(username);
 			if(result!= null) {
@@ -128,16 +129,15 @@ public class UserService implements UserServiceInterface {
 			currentUser.setResumeFileId(user.getResumeFileId());
 		if(user.getBiography() != null)
 			currentUser.setBiography(user.getBiography());
-		if(user.getUsername() != null && !user.getUsername().isEmpty())
+		if(user.getUsername() != null && !user.getUsername().isEmpty()) {
 			try {
 				List<Application> userApps = appDao.findAllByUsername(currentUser.getUsername());
 				currentUser.setUsername(user.getUsername());
-				for(Application app : userApps) {
+				for(Application app : userApps)
 					app.setUsername(user.getUsername());
-					
-				}
 				appDao.saveAll(userApps);
 			} catch (Exception e) {}
+		}
 		return userDao.save(currentUser);
 	}
 }

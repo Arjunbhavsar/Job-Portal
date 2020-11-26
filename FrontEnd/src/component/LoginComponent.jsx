@@ -7,7 +7,6 @@ import '../css/LoginComponent.css'
 import { Avatar, Button, CssBaseline, TextField, Checkbox, Link, Grid, Box, Typography, Container, FormControlLabel } from '@material-ui/core';
 import { withStyles } from "@material-ui/core/styles";
 import { GoogleLogin } from 'react-google-login';
-import Alert from '@material-ui/lab/Alert';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 const styles = theme => ({
@@ -192,7 +191,6 @@ class LoginComponenet extends Component {
         if (this.state.externalCond){
             return(
                 <Container component="main" maxWidth="xs">
-                    <Alert severity="error">This is an error alert — check it out!</Alert>
                     <div className="registerBack"></div>
                     <CssBaseline />
                     <div className={classes.paper}>
@@ -286,7 +284,7 @@ class LoginComponenet extends Component {
                                 <div className="google-button">
                                     <GoogleLogin
                                         clientId="388896389881-5je3ulqa0qfii59cgpq3ldnfiof49pfv.apps.googleusercontent.com"
-                                        buttonText="Login"
+                                        buttonText="Sign in With Google"
                                         onSuccess={this.handleGoogleLogin}
                                         onFailure={this.handleError}
                                         cookiePolicy={'single_host_origin'} />

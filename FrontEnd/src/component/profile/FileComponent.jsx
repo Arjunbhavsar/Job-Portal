@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import FileService from "../../api/FileService";
 import UserService from '../../api/UserService';
-import ProgressBar from './ProgressBar';
+import ProgressBar from '../ProgressBar';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableCell from '@material-ui/core/TableCell';
