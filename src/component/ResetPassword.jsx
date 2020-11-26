@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import AutheticationService from '../api/AuthenticationService.js'
 import UserService from '../api/UserService';
-// import Facebook from './Facebook'
 import '../css/LoginComponent.css'
 
 import Avatar from '@material-ui/core/Avatar';
