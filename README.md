@@ -1,8 +1,9 @@
+
 # Quick-Pick-Sprint 5-Byun (tested locally as of now)
 
 ## Added Changes
 - I changed all instances primary key @Id names to simply "id"
-	- So "uniqueId" is simply "id" for clarity and becasue heroku didn't recognize it as a string for some reason
+	- So "uniqueId" is simply "id" for clarity and because heroku didn't recognize it as a string for some reason
 	- Any instance of a string with both 'I' and 'D' capitalized have been changed so 'D' is lowercase
 		- So 'ID' to "Id". Again this is for clarity and so everything is uniform.
 		- For example "jobID" is now "jobId" and "authenticatedUserID" is now "authenticatedUserId"
