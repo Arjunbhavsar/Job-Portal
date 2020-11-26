@@ -33,6 +33,10 @@
 		- Go to dashboard (must have more than 1 job)
 		- Apply to a job and observe the message that shows
 		- Click on a different job and observe the message
+- Profile Image uploading spam in backend
+	- Replicate:
+		- Replace an existing image on profile
+		- Check backend and there should be two versions that were uploaded
 
 ## Known Issues
 - Can't change email
