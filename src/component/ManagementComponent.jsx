@@ -324,12 +324,15 @@ class AppList extends Component {
             return(
                 <Paper style={style.paper}>
                     <List>
-                        {
+                        {this.state.applicants.length > 0 ?
                         this.state.applicants.map( function(app, index) {
                             return (
                                 <Application application={app} key={index}/>
                             );
-                        }, this)
+                        }, this):
+                        <ListItem>
+                            <ListItemText primary="No applicants yet" style={{textAlign: "center"}}/>
+                        </ListItem>
                         }
                     </List>
                 </Paper>
@@ -404,12 +407,13 @@ class Application extends Component {
                             <ListItemText primary="Profile Page" />
                         </ListItem>
                     </Link>
-                    {resumeExists &&
-                        <ListItem>
-                            <ListItemIcon title="resume"><NoteIcon /></ListItemIcon>
-                            <a href={output + '/load/' + this.state.link}><ListItemText primary="Download Resume" /></a>
-                        </ListItem>
-                    }
+                    <ListItem>
+                        <ListItemIcon title="resume"><NoteIcon /></ListItemIcon>
+                        {resumeExists? 
+                        <a href={output + '/load/' + this.state.link}><ListItemText primary="Download Resume" /></a>:
+                        <ListItemText primary={this.state.application.firstName + ' has not uploaded a resume.'} />
+                        }
+                    </ListItem>
                     <ListItem style={{justifyContent: "center"}}>
                         {this.state.application.status === "Pending" &&
                         <ButtonGroup aria-label="manage secion">
