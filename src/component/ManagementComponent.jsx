@@ -38,7 +38,7 @@ class ManagementComponent extends Component {
         const data = await	UserService
 							.executeGetUserService(sessionStorage.getItem('authenticatedUser'))
                             .then(result => result.data);
-        const jobData = await JobService.executeGetJobListService().then(result => result.data);
+        const jobData = await JobService.exectureCheckByAuthor().then(result => result.data);
         this.setState({userObj: data, exists: jobData})
     }
 
@@ -76,7 +76,7 @@ class ManagementComponent extends Component {
                 backgroundColor: "#eeeeee"
             }
         };
-        if(isUserLoggedIn && this.state.exists.length > 0){
+        if(isUserLoggedIn && this.state.exists){
             return(
                 <div className="container">
                     <Grid container direction="row" spacing={3} style={{width: "100%", margin: 0}} justify="center">
@@ -95,7 +95,7 @@ class ManagementComponent extends Component {
                     </Grid>
                 </div>
             )
-        }else if(this.state.exists.length === 0){
+        }else if(!this.state.exists){
             return (
 				<Grid container direction="row">
 					<Grid container justify="center">
@@ -369,6 +369,7 @@ class Application extends Component {
     }
 
     async decide(event){
+        console.log(event)
         if(event === 'accept'){
             const ids = [this.state.application.jobId, this.state.application.userId]
             const res = await ApplicationService.acceptApplication(ids)
@@ -378,7 +379,14 @@ class Application extends Component {
                 application: temp
             })
         }else if(event === 'deny'){
-
+            const ids = [this.state.application.jobId, this.state.application.userId]
+            const res = await ApplicationService.denyApplication(ids)
+            console.log(res)
+            let temp = this.state.application
+            temp.status = res.data.status
+            this.setState({
+                application: temp
+            })
         }
     }
     
