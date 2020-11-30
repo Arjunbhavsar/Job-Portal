@@ -20,13 +20,15 @@ class Navgiation extends Component {
             isUserLoggedIn: false,
             checkByAuthor: false
         }
+        this.search = this.search.bind(this)
     }
 
     async componentWillReceiveProps(newProps){
         let logged = AuthenticationService.isUserLoggedIn();
-        console.log(logged)
-        let check = await JobService.executeCheckByAuthor().then(result => result.data);
-        console.log(check)
+        let check = false
+        if(logged){
+            check = await JobService.executeCheckByAuthor().then(result => result.data);
+        }
         this.setState({
             path: newProps.location.pathname.includes('dash'),
             isUserLoggedIn: logged,
@@ -36,9 +38,10 @@ class Navgiation extends Component {
 
     async componentDidMount() {
         let logged = AuthenticationService.isUserLoggedIn();
-        console.log(logged)
-        let check = await JobService.executeCheckByAuthor().then(result => result.data);
-        console.log(check)
+        let check = false
+        if(logged){
+            check = await JobService.executeCheckByAuthor().then(result => result.data);
+        }
         this.setState({
             path: this.props.location.pathname.includes('dash'),
             isUserLoggedIn: logged,
@@ -46,12 +49,16 @@ class Navgiation extends Component {
         });
     }
 
+    search(paramString){
+        this.props.history.push('/dash/' + paramString)
+    }
+
     render(){
         return(
             <div className="navBar">
             <div className="nav-search-logo">
                 <Link to="/"><img src={logo} alt="logo" className="logo"/></Link>
-                {this.state.path && <SearchBar />}
+                {this.state.path && <SearchBar submit={this.search}/>}
             </div>
             <div className="leftNav">
                 <nav className="navControls">
