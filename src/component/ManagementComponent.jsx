@@ -92,15 +92,25 @@ class ManagementComponent extends Component {
             },
             inert: {
                 backgroundColor: "#eeeeee"
+            },
+            container: {
+                width: "100%",
+                height: "100%",
+                margin: 0,
+                position: "relative"
             }
         };
 
         if(isUserLoggedIn && this.state.exists){
             return(
                 <div className="container">
-                    <Grid container direction="row" spacing={3} style={{width: "100%", margin: 0}} justify="center">
-                        <JobList update={this.updateSelectedJob} jobs={this.state.jobs}/>
-                        <Grid item xs={7} >
+                    <Grid container direction="row" spacing={3} style={style.container} justify="center">
+                        <Grid item xs={2} className="content-sections">
+                            {/* style={{overflowY: "scroll", position: "relative", height: "100%"}} > */}
+                            <JobList update={this.updateSelectedJob} jobs={this.state.jobs}/>
+                        </Grid>
+                        <Grid item xs={7} className="content-sections">
+                            {/* style={{overflowY: "scroll", position: "relative", height: "100%"}}> */}
                             <Grid container item xs={12} alignItems="center" justify="center">
                                 <ButtonGroup aria-label="manage secion">
                                     <Button onClick={() => { this.changeManage("jobs") }} style={this.state.manageState === 0 ? style.active : style.inert}>Manage Job</Button>
@@ -182,7 +192,7 @@ class JobList extends Component {
 
     render(){
         const style = {
-            paper : {padding: 0, marginTop:65, marginBottom:20, height: "fit-content"},
+            paper : {padding: 0, marginTop:55, marginBottom:20, height: "fit-content"},
             list : {padding: 0}
         };
         return(

@@ -21,34 +21,13 @@ class Dashboard extends Component {
     }
     
     async componentDidMount(){
-        let paramArray = []
-        let stringParams = this.props.location.search
-        if(this.props.location.search.startsWith('?k=')){
-            stringParams = stringParams.split('?k=')[1]
-            if(stringParams.includes('?l=')){
-                paramArray = stringParams.split('?l=')
-                console.log(paramArray)
-                this.setState({
-                    keyword: paramArray[0],
-                    location: paramArray[1]
-                })
-            }else{
-                console.log(stringParams)
-                this.setState({
-                    keyword: stringParams
-                })
-            }
-        }else if(this.props.location.search.startsWith('?l=')){
-            stringParams = stringParams.split('?l=')[1]
+        console.log(this.props)
+        if(this.props.location.search === ""){
             this.setState({
-                location: stringParams
+                keyword: '',
+                location: ''
             })
-        }
-        
-    }
-
-    async componentDidUpdate(prevProps){
-        if(prevProps !== this.props){
+        }else{
             let paramArray = []
             let stringParams = this.props.location.search
             if(this.props.location.search.startsWith('?k=')){
@@ -71,6 +50,41 @@ class Dashboard extends Component {
                 this.setState({
                     location: stringParams
                 })
+            }
+        }
+    }
+
+    async componentDidUpdate(prevProps){
+        if(prevProps !== this.props){
+            if(this.props.location.search === ""){
+                this.setState({
+                    keyword: '',
+                    location: ''
+                })
+            }else{
+                let paramArray = []
+                let stringParams = this.props.location.search
+                if(this.props.location.search.startsWith('?k=')){
+                    stringParams = stringParams.split('?k=')[1]
+                    if(stringParams.includes('?l=')){
+                        paramArray = stringParams.split('?l=')
+                        console.log(paramArray)
+                        this.setState({
+                            keyword: paramArray[0],
+                            location: paramArray[1]
+                        })
+                    }else{
+                        console.log(stringParams)
+                        this.setState({
+                            keyword: stringParams
+                        })
+                    }
+                }else if(this.props.location.search.startsWith('?l=')){
+                    stringParams = stringParams.split('?l=')[1]
+                    this.setState({
+                        location: stringParams
+                    })
+                }
             }
         }
     }
@@ -104,7 +118,7 @@ class Dashboard extends Component {
             <div className="dash-contianer">
                 <div className="background-container"/>
                 <div className="dash-inner">
-                    <div className="content-sections">
+                    <div className="content-container">
                         <JobListItems jobSelect={this.changeJob} keyword={this.state.keyword} location={this.state.location}/>
                     </div>
                     <div className="content-container">
@@ -182,6 +196,7 @@ class JobListItems extends Component {
                 searchKey: this.props.keyword,
                 location: this.props.location
             }
+            console.log(params)
             await JobService.executeGetSearch(params)
             .then(result => {
                 const data = result.data

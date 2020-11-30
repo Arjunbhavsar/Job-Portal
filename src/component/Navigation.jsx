@@ -50,7 +50,11 @@ class Navgiation extends Component {
     }
 
     search(paramString){
-        this.props.history.push('/dash/' + paramString)
+        if(paramString !== ''){
+            this.props.history.push('/dash/' + paramString)
+        }else{
+            this.props.history.push('/dash')
+        }
     }
 
     render(){
