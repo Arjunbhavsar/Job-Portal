@@ -7,13 +7,12 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "\"files\"")
+@Table(name = "\"Files\"")
 public class File {
 	@Id
 	@GeneratedValue(generator = "uuid")
@@ -25,7 +24,7 @@ public class File {
 	private String type;
 
 	@Lob
-	@Type(type = "org.hibernate.type.ImageType")
+//	@Type(type = "org.hibernate.type.ImageType")
 	private byte[] data;
 
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.dao.JobDao;
 import com.backend.model.Job;
@@ -36,25 +37,18 @@ public class JobService implements JobServiceInterface {
 		return null;
 	}
 	
+	@Transactional
 	public Boolean checkCreated(String author) {
-		List<Job> jobs = jobDao.findAllByAuthor(author);
-		if(jobs != null) {
-			if(jobs.size() > 0) {
-				return true;
-			}else {
-				return false;
-			}
-		}else {
-			return false;
-		}
+		 return jobDao.existsByAuthor(author);
 	}
 	
+	@Transactional
 	public List<Job> getJobsByAuthor(String author){
 		return jobDao.findAllByAuthor(author);
 	}
 	
+	@Transactional
 	public List<Job> getJobsByFilter(String searchKey, String location) {
-		
 		List<Job> jobs;
 		if((null == searchKey || searchKey.equals("")) && (null == location || location.equals("") )) {
 			jobs= jobDao.findAll();
@@ -68,11 +62,12 @@ public class JobService implements JobServiceInterface {
 		return jobs;	
 	}
 	
+	@Transactional
 	public Job updateJob(Job jobDetails) {
 		if (jobDetails != null) {
-			Job current = jobDao.findById(jobDetails.getId()).orElse(null);
+			
+			Job current = jobDao.findById(jobDetails.getId()).get();
 			if (current != null) {
-				current = jobDetails;
 				if(!current.getCountry().equals(jobDetails.getCountry())) {
 					current.setCountry(jobDetails.getCountry());
 				}
