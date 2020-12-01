@@ -222,9 +222,11 @@ class JobListItems extends Component {
                                 );
                             }, this)
                         }
-                        <ListItem style={{justifyContent: 'center'}}>
-                            {this.state.moreToLoad && <Button variant="contained" size="small" onClick={this.loadmore}>Load more</Button>}
-                        </ListItem>
+                        {this.state.moreToLoad && 
+                            <ListItem style={{justifyContent: 'center'}}>
+                                <Button variant="contained" size="small" onClick={this.loadmore}>Load more</Button>
+                            </ListItem>
+                        }
                     </List>
                 </Paper>
             )
