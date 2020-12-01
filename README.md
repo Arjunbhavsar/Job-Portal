@@ -1,5 +1,5 @@
 
-# Quick-Pick-Sprint 5-Byun (v2) (tested locally)
+# Quick-Pick-Sprint 5-Byun (v2) (tested Heroku, it works!!)
 
 ***please keep my file structure for the profile folder***
 ## New Features (the ones I can remember)
@@ -51,3 +51,5 @@
 		- Go to register
 		- Enter an username that already exists
 		- Sign up
+## Suggestions
+- searching should only disappear when on the landing page, I feel people should be able to search whenever
