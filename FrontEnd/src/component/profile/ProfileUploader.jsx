@@ -5,6 +5,7 @@ import FileService from "../../api/FileService";
 import UserService from '../../api/UserService';
 import blank_profile from '../../img/blank-profile.png';
 import '../../css/ProfileUploader.css';
+import LoadingComponent from '../LoadingComponent';
 
 // import PDFViewer from 'pdf-viewer-reactjs'
 
@@ -99,7 +100,7 @@ export default class ProfileUploader extends Component {
 			this.setState({uploaded: true});
 		}
 		if(this.state.isLoading)
-			return (<div>Loading...</div>);
+			return (<LoadingComponent/>);
 		if(!this.state.uploadable)
 			return (
 				<div>

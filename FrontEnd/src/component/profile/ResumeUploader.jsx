@@ -13,6 +13,7 @@ import Alert from '@material-ui/lab/Alert';
 
 import FindInPageOutlinedIcon from '@material-ui/icons/FindInPageOutlined';
 import AnnouncementOutlinedIcon from '@material-ui/icons/AnnouncementOutlined';
+import LoadingComponent from '../LoadingComponent';
 
 export default class ResumeUploader extends Component {
 	constructor(props) {
@@ -117,7 +118,7 @@ export default class ResumeUploader extends Component {
 		)
 
 		if(this.state.isLoading)
-			return (<div>Loading...</div>);
+			return (<LoadingComponent/>);
 		if(!this.state.uploadable)
 			return (
 				<div>

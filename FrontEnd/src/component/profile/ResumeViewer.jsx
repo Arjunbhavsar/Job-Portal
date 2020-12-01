@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import output from '../../api/connections';
 import PDFViewer from 'pdf-viewer-reactjs';
 import UserService from '../../api/UserService';
-import PropTypes from 'prop-types';
+import ErrorMessage from './ErrorMessage';
+import LoadingComponent from '../LoadingComponent';
 
 export default class ResumeViewer extends Component {
 	constructor(props) {
@@ -32,22 +33,15 @@ export default class ResumeViewer extends Component {
 	}
 
 	render() {
-		PropTypes.shape({
-			text: 'yep', // Watermark text
-		 
-			diagonal: true, // Watermark placement true for Diagonal, false for Horizontal
-		 
-			opacity: PropTypes.string, // Watermark opacity, ranges from 0 to 1
-		 
-			font: PropTypes.string, // custom font name default is 'Comic Sans MS'
-		 
-			size: PropTypes.string, // Fontsize of Watermark
-		 
-			color: PropTypes.string, // Color(hexcode) of the watermark
-		})
-
+		if(this.state.userObj !== null)
+		console.log(this.state.userObj.length)
+		// console.log(Object.values(this.state.userObj))
 		if(this.state.isLoading)
-			return (<div>Loading...</div>);
+			return (<LoadingComponent/>);
+		if(this.state.userObj.length <= 0)
+			return (
+				<ErrorMessage text="Resume Not Found" severity='error'/>
+			)
 		return (
 			<PDFViewer
 				// navbarOnTop='true'

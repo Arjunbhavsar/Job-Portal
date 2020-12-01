@@ -5,6 +5,7 @@ import JobService from '../api/JobService';
 import ApplicationService from '../api/ApplicationService';
 import AuthenticationService from '../api/AuthenticationService';
 import { /*Paper, Grid, Container,*/ Button} from '@material-ui/core/';
+import LoadingComponent from './LoadingComponent';
 
 class Dashboard extends Component {
     constructor() {
@@ -263,7 +264,7 @@ class JobListItems extends Component {
         console.log();
         if(this.state.isLoading){
             return(
-                <p>Loading...</p>
+                <LoadingComponent/>
             )
         }else{
             if(this.state.jobs.length === 0){
@@ -355,7 +356,7 @@ class SelectedJob extends Component {
         } else {
             if(this.props.loading){
                 return(
-                    <p>Loading...</p>
+                    <LoadingComponent/>
                 )
             }else{
                 // console.log(this.state.appStatus)

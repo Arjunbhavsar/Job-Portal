@@ -6,6 +6,8 @@ import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import LocationAutofill from './LocationAutofill';
+import ErrorMessage from './ErrorMessage';
+import LoadingComponent from '../LoadingComponent';
 
 import ResumeUploader from './ResumeUploader';
 import ProfileUploader from './ProfileUploader';
@@ -13,6 +15,7 @@ import ProfileJobList from './ProfileJobList';
 import UserService from '../../api/UserService';
 import AuthenticationService from '../../api/AuthenticationService';
 import '../../css/RegisterComponent.css'
+import Alert from '@material-ui/lab/Alert';
 
 
 class ProfileComponent extends Component {
@@ -133,21 +136,10 @@ class ProfileComponent extends Component {
 			image : {'borderRadius':'50%', width:"200px", height:"200px", "objectfit":"cover"}
 		}
 		if(this.state.isLoading)
-			return (<div>Loading...</div>);
+			return (<LoadingComponent/>);
 		if(!isUserLoggedIn || !this.state.exists)
 			return (
-				<Grid container direction="row">
-					<Grid container justify="center">
-						<Grid item sm={3}></Grid>
-						<Grid item sm={6}>
-							<Paper style={style.Paper}>
-								<Grid container>
-									{!isUserLoggedIn ? <Grid item sm> Not Logged In </Grid> : <Grid item sm> User Not Found </Grid>}
-								</Grid>
-							</Paper>
-						</Grid>
-					</Grid>
-				</Grid>
+				<ErrorMessage text={!isUserLoggedIn ? "Not Logged In" : "User Not Found"}/>
 			)
 		const editingFalse = () => (
 			<List>
@@ -217,7 +209,9 @@ class ProfileComponent extends Component {
 													<Grid item >
 														{!this.state.edit_mode ?
 															<div align="left" style={{'wordBreak': 'break-word'}}>
-																{this.state.userObj != null && this.state.userObj.biography !== null && this.state.userObj.biography.length > 0 ? this.state.userObj.biography : "-empty-"}
+																{this.state.userObj != null && this.state.userObj.biography !== null && this.state.userObj.biography !== undefined && this.state.userObj.biography.length > 0 ? this.state.userObj.biography :
+																<Alert variant="outlined" severity='info' style={{'width':'fit-content'}}>no biography</Alert>}
+																{/* <Alert severity='info'>empty biography</Alert> */}
 															</div> :
 															<div width="10%">
 																<TextareaAutosize cols="50" rows="4" name="newBiography" defaultValue={this.state.userObj.biography} onChange={this.handleChange}/>

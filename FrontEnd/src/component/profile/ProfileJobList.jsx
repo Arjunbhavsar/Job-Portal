@@ -17,12 +17,14 @@ import {Description as DescriptionIcon,
 		NotInterested as NotInterestedIcon,
 		} from '@material-ui/icons';
 import { green, red, orange } from '@material-ui/core/colors';
+import LoadingComponent from '../LoadingComponent';
 
 import output from '../../api/connections';
 import JobService from '../../api/JobService';
 import UserService from '../../api/UserService';
 import ApplicationService from '../../api/ApplicationService';
 import ProfileJobDelete from './ProfileJobDelete';
+import Alert from '@material-ui/lab/Alert';
 
 export default class ProfileJobList extends Component{
 	constructor(props) {
@@ -73,7 +75,7 @@ export default class ProfileJobList extends Component{
 		if(jobType != null)
 			jobType = jobType.slice(0,1).toUpperCase() + jobType.slice(1).toLowerCase();
 		if(this.state.isLoading)
-			return(<p>Loading...</p>)
+			return(<LoadingComponent/>)
 		return (
 			<Grid container direction="column">
 				<Grid >
@@ -87,9 +89,9 @@ export default class ProfileJobList extends Component{
 							)}
 						</List>
 					</Grid> :
-					<Grid >
-						-no jobs-
-					</Grid>
+					// <Grid >
+						<Alert variant="outlined" severity='info' style={{'width':'fit-content'}}>no jobs</Alert>
+					// </Grid>
 				}
 			</Grid>
 		)
