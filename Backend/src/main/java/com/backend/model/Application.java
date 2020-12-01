@@ -8,13 +8,9 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Data
 @Table(name="\"Application\"")
 public class Application {
 	
@@ -25,13 +21,40 @@ public class Application {
 	
 	private String jobId;
 	
-	private String username;	
+	private String userId;	
 	
 	private String status;
 	
-	public Application(String jobId, String username) {
+	public Application() {
+		super();
+	}
+	
+	public Application(String jobId, String userId) {
+		super();
 		this.jobId = jobId;
-		this.username = username;
-		this.status = "Pending";
+		this.userId = userId;
+	}
+	
+	public String getJobId() {
+		return jobId;
+	}
+	public void setJobId(String jobId) {
+		this.jobId = jobId;
+	}
+	public String getId() {
+		return id;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

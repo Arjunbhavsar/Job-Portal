@@ -21,11 +21,14 @@ public class SpringSecurityConfigurationBasicAuth extends WebSecurityConfigurerA
 			.antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
+//			.formLogin().and()
 			.httpBasic();
 	}
 	
 	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/load/**");
-	}
+	  public void configure(WebSecurity web) throws Exception {
+	    web
+	      .ignoring()
+	         .antMatchers("/load/**");
+	  }
 }

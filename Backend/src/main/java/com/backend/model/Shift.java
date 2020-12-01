@@ -48,4 +48,57 @@ public class Shift {
 			return false;
 		return true;
 	}
+
+	public String getApplicationId() {
+		return applicationId;
+	}
+
+	public void setApplicationId(String applicationId) {
+		this.applicationId = applicationId;
+	}
+
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
+
+	public Integer getHourStart() {
+		return hourStart;
+	}
+
+	public void setHourStart(Integer hourStart) {
+		this.hourStart = hourStart;
+	}
+
+	public Integer getMinuteStart() {
+		return minuteStart;
+	}
+
+	public void setMinuteStart(Integer minuteStart) {
+		this.minuteStart = minuteStart;
+	}
+
+	public Integer getHourEnd() {
+		return hourEnd;
+	}
+
+	public void setHourEnd(Integer hourEnd) {
+		this.hourEnd = hourEnd;
+	}
+
+	public Integer getMinuteEnd() {
+		return minuteEnd;
+	}
+
+	public void setMinuteEnd(Integer minuteEnd) {
+		this.minuteEnd = minuteEnd;
+	}
+
+	public String getId() {
+		return id;
+	}
+	
 }

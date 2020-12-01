@@ -1,53 +1,73 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import AuthenticationService from '../api/AuthenticationService';
-import SearchBar from './SearchBar';
-import '../css/Navigation.css';
-import logo from '../img/quickpick-logo2-transparent-small.png';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from "@material-ui/core/IconButton";
 import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { withRouter } from "react-router";
 
+import JobService from '../api/JobService';
+import logo from '../img/quickpick-logo2-transparent-small.png';
+import AuthenticationService from '../api/AuthenticationService';
+import SearchBar from './SearchBar';
+import '../css/Navigation.css';
+
 class Navgiation extends Component {
     constructor(){
         super();
         this.state = {
-            path: false
+            path: false,
+            isUserLoggedIn: false,
+            checkByAuthor: false
         }
-        this.isUserLoggedIn = AuthenticationService.isUserLoggedIn();
+        this.search = this.search.bind(this)
     }
 
-    componentWillReceiveProps(newProps){
+    async componentWillReceiveProps(newProps){
+        let logged = AuthenticationService.isUserLoggedIn();
+        let check = false
+        if(logged){
+            check = await JobService.executeCheckByAuthor().then(result => result.data);
+        }
         this.setState({
-            path: window.location.href.includes('dash')
+            path: newProps.location.pathname.includes('dash'),
+            isUserLoggedIn: logged,
+            checkByAuthor: check
         });
     }
 
     async componentDidMount() {
+        let logged = AuthenticationService.isUserLoggedIn();
+        let check = false
+        if(logged){
+            check = await JobService.executeCheckByAuthor().then(result => result.data);
+        }
         this.setState({
-            path: window.location.href.includes('dash')
+            path: this.props.location.pathname.includes('dash'),
+            isUserLoggedIn: logged,
+            checkByAuthor: check
         });
     }
 
-    render(){
-        var noLoggedStyles = {visibility: "hidden"};
-        if (this.isUserLoggedIn === true){
-            noLoggedStyles = {
-                visibility: "visible"
-            };
+    search(paramString){
+        if(paramString !== ''){
+            this.props.history.push('/dash/' + paramString)
+        }else{
+            this.props.history.push('/dash')
         }
+    }
+
+    render(){
         return(
             <div className="navBar">
             <div className="nav-search-logo">
                 <Link to="/"><img src={logo} alt="logo" className="logo"/></Link>
-                {this.state.path && <SearchBar />}
+                {this.state.path && <SearchBar submit={this.search}/>}
             </div>
             <div className="leftNav">
                 <nav className="navControls">
-                    <Link className="navButton" to="/manage" style={noLoggedStyles} >Manage Posts</Link>
-                    <Link className="navButton" to="/postjob" style={noLoggedStyles} >Post Job</Link>
+                    { this.state.isUserLoggedIn && this.state.checkByAuthor && <Link className="navButton" to="/manage">Manage Posts</Link>}
+                    { this.state.isUserLoggedIn && <Link className="navButton" to="/postjob">Post Job</Link>}
                     <Link className="navButton" to="/dash" >Dashboard</Link>
                     <Nav/>
                 </nav>
@@ -69,7 +89,9 @@ function Nav() {
     };
 
     const handleMenuClose = () => {
-        setAnchorEl(null);
+		// if you are viewing someone's profile and click on profile, it wont update
+		// window.location.replace(window.location.href.split('/')[0] + '/profile/' + sessionStorage.getItem('authenticatedUser'));
+		setAnchorEl(null);
     };
     const handleMenuCloseLogout = () => {
         setAnchorEl(null);
@@ -125,5 +147,4 @@ function Nav() {
         </>
     )
 }
-
 export default withRouter(Navgiation)

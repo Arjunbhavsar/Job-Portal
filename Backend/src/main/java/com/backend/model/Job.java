@@ -23,6 +23,7 @@ public class Job {
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	private String id;
 	
+	
 	private String country;
 	private String dateAdded;
 	private String hasExpired;
@@ -111,6 +112,9 @@ public class Job {
 	}
 	public void setSector(String sector) {
 		this.sector = sector;
+	}
+	public String getId() {
+		return id;
 	}
 	public String getAuthor() {
 		return author;

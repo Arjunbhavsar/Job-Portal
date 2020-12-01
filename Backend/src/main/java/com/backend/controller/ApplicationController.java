@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,14 +23,14 @@ public class ApplicationController {
 	@Autowired
 	ApplicationService appService;
 	
-	@PostMapping("/acceptApp/{username}")
-	public String acceptJob(@PathVariable String username, @RequestBody String id) {
-		try {
-			appService.acceptApplicant(id, username);
-			return "Job Accepted Successfully";
-		} catch (Exception e) {
-			return "Could Not Accept Job";
-		}
+	@PostMapping("/acceptApp")
+	public Application acceptApp(@RequestBody List<String> ids) {
+		return appService.acceptApplicant(ids.get(0), ids.get(1));
+	}
+	
+	@PostMapping("/denyApp")
+	public Application denyApp(@RequestBody List<String> ids) {
+		return appService.denyApplicant(ids.get(0), ids.get(1));
 	}
 	
 	@PostMapping("/apply")
@@ -42,14 +43,29 @@ public class ApplicationController {
 		}
 	}
 	
-	@GetMapping("/userApplications/{username}")
-	public List<Application> getApplied(@PathVariable String username) {
-		return appService.getUserApps(username);
+	@GetMapping("/userApplications/{userId}")
+	public List<Application> getApplied(@PathVariable String userId) {
+		return appService.getUserApps(userId);
+	}
+	
+	@GetMapping("/jobApplicants/{jobId}")
+	public List<Object> getApplicants(@PathVariable String jobId) {
+		return appService.getApplicants(jobId);
 	}
 	
 	@PostMapping("/checkIfApplied")
 	public String checkIfUsernameExists(@RequestBody Application app){
 		return appService.checkIfApplied(app);
+	}
+	
+	@DeleteMapping("/deleteApplicaionById/{id}")
+	public String deleteApplicaionById(@PathVariable String id) {
+		return appService.deleteApplicaionById(id);
+	}
+	
+	@DeleteMapping("/deleteApplicaionByJobId/{jobId}")
+	public String deleteApplicaionByJobId(@PathVariable String jobId) {
+		return appService.deleteApplicaionByJobId(jobId);
 	}
 }
 

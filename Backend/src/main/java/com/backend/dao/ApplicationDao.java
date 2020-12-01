@@ -12,6 +12,7 @@ public interface ApplicationDao extends JpaRepository<Application, String> {
 
 	List<Application> findAllByJobId(String jobId);
 	
-	List<Application> findAllByUsername(String username);
+	List<Application> findAllByUserId(String userId);
 	
+	void deleteAllByJobId(String jobId);
 }

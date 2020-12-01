@@ -22,6 +22,7 @@ import output from '../../api/connections';
 import JobService from '../../api/JobService';
 import UserService from '../../api/UserService';
 import ApplicationService from '../../api/ApplicationService';
+import ProfileJobDelete from './ProfileJobDelete';
 
 export default class ProfileJobList extends Component{
 	constructor(props) {
@@ -33,6 +34,11 @@ export default class ProfileJobList extends Component{
 			jobs: null,
 			jobType: null,
 		};
+		this.update = this.update.bind(this);
+	}
+
+	update() {
+		this.componentDidMount();
 	}
 
 	async componentDidMount(){
@@ -41,22 +47,21 @@ export default class ProfileJobList extends Component{
 							.then(result => result.data);
 							console.log('loading data ...');
 		this.setState({userObj : data});
-		let jobData = await JobService.executeGetJobListService().then(result => result.data);
 		let added = [];
 		if(this.props.jobType != null && this.props.jobType.toLowerCase() === 'applied') {
 			// Push applied jobs
 			this.setState({jobType : "applied"});
 			let appData = await ApplicationService.getAllApplied().then(result => result.data);
-			for(let i = 0; i < appData.length; i++)
-				for(let j = 0; j < jobData.length; j++)
-					if(appData[i].username === this.state.userObj.username && appData[i].jobId === jobData[j].id)
-						added.push(<JobElement jobStatus={appData[i].status} jobType={this.state.jobType} jobData={jobData[j]}/>);
+			for(let i = 0; i < appData.length; i++) {
+				let appliedJob = await JobService.executeGetJob(appData[i].jobId).then(result => result.data);
+				added.push(<JobElement appData={appData[i]} jobType={this.state.jobType} jobData={appliedJob} update={this.update}/>);
+			}
 		} else {
 			// Push created jobs
+			let jobData = await JobService.executeGetByAuthor().then(result => result.data);
 			this.setState({jobType : "created"});
 			for(let i = 0; i < jobData.length; i++)
-				if(jobData[i].author === this.state.userObj.id)
-					added.push(<JobElement jobType={this.state.jobType} jobData={jobData[i]}/>)
+				added.push(<JobElement jobType={this.state.jobType} jobData={jobData[i]} update={this.update}/>)
 		}
 		this.setState({jobs: added});
 		if(this.state.userObj && this.state.jobs)
@@ -110,9 +115,9 @@ class JobElement extends Component {
 		}
 		let hoverText = 'created job';
 		let jobIcon = () => (<WorkOutlineIcon />);
-		if(this.props.jobType === 'applied') {
-			hoverText = this.props.jobStatus.toLowerCase();
-			switch(this.props.jobStatus.toLowerCase()) {
+		if(this.props.jobType.toLowerCase() === 'applied') {
+			hoverText = this.props.appData.status.toLowerCase();
+			switch(this.props.appData.status.toLowerCase()) {
 			case 'pending':
 				jobIcon = () => (<HourglassEmptyIcon style={{color: orange[500]}} />);
 				break;
@@ -167,6 +172,13 @@ class JobElement extends Component {
 									<ListItemIcon title="salary"><AttachMoneyIcon /></ListItemIcon>
 									<ListItemText primary={this.props.jobData.jobSalary} />
 								</ListItem>}
+								<ListItem button style={style.nested}>
+									{this.props.jobType === 'applied' ?
+										<ProfileJobDelete jobData={this.props.jobData} update={this.props.update} appData={this.props.appData} jobType='applied'/> :
+										<ProfileJobDelete jobData={this.props.jobData} update={this.props.update} jobType='created'/>
+									}
+								</ListItem>
+								<hr/>
 							</List>
 						</Collapse>
 						{/* <p>{this.props.jobData.hasExpired}</p>

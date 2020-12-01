@@ -8,7 +8,6 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -35,16 +34,20 @@ public class User {
 	@Column(unique= true)
 	private String username;
 	
+	@Column(unique= true)
 	private String emailId;
+	
 	private String address;
 	private String password;
 	
 	@Lob
-	@Type(type = "org.hibernate.type.CharacterArrayType")
 	private String biography;
 	
 	public String profileFileId;
 	public String resumeFileId;
+	
+	//Forget Password Functionality
+	private String resetToken;
 	
 	public String getProfileFileId() {
 		return profileFileId;
@@ -99,6 +102,15 @@ public class User {
 	}
 	public void setBiography(String biography) {
 		this.biography = biography;
+	}
+	public String getId() {
+		return id;
+	}
+	public String getResetToken() {
+		return resetToken;
+	}
+	public void setResetToken(String resetToken) {
+		this.resetToken = resetToken;
 	}
 	
 }

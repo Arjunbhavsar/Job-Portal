@@ -3,13 +3,12 @@ import axios from 'axios'
 class AutheticationService{
     registerSuccessfulLogin(user){
         sessionStorage.setItem('authenticatedUser',user.username);
-		sessionStorage.setItem('authenticatedUserId',user.id);
-		console.log("USER ID REGISTER" + user.id)
+        sessionStorage.setItem('authenticatedUserId',user.id);
         this.setupAxiosInterceptors()
     }
 
-    updateUsername(user){
-        sessionStorage.setItem('authenticatedUser',user);
+    updateUsername(username){
+        sessionStorage.setItem('authenticatedUser',username);
     }
 
     logout(){

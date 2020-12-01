@@ -1,13 +1,13 @@
 package com.backend.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.backend.dao.ApplicationDao;
 import com.backend.dao.UserDao;
-import com.backend.model.Application;
 import com.backend.model.User;
 
 @Service
@@ -16,20 +16,20 @@ public class UserService implements UserServiceInterface {
 	@Autowired
 	private UserDao userDao;
 	
-	@Autowired
-	private ApplicationDao appDao;
-	
+	@Transactional
 	@Override
 	public String registerUser(User user) {
 		userDao.save(user);
 		return "Success";
 	}
 
+	@Transactional
 	@Override
 	public List<User> getUsers() {
 		return (List<User>) userDao.findAll();
 	}
 	
+	@Transactional
 	public User getUser(String username) {
 		User target = null;
 		for(User current : userDao.findAll()) {
@@ -40,12 +40,13 @@ public class UserService implements UserServiceInterface {
 		return target;
 	}
 
+	@Transactional
 	@Override
 	public User login(User user) {
 		User fail = new User();
 		if(user != null) { 
 			if (user.getUsername() != null && user.getPassword() != null ) {
-				User result = userDao.findByUsername(user.getUsername());
+				User result = userDao.findByusername(user.getUsername());
 				if(result!= null) {
 					if(result.getPassword() != null && result.getPassword().equals(user.getPassword())  ) {
 						return result;
@@ -54,7 +55,7 @@ public class UserService implements UserServiceInterface {
 						return fail;
 					}
 				}else {
-					result = userDao.findByEmailId(user.getEmailId());
+					result = userDao.findByEmailId(user.getUsername());
 					if(result!= null) {
 						if(result.getPassword() != null && result.getPassword().equals(user.getPassword())  ) {
 							return result;
@@ -86,19 +87,20 @@ public class UserService implements UserServiceInterface {
 		return fail;
 	}
 	
+	@Transactional
 	public String checkIfUsernameExists(String username) {
-		try {
-			User result = userDao.findByUsername(username);
+		if(username != null) {
+			User result = userDao.findByusername(username);
 			if(result!= null) {
 				return "Username not available";
 			}else {
 				return "Username available";
 			}
-		} catch(Exception e) {
-			return "Something went wrong";
 		}
+		return "Something went wrong";
 	}
 	
+	@Transactional
 	public String checkIfEmailExists(String emailId) {
 		if(emailId != null) {
 			User result = userDao.findByEmailId(emailId);
@@ -111,6 +113,23 @@ public class UserService implements UserServiceInterface {
 		return "Something went wrong";
 	}
 	
+	@Transactional
+	public User findUserByEmail(String userEmail) {		
+		return userDao.findByEmailId(userEmail);
+	}
+
+	@Transactional
+	public Optional<User> findUserByResetToken(String token) {
+		return userDao.findByResetToken(token);
+	}
+
+	@Transactional
+	public void save(User resetUser) {
+		userDao.save(resetUser);
+		
+	}
+	
+	@Transactional
 	public String updateUser(String id, User user) {
 		String out = "service failed";
 		try {
@@ -143,11 +162,7 @@ public class UserService implements UserServiceInterface {
 			out = "biography";
 			if(user.getUsername() != null && !user.getUsername().isEmpty()) {
 				try {
-					List<Application> userApps = appDao.findAllByUsername(currentUser.getUsername());
 					currentUser.setUsername(user.getUsername());
-					for(Application app : userApps)
-						app.setUsername(user.getUsername());
-					appDao.saveAll(userApps);
 				} catch (Exception e) {}
 			}
 			out = "username";

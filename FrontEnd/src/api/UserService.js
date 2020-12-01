@@ -7,7 +7,7 @@ class getUsersListService{
 		userTag : output + '/user/'
 	}
 
-	executeGetUserListService(){
+    executeGetUserListService(){
 		const {userTag} = this.state;
 
 		let usernameAuth = 'user'
@@ -22,6 +22,7 @@ class getUsersListService{
 			}
 		)
 	}
+
 	executeCheckRegisteredExternal(emailId) {
 		const {userTag} = this.state;
 
@@ -53,35 +54,35 @@ class getUsersListService{
 			}
 		)
 	}
-
-	executePostUserRegisterService(user){
+   
+    executePostUserRegisterService(user){
 		const {userTag} = this.state;
-		let username = 'user'
+        let username = 'user'
 		let password =  'password'
 		
-		let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
-		return axios.post(userTag+'register',user,
-		{
-			headers:{
-				authorization: basicAuthHeader,
+        let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
+        return axios.post(userTag+'register',user,
+        {
+            headers:{
+                authorization: basicAuthHeader,
 		'Content-Type': 'application/json'
-			}
-		}
-		)
-	}
+            }
+        }
+        )
+    }
 
-	registerLogin(user) {
+    registerLogin(user) {
 		const {userTag} = this.state;
-		let username = 'user'
-		let password = 'password'
-		let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
-		return axios.post(userTag+'login', user , {
+        let username = 'user'
+        let password = 'password'
+        let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
+        return axios.post(userTag+'login', user , {
 				headers:{
 					authorization: basicAuthHeader
 				}
 			}
-		)
-	}
+        )
+    }
 	
 	async updateUser(id, user) {
 		const {userTag} = this.state;
@@ -112,5 +113,35 @@ class getUsersListService{
 		console.log("EXISTS? " + result);
 		return result === 'registered';
 	}
+
+	ForgetPassword(param) {
+		const {userTag} = this.state;
+        let username = 'user'
+        let password = 'password'
+		let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
+		return axios.get(userTag+'forgotpassword', 
+		{	
+			params : param,
+			headers:{
+				authorization: basicAuthHeader
+			}
+		}
+		)
+	}
+	
+	ResetPassword(param) {
+		const {userTag} = this.state;
+        let username = 'user'
+        let password = 'password'
+		let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
+		return axios.get(userTag+'reset', 
+		{	
+			params : param,
+			headers:{
+				authorization: basicAuthHeader
+			}
+		}
+		)
+    }
 }
 export default new getUsersListService();

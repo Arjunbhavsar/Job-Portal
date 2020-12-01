@@ -1,67 +1,48 @@
-# Quick-Pick-Sprint 5-Byun (tested on heroku and it works... kinda)
 
-## Added Changes
-- I changed all instances primary key @Id names to simply "id"
-	- So "uniqueId" is simply "id" for clarity and because heroku didn't recognize it as a string for some reason
-	- Any instance of a string with both 'I' and 'D' capitalized have been changed so 'D' is lowercase
-		- So 'ID' to "Id". Again this is for clarity and so everything is uniform.
-		- For example "jobID" is now "jobId" and "authenticatedUserID" is now "authenticatedUserId"
-- Backend for shift setup
-	- Shift model, dao, controller, service added
-- Profile viewing added
-	- Can view other people's profiles now by changing the url
-	- As of now you can only view profiles when logged in
-		- Can easily change this
-	- When on other profiles you will have limited functionality
-		- You cannot upload images/resume
-		- You cannot view their applied jobs
-		- You cannot edit information
+# Quick-Pick-Sprint 5-Byun (v2) (tested locally)
 
+***please keep my file structure for the profile folder***
+## New Features (the ones I can remember)
+- PDF viewing added
+	- New page added with that uses 'path/resume/user'
+- Component for deleting Jobs/Applications added
+	- When a job is deleted all associated applications get deleted as well
+	- The backend has been updated as well to do this
+- Profile page address uses google places API for autofilling locations
+	- Don't spam it, idk when it's gonna charge me...
+## Updates/Bug Fixes (the ones I can remember)
+- ProfileUploader.js UI update
+	- No longer clips into the username
+	- Has tinted background on hover
+- ResumeUploader.js UI update
+	- It looks better
+- Fixed bug with ProfileJobList.js because it was pulling wrong information for AppliedJobList
 ## Known Bugs
-- Profile breaks if there is a space in the username
+- Profile locks you out if there is a space in the username
 	- This is because it is pulling the name from the url and if there is a space there it will show as "%20"
 	- We can either prevent people from making names with spaces or just check for spaces in the url
 	- Replicate:
 		- Have a username with a space
 		- Go to profile once logged in
 		- Observe that you can't edit anymore and applied jobs no longer shows
-- Biography doesn't update on save
-	- Replicate:
-		- Go to profile once logged in
-		- Enter edit mode
-		- Fill out biography section
-		- Save and observe the biography field
-- User can sign up with the same email
-	- Replicate:
-		- Go to register
-		- Enter an email address that already exists
-		- Sign up
 - Inconsistent font from landing page to other pages
 	- Replicate:
 		- Go to landing page
 		- Go to any other page
 		- Click refresh and observe the font
-			- It is most noticeable for the navbar
-- Email login doesn't work
-	- Replicate
-		- Go to login page
-		- Login with existing email and password
-- Applying for jobs still has bug where the pending message doesn't go away
-	- Replicate:
-		- Go to dashboard (must have more than 1 job)
-		- Apply to a job and observe the message that shows
-		- Click on a different job and observe the message
+			- It is most noticeable for the navbar or the '+' for the upload profile
 - Profile Image uploading spam in backend
 	- Replicate:
 		- Replace an existing image on profile
 		- Check backend and there should be two versions that were uploaded
-
 ## Known Issues
+- ctrl+click will open link in new tab but we lose our session
+- when you move from landing page to profile, there is a font that is applied for some reason which shows when you hover over the profile image
 - User can't change email
 	- Email changing is currently locked
 	- This is due to the fact that people who sign in through Gmail will get locked out if they change their email
 	- We could keep it this way or change the backend
-- No error message if username exists for profile and signup
+- No error message if username exists for profile/the register fields
 	- Replicate on Profile:
 		- Go to profile page
 		- Update username to an existing username

@@ -22,9 +22,22 @@ class ApplicationService{
 		const {appsTag} = this.state;
         let username = 'user'
 		let password = 'password'
-		let currentUsername = sessionStorage.getItem('authenticatedUser');
+		let currentUserId = sessionStorage.getItem('authenticatedUserId');
+		let basicAuthHeader = 'Basic '+ window.btoa(username+':'+password);
+		return axios.get(appsTag+'userApplications/'+ currentUserId, {
+				headers:{
+					authorization: basicAuthHeader
+				}
+			}
+        )
+    }
+    
+    getAllApplicants(jobId){
+		const {appsTag} = this.state;
+        let username = 'user'
+		let password = 'password'
         let basicAuthHeader = 'Basic '+ window.btoa(username+':'+password)
-		return axios.get(appsTag+'userApplications/'+ currentUsername, {
+		return axios.get(appsTag+'jobApplicants/'+ jobId, {
 				headers:{
 					authorization: basicAuthHeader
 				}
@@ -44,6 +57,46 @@ class ApplicationService{
             }
         })
     }
+
+    acceptApplication(ids){
+        const {appsTag} = this.state;
+		let username = 'user'
+		let password =  'password'
+        let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
+		return axios.post(appsTag +'acceptApp/', ids,
+        {
+            headers:{
+                authorization: basicAuthHeader
+            }
+        })
+    }
+
+    denyApplication(ids){
+        const {appsTag} = this.state;
+		let username = 'user'
+		let password =  'password'
+        let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
+		return axios.post(appsTag +'denyApp/', ids,
+        {
+            headers:{
+                authorization: basicAuthHeader
+            }
+        })
+	}
+	
+	deleteApplication(id){
+		const {appsTag} = this.state;
+		
+		let usernameAuth = 'user'
+		let passwordAuth =  'password'
+		let basicAuthHeader = 'Basic '+window.btoa(usernameAuth+':'+passwordAuth)
+
+		return axios.delete(`${appsTag}deleteApplicaionById/${id}`,{
+			headers:{
+				authorization: basicAuthHeader
+			}
+		})
+	}
 }
 
 export default new ApplicationService();

@@ -8,15 +8,16 @@ import org.springframework.stereotype.Repository;
 import com.backend.model.User;
 
 @Repository
-public interface UserDao extends JpaRepository<User, String>	{
+public interface UserDao extends JpaRepository<User, Integer>	{
 	
-	User findByUsername(String username);
+	User findByusername(String username);
 	
 	Optional<User> findById(String id);
 	
-	void deleteById(String id);
-	
 	User findByEmailId(String emailId);
 	
+	void deleteById(String id);
+	
+	Optional<User> findByResetToken(String token);
 }
 	

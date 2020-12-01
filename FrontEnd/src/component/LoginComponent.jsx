@@ -74,7 +74,9 @@ class LoginComponenet extends Component {
         this.props.history.push(`/register`);
     }
 
-    loginClicked(){
+    loginClicked(event){
+        console.log('check')
+        event.preventDefault()
         const user = {
             password: this.state.password,
             username:this.state.username,
@@ -83,6 +85,7 @@ class LoginComponenet extends Component {
             address: null,
             emailId: null
         }
+        console.log(user)
         console.log('Inside the login function')
         //let loginSccess = false;
         UserService.registerLogin(user)
@@ -95,7 +98,7 @@ class LoginComponenet extends Component {
 
     handleSuccessResponse(response){
         if (response.status === 200) {
-            if (response.data.username === this.state.username || response.data.emailId === this.state.emailId){
+            if (response.data.username === this.state.username || response.data.emailId === this.state.emailId || response.data.emailId === this.state.username){
                 console.log('Successful Login')
                 AutheticationService.registerSuccessfulLogin(response.data)
                 this.props.history.push(`/`)
@@ -135,7 +138,8 @@ class LoginComponenet extends Component {
 		.catch(error => this.handleError(error));
     }
     
-    registerGoogle(){
+    registerGoogle(event){
+        event.preventDefault()
         const response = this.state.userObj
         const user = {
 			password: response.profileObj.googleId,
@@ -197,8 +201,8 @@ class LoginComponenet extends Component {
                         <Avatar className={classes.avatar}>
                             <LockOutlinedIcon />
                         </Avatar>
-                        <form className={`${classes.form} login-paper`} noValidate  onSubmit={this.onSubmit}>
-                            <Typography component="h1" variant="h5">Sign in</Typography>
+                        <form className={`${classes.form} login-paper`} noValidate  onSubmit={this.registerGoogle}>
+                            <Typography component="h1" variant="h5">Set Username</Typography>
                             <TextField
                                 variant="outlined"
                                 margin="normal"
@@ -233,7 +237,7 @@ class LoginComponenet extends Component {
                         <Avatar className={classes.avatar}>
                             <LockOutlinedIcon />
                         </Avatar>
-                        <form className={classes.form} noValidate  onSubmit={this.onSubmit} >
+                        <form className={classes.form} noValidate  onSubmit={this.loginClicked} >
                             <Typography component="h1" variant="h5">Sign in</Typography>
                             <TextField
                                 error={ this.state.incorrect === 1 }
@@ -251,7 +255,7 @@ class LoginComponenet extends Component {
                                 inputProps={{
                                     type: "text",
                                     onChange: this.handleChange,
-                                    autoComplete: "hidden"
+                                    autoComplete: "off"
                                 }}/>
                             <TextField
                                 error={ this.state.incorrect > 0 }
@@ -269,7 +273,7 @@ class LoginComponenet extends Component {
                                 inputProps={{
                                     type: "password",
                                     onChange: this.handleChange,
-                                    autoComplete: "hidden"
+                                    autoComplete: "off"
                                 }}/>
                             <FormControlLabel
                                 control={<Checkbox value="remember" color="primary" />}
@@ -293,7 +297,7 @@ class LoginComponenet extends Component {
                             <div style={{"height": "20px"}}></div>
                             <Grid container>
                                 <Grid item xs>
-                                    <Link href="#" variant="body2">
+                                    <Link href="/ForgotPassword" variant="body2">
                                         Forgot password?
                                     </Link>
                                 </Grid>
