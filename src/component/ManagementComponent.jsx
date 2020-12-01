@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Paper, Grid, List, ListItem, ListItemText, ListItemAvatar, Divider, ButtonGroup, Button, ListItemIcon, Collapse, TextField, TextareaAutosize } from '@material-ui/core/';
+import { Paper, Grid, List, ListItem, ListItemText, Divider, ButtonGroup, Button, ListItemIcon, Collapse, TextField } from '@material-ui/core/';
 import { LocationOn as LocationOnIcon, 
          Business as BusinessIcon,
          Link as LinkIcon,
@@ -11,12 +11,10 @@ import { LocationOn as LocationOnIcon,
          Save as SaveIcon } from '@material-ui/icons';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { green, red } from '@material-ui/core/colors';
-// import { Alert } from '@material-ui/lab';
 import { Link } from 'react-router-dom';
 
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import AuthenticationService from '../api/AuthenticationService';
-import UserService from '../api/UserService';
 import JobService from '../api/JobService';
 import RichTextInput from './RichTextInput';
 import ApplicationService from '../api/ApplicationService';
@@ -106,11 +104,9 @@ class ManagementComponent extends Component {
                 <div className="container">
                     <Grid container direction="row" spacing={3} style={style.container} justify="center">
                         <Grid item xs={2} className="content-sections">
-                            {/* style={{overflowY: "scroll", position: "relative", height: "100%"}} > */}
                             <JobList update={this.updateSelectedJob} jobs={this.state.jobs}/>
                         </Grid>
                         <Grid item xs={7} className="content-sections">
-                            {/* style={{overflowY: "scroll", position: "relative", height: "100%"}}> */}
                             <Grid container item xs={12} alignItems="center" justify="center">
                                 <ButtonGroup aria-label="manage secion">
                                     <Button onClick={() => { this.changeManage("jobs") }} style={this.state.manageState === 0 ? style.active : style.inert}>Manage Job</Button>
@@ -331,9 +327,7 @@ class SelectedManage extends Component {
             sector: this.props.job.sector,
             author: this.props.job.author
         }
-        console.log(job)
         const data = await JobService.executeUpdateJobService(job);
-        console.log(data)
         this.props.update()
     }
 
@@ -378,36 +372,37 @@ class SelectedManage extends Component {
                                     <p style={{padding: 0, margin: 0}}>Job Information</p>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <TextField  label={this.state.jobTitle}
+                                    <TextField  label="Job Title"
                                                 defaultValue={this.state.jobTitle}
                                                 fullWidth
+                                                required
                                                 variant="outlined"
                                                 placeholder={this.state.jobTitle} name="jobTitle"
                                                 onChange={this.handleChange}/>
                                 </Grid>
                                 <Grid item xs={12} sm={4}>
-                                    <TextField  label={this.state.jobSalary}
+                                    <TextField  label="Salary"
                                                 defaultValue={this.state.jobSalary}
                                                 fullWidth
                                                 variant="outlined"
-                                                placeholder="Salary" name="jobSalary"
+                                                placeholder={this.state.jobSalary} name="jobSalary"
                                                 onChange={this.handleChange}/>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <TextField  label={this.state.location}
+                                    <TextField  label="Job Location"
                                                 defaultValue={this.state.location}
                                                 fullWidth
+                                                required
                                                 variant="outlined"
-                                                placeholder="Job Location" name="location"
+                                                placeholder={this.state.location} name="location"
                                                 onChange={this.handleChange}/>
                                 </Grid>
                                 <Grid item xs={12} sm={4}>
-                                    <TextField  label={this.state.country}
+                                    <TextField  label="Job Country"
                                                 defaultValue={this.state.country}
                                                 fullWidth
                                                 variant="outlined"
-                                                placeholder="Job Country" 
-                                                name="country"
+                                                placeholder={this.state.country} name="country"
                                                 onChange={this.handleChange}/>
                                 </Grid>
                                 <Grid item xs={12} style={{textAlign: "center"}}>
@@ -415,19 +410,20 @@ class SelectedManage extends Component {
                                     <p style={{padding: 0, margin: 0}}>Company Information</p>
                                 </Grid>
                                 <Grid item xs={12} sm={5}>
-                                    <TextField  label={this.state.organization}
+                                    <TextField  label="Company Name"
                                                 defaultValue={this.state.organization}
                                                 fullWidth
+                                                required
                                                 variant="outlined"
-                                                placeholder="Company" name="organization"
+                                                placeholder={this.state.organization} name="organization"
                                                 onChange={this.handleChange}/>
                                 </Grid>
                                 <Grid item xs={12} sm={5}>
-                                    <TextField  label={this.state.pageUrl}
+                                    <TextField  label="Page URL"
                                                 defaultValue={this.state.pageUrl}
                                                 fullWidth
                                                 variant="outlined"
-                                                placeholder="Page URL" name="pageUrl"
+                                                placeholder={this.state.pageUrl} name="pageUrl"
                                                 onChange={this.handleChange}/>
                                 </Grid>
                             </Grid>

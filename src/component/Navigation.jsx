@@ -115,7 +115,7 @@ function Nav() {
 
     if (isUserLoggedIn === true){
         spanStyles = {
-            color: "#00a2ff"
+            color: "var(--light-blue)"
         };
         renderMenu = (
             // Add information here to check if already logged in and have a seperate menu with if conditionals
