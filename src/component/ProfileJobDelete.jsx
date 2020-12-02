@@ -13,10 +13,10 @@ import ApplicationService from '../api/ApplicationService';
 
 //	props.jobData [Required]
 //		- must contain information of valid job model
-//	props.jobType (optional)
+//	props.jobType [Required]
 //		- if props.jobType === 'applied'
 //			- delete given application based off of its id
-//		- else
+//		- else props.jobType === 'created'
 //			- delete given job based off of its id
 //	props.appData (required if props.jobType === 'applied')
 //		- must contain information of valid application model
@@ -40,7 +40,7 @@ export default class ProfileJobDelete extends Component {
 	}
 
 	async deleteJob() {
-		if(this.props.jobType !== null && this.props.jobType.toLowerCase() === 'applied') {
+		if(this.props.jobType !== null && this.props.jobType !== undefined && this.props.jobType.toLowerCase() === 'applied') {
 			await ApplicationService.deleteApplication(this.props.appData.id);
 			this.setState({open : false});
 			this.props.update();

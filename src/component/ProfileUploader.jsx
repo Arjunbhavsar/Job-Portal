@@ -118,7 +118,9 @@ export default class ProfileUploader extends Component {
 					(<img className="image" src={this.state.urlTag + this.state.userObj.profileFileId} alt={this.state.userObj.username + "-profile-image"} style={style.image}/>) :
 					(<img className="image" src={blank_profile} alt="profile-blank" style={style.image}/>)
 				}
-				<div style={style.image} className="overlay">+</div>
+				<div style={style.image} className="overlay">
+					<div style={{marginTop:'12px'}}>+</div>
+				</div>
 			</label>
 		);
 	}

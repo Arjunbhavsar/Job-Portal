@@ -12,6 +12,7 @@ import { LocationOn as LocationOnIcon,
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { green, red } from '@material-ui/core/colors';
 import { Link } from 'react-router-dom';
+import Alert from '@material-ui/lab/Alert';
 
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import AuthenticationService from '../api/AuthenticationService';
@@ -19,6 +20,8 @@ import JobService from '../api/JobService';
 import RichTextInput from './RichTextInput';
 import ApplicationService from '../api/ApplicationService';
 import output from '../api/connections';
+import ProfileJobDelete from './ProfileJobDelete';
+import ErrorMessage from './ErrorMessage';
 
 class ManagementComponent extends Component {
     constructor(){
@@ -135,32 +138,34 @@ class ManagementComponent extends Component {
         }else if(!this.state.exists){
             return (
 				<Grid container direction="row">
-                    <div className="background-container"/>
+					<div className="background-container"/>
 					<Grid container justify="center">
 						<Grid item sm={3}></Grid>
 						<Grid item sm={6}>
-							<Paper style={style.Paper}>
+							<Paper style={{marginTop:20, marginBottom:20}}>
 								<Grid container>
-									<Grid item sm> No jobs posted. </Grid>
+									<Alert style={{'width' : '100%'}}severity='info'>No jobs posted</Alert>
 								</Grid>
 							</Paper>
 						</Grid>
+						<Grid item sm={3}></Grid>
 					</Grid>
 				</Grid>
 			)
         }else{
             return (
 				<Grid container direction="row">
-                    <div className="background-container"/>
+					<div className="background-container"/>
 					<Grid container justify="center">
 						<Grid item sm={3}></Grid>
 						<Grid item sm={6}>
-							<Paper style={style.Paper}>
+							<Paper style={{marginTop:20, marginBottom:20}}>
 								<Grid container>
-									<Grid item sm> Not Logged In </Grid>
+									<Alert style={{'width' : '100%'}}severity='error'>Not logged in</Alert>
 								</Grid>
 							</Paper>
 						</Grid>
+						<Grid item sm={3}></Grid>
 					</Grid>
 				</Grid>
 			)
@@ -215,7 +220,7 @@ class JobList extends Component {
                             const active = this.state.activeIndex === index ? this.active : this.inactive;
                             return(
                             <ListItem button style={active} onClick={this.updateCurrent.bind(this, index)} key={index}>
-                                {job}
+                        		{job}
                             </ListItem>
                             );
                         }, this)
@@ -304,10 +309,10 @@ class SelectedManage extends Component {
     editing() {
         if(this.state.edit) {
             this.updateJob();
-            this.setState({edit: false});
+			this.setState({edit: false});
         }else{
             this.setState({edit: true});
-        }
+		}
     }
 
     async updateJob(){
@@ -328,7 +333,7 @@ class SelectedManage extends Component {
             author: this.props.job.author
         }
         const data = await JobService.executeUpdateJobService(job);
-        this.props.update()
+		this.props.update()
     }
 
     handleChange(event) {
@@ -352,9 +357,10 @@ class SelectedManage extends Component {
         };
         if(this.state.job === null){
             return(
-                <Paper style={style.paper2}>
-                    <p>No job selected.</p>
-                </Paper>
+                <ErrorMessage severity='info' text='No job selected'/>
+                // <Paper style={style.paper2}>
+                //     <p>No job selected.</p>
+                // </Paper>
             )
         }else {
 
@@ -430,6 +436,9 @@ class SelectedManage extends Component {
                             <Grid item xs={12} style={{border: "rgba(0, 0, 0, 0.42) 1px solid", marginTop: 15, borderRadius: 5, padding: 10}}>
                                 <RichTextInput updateParent={this.handleDescription} starter={this.state.jobDescription}/>
                             </Grid>
+							<Grid style={{border: "#FFF 1px solid", marginTop: 15, borderRadius: 5, padding: 10}} justify="center" alignItems="center">
+								<ProfileJobDelete jobData={this.props.job} jobType='created' update={this.componentDidMount}/>
+							</Grid>
                         </Grid>:
                         <Grid item>
                             <h2>{this.state.jobTitle}</h2>
@@ -494,20 +503,33 @@ class AppList extends Component {
             )
         }else {
             return(
-                <Paper style={style.paper}>
-                    <List>
-                        {this.state.applicants.length > 0 ?
-                        this.state.applicants.map( function(app, index) {
-                            return (
-                                <Application application={app} key={index}/>
-                            );
-                        }, this):
-                        <ListItem>
-                            <ListItemText primary="No applicants yet" style={{textAlign: "center"}}/>
-                        </ListItem>
-                        }
-                    </List>
-                </Paper>
+				<>
+				{this.state.applicants.length > 0 ?
+					(<Paper style={style.paper}>
+						<List>
+							{this.state.applicants.map( function(app, index) {
+								return (
+									<Application application={app} key={index}/>
+								);
+							}, this)}
+						</List>
+					</Paper>):
+					<ErrorMessage severity='info' text='No applicants yet'/>
+				}</>
+                // <Paper style={style.paper}>
+                //     <List>
+                //         {this.state.applicants.length > 0 ?
+                //         this.state.applicants.map( function(app, index) {
+                //             return (
+                //                 <Application application={app} key={index}/>
+                //             );
+                //         }, this):
+                //         <ListItem>
+                //             <ListItemText primary="No applicants yet" style={{textAlign: "center"}}/>
+                //         </ListItem>
+                //         }
+                //     </List>
+                // </Paper>
             )
         }
     }
