@@ -1,15 +1,20 @@
 import React from 'react';
 import { Component } from 'react';
-import '../css/Dashboard.css'
-import JobService from '../api/JobService';
-import ApplicationService from '../api/ApplicationService';
-import AuthenticationService from '../api/AuthenticationService';
+
 import { Paper, Grid, List, ListItem, Button } from '@material-ui/core/';
 import {HourglassEmpty as HourglassEmptyIcon,
         CheckCircleOutline as CheckCircleOutlineIcon,
         NotInterested as NotInterestedIcon } from '@material-ui/icons';
 import { green, red, orange } from '@material-ui/core/colors';
 import { Alert } from '@material-ui/lab';
+
+import LoadingComponent from './LoadingComponent';
+
+import JobService from '../api/JobService';
+import ApplicationService from '../api/ApplicationService';
+import AuthenticationService from '../api/AuthenticationService';
+
+import '../css/Dashboard.css'
 
 class Dashboard extends Component {
     constructor() {
@@ -195,18 +200,18 @@ class JobListItems extends Component {
         console.log();
         if(this.state.isLoading){
             return(
-                <p>Loading...</p>
+                <LoadingComponent/>
             )
         }else{
             if(this.state.jobs.length === 0){
                 return(
-                    <div className="search-list-container">
-                        <div className="job-list">
-                            <div className="leftItem" style={this.inactive}>
-                                <p style={{'margin': '16px auto'}}>No jobs found</p>
-                            </div>
-                        </div>
-                    </div>
+                    <Paper style={style.paper}>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <p style={{margin: '20px auto', width: 'fit-content'}}>No jobs found</p>
+                            </Grid>
+                        </Grid>
+                    </Paper>
                 )
             }
             return(
@@ -363,14 +368,18 @@ class SelectedJob extends Component {
 
         if (this.props.job == null){
             return(
-                <div className="content" id="selectJob">
-                    <p style={{margin: '20px auto', width: 'fit-content'}}>No jobs available</p>
-                </div>
+                <Paper style={style.paper}>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <h2 style={{margin: '20px auto', width: 'fit-content'}}>No jobs found</h2>
+                        </Grid>
+                    </Grid>
+                </Paper>
             )
         } else {
             if(this.props.loading){
                 return(
-                    <p>Loading...</p>
+                    <LoadingComponent/>
                 )
             }else{
                 // console.log(this.state.appStatus)

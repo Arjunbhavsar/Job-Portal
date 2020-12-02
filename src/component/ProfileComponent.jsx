@@ -5,14 +5,18 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import Alert from '@material-ui/lab/Alert';
 
+import LocationAutofill from './LocationAutofill';
+import ErrorMessage from './ErrorMessage';
+import LoadingComponent from './LoadingComponent';
 import ResumeUploader from './ResumeUploader';
 import ProfileUploader from './ProfileUploader';
 import ProfileJobList from './ProfileJobList';
+
 import UserService from '../api/UserService';
 import AuthenticationService from '../api/AuthenticationService';
 import '../css/RegisterComponent.css'
-
 
 class ProfileComponent extends Component {
 	constructor() {
@@ -38,6 +42,7 @@ class ProfileComponent extends Component {
 		this.editing = this.editing.bind(this);
 		this.updateUser = this.updateUser.bind(this);
 		this.handleChange = this.handleChange.bind(this);
+		this.editNewAddress = this.editNewAddress.bind(this);
 	}
 	
 	async componentWillReceiveProps(newProps){ // Handles when the path updates as that does not call a remount of the component
@@ -73,6 +78,17 @@ class ProfileComponent extends Component {
 		evt.initEvent('load', false, false);
 		window.dispatchEvent(evt);
 	}
+
+	editNewAddress(value) {
+		if(value === null)
+			this.setState({newAddress : this.state.newAddress}, () => {
+				console.log(this.state.newAddress);	// this needs to be here
+			});
+		else
+			this.setState({newAddress : value}, () => {
+				console.log(this.state.newAddress);	// this needs to be here
+			});
+	}
 	
 	editing() {
 		if(this.state.editable){
@@ -92,11 +108,14 @@ class ProfileComponent extends Component {
 			biography : (this.state.editBiography ? this.state.newBiography : this.state.userObj.biography),
 			username : this.state.newUsername,
 		}
+		let reload = false;
+		if(user.username !== '' && user.username !== sessionStorage.getItem('authenticatedUser'))
+			reload = true;
 		this.setState({editBiography : false});
 		await UserService.updateUser(this.state.userObj.id, user);
 		await this.componentDidMount();
-		// window.location.replace(this.state.userTag + sessionStorage.getItem('authenticatedUser'));
-		this.props.history.push('/profile/' + sessionStorage.getItem('authenticatedUser'))
+		if(reload)
+			window.location.replace(this.state.userTag + sessionStorage.getItem('authenticatedUser'));
 		this.setState({edit_mode: false});
 	}
 
@@ -117,21 +136,10 @@ class ProfileComponent extends Component {
 			image : {'borderRadius':'50%', width:"200px", height:"200px", "objectfit":"cover"}
 		}
 		if(this.state.isLoading)
-			return (<div>Loading...</div>);
+			return (<LoadingComponent/>);
 		if(!isUserLoggedIn || !this.state.exists)
 			return (
-				<Grid container direction="row">
-					<Grid container justify="center">
-						<Grid item sm={3}></Grid>
-						<Grid item sm={6}>
-							<Paper style={style.Paper}>
-								<Grid container>
-									{!isUserLoggedIn ? <Grid item sm> Not Logged In </Grid> : <Grid item sm> User Not Found </Grid>}
-								</Grid>
-							</Paper>
-						</Grid>
-					</Grid>
-				</Grid>
+				<ErrorMessage text={!isUserLoggedIn ? "Not Logged In" : "User Not Found"}/>
 			)
 		const editingFalse = () => (
 			<List>
@@ -145,10 +153,12 @@ class ProfileComponent extends Component {
 					<ListItemText primary={this.state.userObj.emailId}/>
 				</ListItem>
 				<Divider variant="inset" component="li" />
-				<ListItem>
-					<ListItemAvatar><ContactMail fontSize="large"/></ListItemAvatar>
-					<ListItemText primary={this.state.userObj.address}/>
-				</ListItem>
+				{(this.state.userObj.address != null && this.state.userObj.address.length > 0) &&
+					<ListItem>
+						<ListItemAvatar><ContactMail fontSize="large"/></ListItemAvatar>
+						<ListItemText primary={this.state.userObj.address}/>
+					</ListItem>
+				}
 			</List>
 		);
 		const editingTrue = () => (
@@ -165,9 +175,13 @@ class ProfileComponent extends Component {
 					<TextField disabled label="Disabled" defaultValue={this.state.userObj.emailId}/>
 				</ListItem>
 				<Divider variant="inset" component="li" />
-				<ListItem>
+				{/* <ListItem>
 					<ListItemAvatar><ContactMail fontSize="large" /></ListItemAvatar>
 					<TextField label={this.state.userObj.address} placeholder="address" name="newAddress" onChange={this.handleChange}/>
+				</ListItem> */}
+				<ListItem alignItems="flex-start">
+					<ListItemAvatar><ContactMail fontSize="large"/></ListItemAvatar>
+					<LocationAutofill text={this.state.userObj.address} update={this.editNewAddress}/>
 				</ListItem>
 			</List>
 		);
@@ -181,10 +195,10 @@ class ProfileComponent extends Component {
 								<Grid container>
 									<>
 										<Grid container direction="row" spacing={3}>
-											<Grid item sm={3}>
+											<div style={{"paddingRight" : "2.5%"}}>
 												<ProfileUploader key={this.state.userObj.username} username={this.state.userObj.username}/>
-											</Grid>
-											<Grid item sm={8}>
+											</div>
+											<Grid item sm={7}>
 												<Grid container direction="column" alignItems="flex-start" spacing={2}>
 													<Grid item>
 														{!this.state.edit_mode ?
@@ -195,7 +209,9 @@ class ProfileComponent extends Component {
 													<Grid item >
 														{!this.state.edit_mode ?
 															<div align="left" style={{'wordBreak': 'break-word'}}>
-																{this.state.userObj != null && this.state.userObj.biography !== null && this.state.userObj.biography.length > 0 ? this.state.userObj.biography : "-empty-"}
+																{this.state.userObj != null && this.state.userObj.biography !== null && this.state.userObj.biography !== undefined && this.state.userObj.biography.length > 0 ? this.state.userObj.biography :
+																<Alert variant="outlined" severity='info' style={{'width':'fit-content'}}>no biography</Alert>}
+																{/* <Alert severity='info'>empty biography</Alert> */}
 															</div> :
 															<div width="10%">
 																<TextareaAutosize cols="50" rows="4" name="newBiography" defaultValue={this.state.userObj.biography} onChange={this.handleChange}/>
@@ -204,9 +220,12 @@ class ProfileComponent extends Component {
 													</Grid>
 												</Grid>
 											</Grid>
-											<Grid item sm={1}>
+											{/* <div>
 												{this.state.editable && (!this.state.edit_mode ? <EditIcon style={{cursor: "pointer"}} onClick={this.editing}/> : <SaveIcon style={{cursor: "pointer"}} onClick={this.editing}/>)}
-											</Grid>
+											</div> */}
+											{/* <Grid item sm={1}>
+												{this.state.editable && (!this.state.edit_mode ? <EditIcon style={{cursor: "pointer"}} onClick={this.editing}/> : <SaveIcon style={{cursor: "pointer"}} onClick={this.editing}/>)}
+											</Grid> */}
 										</Grid>
 										<Grid container direction="row">
 											<Grid item sm>
@@ -215,6 +234,9 @@ class ProfileComponent extends Component {
 										</Grid>
 									</>
 								</Grid>
+								<span style={{'display' : 'inline', 'position':'absolute', 'right':'26%', 'top' : '5%'}}>
+									{this.state.editable && (!this.state.edit_mode ? <EditIcon style={{cursor: "pointer"}} onClick={this.editing}/> : <SaveIcon style={{cursor: "pointer"}} onClick={this.editing}/>)}
+								</span>
 							</Paper>
 						</Grid>
 						<Grid item sm={3}>

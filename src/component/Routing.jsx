@@ -11,6 +11,7 @@ import LandingComponent from './LandingComponent';
 import ManagementComponent from './ManagementComponent';
 import ForgotPasswordComponent from './ForgotPassword';
 import ResetPasswordComponent from './ResetPassword';
+import ResumeViewer from './ResumeViewer';
 
 class AppRouting extends Component {
     render() {
@@ -28,6 +29,7 @@ class AppRouting extends Component {
                             <Route path="/postjob"              component = {CreateJob}/>
                             <Route path="/manage"               component = {ManagementComponent}/>
                             <Route path="/profile/:name"        component = {ProfileComponent}/>
+                            <Route path="/resume/:name"         component = {ResumeViewer}/>
                             <Route path="/ForgotPassword"       component = {ForgotPasswordComponent}/>
                             <Route path="/resetpassword/:token" component = {ResetPasswordComponent}/>
                             {/* <AuthenticatedRoute path="/dashboard" component= {Dashboard}/> */}

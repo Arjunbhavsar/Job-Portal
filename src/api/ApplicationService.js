@@ -83,6 +83,20 @@ class ApplicationService{
             }
         })
     }
+	
+	deleteApplication(id){
+		const {appsTag} = this.state;
+		
+		let usernameAuth = 'user'
+		let passwordAuth =  'password'
+		let basicAuthHeader = 'Basic '+window.btoa(usernameAuth+':'+passwordAuth)
+
+		return axios.delete(`${appsTag}deleteApplicaionById/${id}`,{
+			headers:{
+				authorization: basicAuthHeader
+			}
+		})
+	}
 }
 
 export default new ApplicationService();

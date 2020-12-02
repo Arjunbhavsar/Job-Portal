@@ -39,12 +39,19 @@ class ManagementComponent extends Component {
         let added = []
         let temp = []
         const check = await JobService.executeCheckByAuthor().then(result => result.data);
-        let jobData = await JobService.executeGetByAuthor().then(result => result.data);
+        let jobData = await JobService.executeGetByAuthor('').then(result => result.data);
         for(let i = 0; i < jobData.length; i++){
             added.push(<JobItem jobData={jobData[i]}/>)
             temp.push(jobData[i])
         }
+        console.log(temp)
         this.setState({jobs: added, indexList: temp, exists: check, index: 0});
+    }
+
+    componentDidUpdate(oldProps){
+        if(oldProps !== this.props){
+            this.componentDidMount()
+        }
     }
 
     updateSelectedJob(newJob){
@@ -102,6 +109,7 @@ class ManagementComponent extends Component {
         if(isUserLoggedIn && this.state.exists){
             return(
                 <div className="container">
+                    <div className="background-container"/>
                     <Grid container direction="row" spacing={3} style={style.container} justify="center">
                         <Grid item xs={2} className="content-sections">
                             <JobList update={this.updateSelectedJob} jobs={this.state.jobs}/>
@@ -127,6 +135,7 @@ class ManagementComponent extends Component {
         }else if(!this.state.exists){
             return (
 				<Grid container direction="row">
+                    <div className="background-container"/>
 					<Grid container justify="center">
 						<Grid item sm={3}></Grid>
 						<Grid item sm={6}>
@@ -142,6 +151,7 @@ class ManagementComponent extends Component {
         }else{
             return (
 				<Grid container direction="row">
+                    <div className="background-container"/>
 					<Grid container justify="center">
 						<Grid item sm={3}></Grid>
 						<Grid item sm={6}>
@@ -163,16 +173,21 @@ class JobList extends Component {
         super();
         this.state = {
             jobs: [],
-            index: 0
+            activeIndex: 0
         }
+        this.inactive = {
+            borderBottom: '1px #0000001a solid'
+        };
+        this.active = {
+            backgroundColor: "var(--light-blue-transparent)",
+            backdropFilter: 'blur(2px)',
+            borderBottom: '1px #0000001a solid'
+        };
     }
 
     componentDidUpdate(prevProps){
         if (this.props !== prevProps) {
-            this.setState({
-                jobs: this.props.jobs
-            })
-            // console.log(this.state)
+            this.componentDidMount()
         }
     }
     
@@ -184,6 +199,7 @@ class JobList extends Component {
 
     updateCurrent(index){
         this.props.update(index);
+        this.setState({activeIndex: index})
     }
 
     render(){
@@ -196,8 +212,9 @@ class JobList extends Component {
                 <List component="div" direction="column" style={style.list}>
                     {
                         this.state.jobs && this.state.jobs.map( function(job, index) {
+                            const active = this.state.activeIndex === index ? this.active : this.inactive;
                             return(
-                            <ListItem button style={style.nested} onClick={this.updateCurrent.bind(this, index)} key={index}>
+                            <ListItem button style={active} onClick={this.updateCurrent.bind(this, index)} key={index}>
                                 {job}
                             </ListItem>
                             );
@@ -258,28 +275,11 @@ class SelectedManage extends Component {
 
     async componentDidUpdate(prevProps){
         if(prevProps !== this.props){
-            this.setState({
-                id: this.props.job.id,
-                country: this.props.job.country,
-                dateAdded: this.props.job.dateAdded,
-                hasExpired: this.props.job.hasExpired,
-                jobBoard: this.props.job.jobBoard,
-                jobDescription: this.props.job.jobDescription,
-                jobTitle: this.props.job.jobTitle,
-                jobType: this.props.job.jobType,
-                location: this.props.job.location,
-                organization: this.props.job.organization,
-                pageUrl: this.props.job.pageUrl,
-                jobSalary: this.props.job.jobSalary,
-                sector: this.props.job.sector,
-                author: this.props.job.author,
-                newJobDescription: this.props.job.jobDescription,
-                edit: false
-            })
+            this.componentDidMount();
         }
     }
     async componentDidMount(){
-        if(this.props.job !== null){
+        if(this.props.job !== undefined){
             this.setState({
                 id: this.props.job.id,
                 country: this.props.job.country,
@@ -456,46 +456,32 @@ class AppList extends Component {
     }
 
     async componentDidMount(){
-        const data = await ApplicationService.getAllApplicants(this.props.job.id).then(result => result.data);
-        let userList = []
-        for(let i = 0; i < data[0].length; i++){
-            let application = {
-                jobId: data[0][i].jobId,
-                status: data[0][i].status,
-                userId: data[0][i].userId,
-                firstName: data[1][i].firstName,
-                lastName: data[1][i].lastName,
-                resumeFileId: data[1][i].resumeFileId,
-                emailId: data[1][i].emailId,
-                username: data[1][i].username
+        if(this.props.job !== undefined){
+            const data = await ApplicationService.getAllApplicants(this.props.job.id).then(result => result.data);
+            let userList = []
+            for(let i = 0; i < data[0].length; i++){
+                let application = {
+                    jobId: data[0][i].jobId,
+                    status: data[0][i].status,
+                    userId: data[0][i].userId,
+                    firstName: data[1][i].firstName,
+                    lastName: data[1][i].lastName,
+                    resumeFileId: data[1][i].resumeFileId,
+                    emailId: data[1][i].emailId,
+                    username: data[1][i].username
+                }
+                userList.push(application)
             }
-            userList.push(application)
+            this.setState({
+                applicants: userList
+            })
         }
-        this.setState({
-            applicants: userList
-        })
     }
 
-    async componentWillReceiveProps(newProps){
-        const data = await ApplicationService.getAllApplicants(newProps.job.id).then(result => result.data);
-        let userList = []
-        for(let i = 0; i < data[0].length; i++){
-            let application = {
-                jobId: data[0][i].jobId,
-                status: data[0][i].status,
-                userId: data[0][i].userId,
-                firstName: data[1][i].firstName,
-                lastName: data[1][i].lastName,
-                resumeFileId: data[1][i].resumeFileId,
-                emailId: data[1][i].emailId,
-                username: data[1][i].username
-            }
-            userList.push(application)
-            
+    componentDidUpdate(oldProps){
+        if(oldProps.job !== this.props.job){
+            this.componentDidMount()
         }
-        this.setState({
-            applicants: userList
-        })
     }
 
     render(){
@@ -595,19 +581,24 @@ class Application extends Component {
                         <ListItemIcon title="email"><EmailIcon /></ListItemIcon>
 						<ListItemText primary={this.state.application.emailId} />
                     </ListItem>
-                    <Link to={'/profile/' + this.state.application.username}>
+                    <Link to={'/profile/' + this.state.application.username} target="_blank">
                         <ListItem button display="row">
                             <ListItemIcon title="profile link"><LinkIcon /></ListItemIcon>
                             <ListItemText primary="Profile Page" />
                         </ListItem>
                     </Link>
+                    {resumeExists? 
+                    <Link to={'/resume/' + this.state.application.username} target="_blank">
+                        <ListItem>
+                            <ListItemIcon title="resume"><NoteIcon /></ListItemIcon>
+                            <ListItemText primary={this.state.application.firstName + "'s resume"} />
+                        </ListItem>
+                    </Link>:
                     <ListItem>
                         <ListItemIcon title="resume"><NoteIcon /></ListItemIcon>
-                        {resumeExists? 
-                        <a href={output + '/load/' + this.state.link}><ListItemText primary="Download Resume" /></a>:
                         <ListItemText primary={this.state.application.firstName + ' has not uploaded a resume.'} />
-                        }
                     </ListItem>
+                    }
                     <ListItem style={{justifyContent: "center"}}>
                         {this.state.application.status === "Pending" &&
                         <ButtonGroup aria-label="manage secion">
