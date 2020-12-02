@@ -24,11 +24,13 @@ public class JobService implements JobServiceInterface {
 		return jobDao.save(jobDetails);
 	}
 
+	@Transactional
 	@Override
 	public List<Job> getJobs() {
 		return (List<Job>) jobDao.findAll();
 	}
 
+	@Transactional
 	@Override
 	public Job getJobById(String id) {
 		
