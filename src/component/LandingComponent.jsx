@@ -148,6 +148,10 @@ class LandingComponent extends Component {
                 opacity: '0.9',
                 borderTopLeftRadius: '4px',
                 borderTopRightRadius: '4px'
+            },
+            button: {
+                margin: '0 20px',
+                backgroundColor: 'var(--light-blue)'
             }
         };
 		return(
@@ -206,6 +210,7 @@ class LandingComponent extends Component {
                                         fullHeight
                                         variant="contained"
                                         color="primary"
+                                        style={style.button}
                                         className={classes.submit}
                                         onClick={this.searchClicked}
                                     >
