@@ -12,10 +12,10 @@ import com.backend.model.Shift;
 
 @Service
 public class ShiftService {
-	
+
 	@Autowired
 	private ShiftDao shiftDao;
-	
+
 	@Autowired
 	private ApplicationDao applicationDao;
 
@@ -55,4 +55,4 @@ public class ShiftService {
 		return updateShift(id, shift);
 	}
 
-}
+} 

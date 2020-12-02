@@ -21,23 +21,23 @@ public class Shift {
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	private String id;
-	
+
 	// Approved or not
 	private boolean approved = false;
-	
+
 	// Application shift is for
 	private String applicationId;
-	
+
 	// Time start and end of shift, 24 hr time
 	private Integer hourStart;
 	private Integer minuteStart;
 	private Integer hourEnd;
 	private Integer minuteEnd;
-	
+
 	public String toString() {
 		return hourStart+":"+minuteStart+"-"+hourEnd+":"+minuteEnd;
 	}
-	
+
 	public boolean isValid() {
 		if(	hourStart == null	|| hourEnd == null		||
 			minuteStart == null || minuteEnd == null	||
@@ -100,5 +100,5 @@ public class Shift {
 	public String getId() {
 		return id;
 	}
-	
+
 }

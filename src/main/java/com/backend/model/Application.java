@@ -28,13 +28,11 @@ public class Application {
 	public Application() {
 		super();
 	}
-	
 	public Application(String jobId, String userId) {
 		super();
 		this.jobId = jobId;
 		this.userId = userId;
 	}
-	
 	public String getJobId() {
 		return jobId;
 	}
@@ -44,7 +42,6 @@ public class Application {
 	public String getId() {
 		return id;
 	}
-
 	public String getUserId() {
 		return userId;
 	}

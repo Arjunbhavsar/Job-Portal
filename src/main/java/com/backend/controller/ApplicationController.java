@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,8 +54,18 @@ public class ApplicationController {
 	}
 	
 	@PostMapping("/checkIfApplied")
-	public String checkIfUsernameExists(@RequestBody Application app){
+	public String checkIfApplied(@RequestBody Application app){
 		return appService.checkIfApplied(app);
+	}
+	
+	@DeleteMapping("/deleteApplicaionById/{id}")
+	public String deleteApplicaionById(@PathVariable String id) {
+		return appService.deleteApplicaionById(id);
+	}
+
+	@DeleteMapping("/deleteApplicaionByJobId/{jobId}")
+	public String deleteApplicaionByJobId(@PathVariable String jobId) {
+		return appService.deleteApplicaionByJobId(jobId);
 	}
 }
 

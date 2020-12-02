@@ -18,25 +18,25 @@ import com.backend.service.ShiftService;
 @RequestMapping("/shift")
 @CrossOrigin(origins = "*")
 public class ShiftController {
-	
+
 	@Autowired
 	ShiftService shiftService;
-	
+
 	@PostMapping("/postShift/{username}/{applicationId}")
 	public String postShift(@PathVariable String username, @PathVariable String applicationId, @RequestBody Shift shift){
 		return shiftService.postShift(username, applicationId, shift);
 	}
-	
+
 	@GetMapping("/getShift/{applicationId}")
 	public List<Shift> getShift(@PathVariable String applicationId){
 		return shiftService.getShift(applicationId);
 	}
-	
+
 	@PostMapping("/approveShift/{id}")
 	public String approveShift(@PathVariable String id){
 		return shiftService.approveShift(id);
 	}
-	
+
 	@PostMapping("/updateShift/{id}")
 	public String updateShift(@PathVariable String id, @RequestBody Shift shift){
 		return shiftService.updateShift(id, shift);
