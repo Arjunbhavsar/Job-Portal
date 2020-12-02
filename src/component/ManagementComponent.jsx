@@ -76,14 +76,13 @@ class ManagementComponent extends Component {
         }
     }
 
-    async changesMade(){
-        let added = []
-        let temp = []
-        let jobData = await JobService.executeGetByAuthor().then(result => result.data);
-        for(let i = 0; i < jobData.length; i++){
-            added.push(<JobItem jobData={jobData[i]}/>)
-            temp.push(jobData[i])
-        }
+    async changesMade(jobId){
+        let added = this.state.jobs
+        let temp = this.state.indexList
+        let jobData = await JobService.executeGetJob(jobId).then(result => result.data);
+        console.log(jobData)
+        temp[this.state.index] = jobData
+        added[this.state.index] = (<JobItem jobData={jobData}/>)
         this.setState({jobs: added, indexList: temp});
     }
 
@@ -190,12 +189,6 @@ class JobList extends Component {
         };
     }
 
-    componentDidUpdate(prevProps){
-        if (this.props !== prevProps) {
-            this.componentDidMount()
-        }
-    }
-    
     componentDidMount(){
         this.setState({
             jobs: this.props.jobs
@@ -279,7 +272,8 @@ class SelectedManage extends Component {
     }
 
     async componentDidUpdate(prevProps){
-        if(prevProps !== this.props){
+        console.log(this.props)
+        if(prevProps.job !== this.props.job){
             this.componentDidMount();
         }
     }
@@ -333,7 +327,7 @@ class SelectedManage extends Component {
             author: this.props.job.author
         }
         const data = await JobService.executeUpdateJobService(job);
-		this.props.update()
+        await this.props.update(job.id)
     }
 
     handleChange(event) {
@@ -358,9 +352,6 @@ class SelectedManage extends Component {
         if(this.state.job === null){
             return(
                 <ErrorMessage severity='info' text='No job selected'/>
-                // <Paper style={style.paper2}>
-                //     <p>No job selected.</p>
-                // </Paper>
             )
         }else {
 

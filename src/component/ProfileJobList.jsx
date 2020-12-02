@@ -157,7 +157,7 @@ class JobElement extends Component {
 							<List component="div" disablePadding>
 								{this.props.jobData.organization &&
 								<ListItem button style={style.nested}>
-									<ListItemIcon title="ogranization"><BusinessIcon /></ListItemIcon>
+									<ListItemIcon title="organization"><BusinessIcon /></ListItemIcon>
 									<ListItemText primary={this.props.jobData.organization} />
 								</ListItem>}
 								{this.props.jobData.country && this.props.jobData.location &&

@@ -56,7 +56,7 @@ export default class ProfileJobDelete extends Component {
 
 	render() {
 		let activateDelete = this.state.deleteConfirmation !== this.props.jobData.jobTitle;
-		
+
 		const WarningMessage = () => (
 			<>
 				{this.props.jobType.toLowerCase() === 'applied' ? 
