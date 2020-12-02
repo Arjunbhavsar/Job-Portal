@@ -185,14 +185,13 @@ class JobElement extends Component {
 									<ListItemIcon title="salary"><AttachMoneyIcon /></ListItemIcon>
 									<ListItemText primary={this.props.jobData.jobSalary} />
 								</ListItem>}
-								{sessionStorage.getItem('authenticatedUserId') === this.props.jobData.author &&
 								<ListItem button style={style.nested}>
 									{this.props.jobType === 'applied' ?
 										<ProfileJobDelete jobData={this.props.jobData} update={this.props.update} appData={this.props.appData} jobType='applied'/> :
-										<ProfileJobDelete jobData={this.props.jobData} update={this.props.update} jobType='created'/>
+										(sessionStorage.getItem('authenticatedUserId') === this.props.jobData.author && <ProfileJobDelete jobData={this.props.jobData} update={this.props.update} jobType='created'/>)
 									}
 								</ListItem>
-								}
+								
 								<hr/>
 							</List>
 						</Collapse>
