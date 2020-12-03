@@ -6,6 +6,7 @@ import {CheckCircleOutline as CheckCircleOutlineIcon,
         NotInterested as NotInterestedIcon,
         Star as StarIcon} from '@material-ui/icons';
 import { green, red, blue } from '@material-ui/core/colors';
+import ErrorMessage from './ErrorMessage';
 
 class ViewCertificates extends Component {
     constructor(){
@@ -43,9 +44,9 @@ class ViewCertificates extends Component {
             }
         };
         return(
-                <List style={style.List}>
-                    {this.state.certificates}
-                </List>
+            <List style={style.List}>
+                {this.state.certificates}
+            </List>
         )
     }
 }

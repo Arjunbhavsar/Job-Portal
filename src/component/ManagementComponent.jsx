@@ -8,7 +8,8 @@ import { LocationOn as LocationOnIcon,
          Email as EmailIcon,
          Note as NoteIcon,
          Edit as EditIcon,
-         Save as SaveIcon } from '@material-ui/icons';
+         Save as SaveIcon,
+         VerifiedUser as VerifiedUserIcon} from '@material-ui/icons';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { green, red } from '@material-ui/core/colors';
 import { Link } from 'react-router-dom';
@@ -22,6 +23,7 @@ import ApplicationService from '../api/ApplicationService';
 import ViewCertificates from './ViewCertificates';
 import ProfileJobDelete from './ProfileJobDelete';
 import ErrorMessage from './ErrorMessage';
+import CertifyService from '../api/CertifyService';
 
 class ManagementComponent extends Component {
     constructor(){
@@ -47,7 +49,6 @@ class ManagementComponent extends Component {
             added.push(<JobItem jobData={jobData[i]}/>)
             temp.push(jobData[i])
         }
-        console.log(temp)
         this.setState({jobs: added, indexList: temp, exists: check, index: 0});
     }
 
@@ -58,7 +59,6 @@ class ManagementComponent extends Component {
     }
 
     updateSelectedJob(newJob){
-        console.log(newJob)
         this.setState({
             index: newJob
         })
@@ -80,7 +80,6 @@ class ManagementComponent extends Component {
         let added = this.state.jobs
         let temp = this.state.indexList
         let jobData = await JobService.executeGetJob(jobId).then(result => result.data);
-        console.log(jobData)
         temp[this.state.index] = jobData
         added[this.state.index] = (<JobItem jobData={jobData}/>)
         this.setState({jobs: added, indexList: temp});
@@ -272,7 +271,6 @@ class SelectedManage extends Component {
     }
 
     async componentDidUpdate(prevProps){
-        console.log(this.props)
         if(prevProps.job !== this.props.job){
             this.componentDidMount();
         }
@@ -486,7 +484,7 @@ class AppList extends Component {
 
     render(){
         const style = {
-            paper : {padding:20, margin:20, flexGrow: 1}
+            paper  : {padding:20, margin:20, flexGrow: 1},
         };
         if(this.props.job === null){
             return(
@@ -496,7 +494,7 @@ class AppList extends Component {
             return(
 				<>
 				{this.state.applicants.length > 0 ?
-					(<Paper style={style.paper}>
+					<Paper style={style.paper}>
 						<List>
 							{this.state.applicants.map( function(app, index) {
 								return (
@@ -504,8 +502,10 @@ class AppList extends Component {
 								);
 							}, this)}
 						</List>
-					</Paper>):
-					<ErrorMessage severity='info' text='No applicants yet'/>
+                    </Paper>:
+                    <Paper style={style.paper}>
+                        <ErrorMessage severity='info' text='No applicants yet' sm={6}/>
+                    </Paper>
 				}</>
             )
         }
@@ -517,22 +517,32 @@ class Application extends Component {
         super()
         this.state = {
             open: false,
-            application: props.application
+            application: props.application,
+            certsExist: false
         }
         this.handleClick = this.handleClick.bind(this);
         this.decide = this.decide.bind(this);
     }
 
     async componentDidMount(){
-        this.setState({
-            application: this.props.application
-        })
+        const data = await CertifyService.executeGetCertifications(this.props.application.userId).then(res => res.data)
+        console.log(data)
+        if(data.length !== 0){
+            this.setState({
+                application: this.props.application,
+                certsExist: true
+            })
+        }else{
+            this.setState({
+                application: this.props.application
+            })
+        }
     }
 
-    async componentWillReceiveProps(newProps){
-        this.setState({
-            application: newProps.application
-        })
+    async componentDidUpdate(oldProps){
+        if(oldProps.application !== this.props.application){
+            this.componentDidMount()
+        }
     }
 
     handleClick() {
@@ -540,7 +550,6 @@ class Application extends Component {
     }
 
     async decide(event){
-        console.log(event)
         if(event === 'accept'){
             const ids = [this.state.application.jobId, this.state.application.userId]
             const res = await ApplicationService.acceptApplication(ids)
@@ -552,7 +561,6 @@ class Application extends Component {
         }else if(event === 'deny'){
             const ids = [this.state.application.jobId, this.state.application.userId]
             const res = await ApplicationService.denyApplication(ids)
-            console.log(res)
             let temp = this.state.application
             temp.status = res.data.status
             this.setState({
@@ -595,12 +603,15 @@ class Application extends Component {
                     </Link>:
                     <ListItem>
                         <ListItemIcon title="resume"><NoteIcon /></ListItemIcon>
-                        <ListItemText primary={this.state.application.firstName + ' has not uploaded a resume.'} />
+                        <ErrorMessage severity='info' text={this.state.application.firstName + ' has not uploaded a resume.'} justify='flex-start'/>
                     </ListItem>
                     }
                     <ListItem>
-                        <ListItemIcon title="cert"><EmailIcon /></ListItemIcon>
-						<ViewCertificates userId={this.state.application.userId} row/>
+                        <ListItemIcon title="cert"><VerifiedUserIcon /></ListItemIcon>
+                        {this.state.certsExist ?
+                            <ViewCertificates userId={this.state.application.userId} row/>:
+                            <ErrorMessage severity='info' text='No certifications completed' justify='flex-start'/>
+                        }
                     </ListItem>
                     <ListItem style={{justifyContent: "center"}}>
                         {this.state.application.status === "Pending" &&

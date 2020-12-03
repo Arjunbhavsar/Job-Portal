@@ -14,6 +14,7 @@ import ResumeUploader from './ResumeUploader';
 import ProfileUploader from './ProfileUploader';
 import ProfileJobList from './ProfileJobList';
 import ViewCertificates from './ViewCertificates';
+import CertifyService from '../api/CertifyService';
 
 import UserService from '../api/UserService';
 import AuthenticationService from '../api/AuthenticationService';
@@ -39,6 +40,7 @@ class ProfileComponent extends Component {
 			editable: false,
 			userTag: window.location.href.split('profile/')[0] + 'profile/',
 			exists: false,
+			certsExist: false
 		}
 		this.editing = this.editing.bind(this);
 		this.updateUser = this.updateUser.bind(this);
@@ -56,7 +58,8 @@ class ProfileComponent extends Component {
 		if(pathUser === sessionStorage.getItem('authenticatedUser')){
 			edit = true
 		}
-		this.setState({userObj : data, isLoading : false, editable : edit});
+		const certData = await CertifyService.executeGetCertifications(data.id).then(res => res.data)
+		this.setState({userObj : data, isLoading : false, editable : edit, certsExist: certData.length > 0});
 		var evt = document.createEvent('Event');
 		evt.initEvent('load', false, false);
 		window.dispatchEvent(evt);
@@ -74,7 +77,8 @@ class ProfileComponent extends Component {
 		if(pathUser === sessionStorage.getItem('authenticatedUser')){
 			edit = true
 		}
-		this.setState({userObj : data, isLoading : false, editable : edit});
+		const certData = await CertifyService.executeGetCertifications(data.id).then(res => res.data)
+		this.setState({userObj : data, isLoading : false, editable : edit, certsExist: certData.length > 0});
 		var evt = document.createEvent('Event');
 		evt.initEvent('load', false, false);
 		window.dispatchEvent(evt);
@@ -196,7 +200,10 @@ class ProfileComponent extends Component {
 									<ListItem>
 										<ListItemText primary="Certifications" />
 									</ListItem>
-									<ViewCertificates userId={this.state.userObj.id}/>
+									{this.state.certsExist ? 
+										<ViewCertificates userId={this.state.userObj.id}/>:
+										<ErrorMessage severity='info' text='No certifications completed' justify='flex-start'/>
+									}
 								</Paper>
 							</Grid>
 						</Grid>
