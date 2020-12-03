@@ -50,13 +50,8 @@ public class JobController {
 	}
 
 	@PostMapping("/createJob")
-	public String createJob(@RequestBody Job jobDetails) {
-		try {
-			jobService.addNewJob(jobDetails);
-			return "Job Created Successfully";
-		} catch (Exception e) {
-			return "Could Not Create Job";
-		}
+	public Job createJob(@RequestBody Job jobDetails) {
+		return jobService.addNewJob(jobDetails);
 	}
 	
 	@PostMapping("/updateJob")
