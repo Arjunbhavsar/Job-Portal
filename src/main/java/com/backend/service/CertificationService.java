@@ -17,6 +17,17 @@ public class CertificationService {
 	
 	@Transactional
 	public Certification addCertification(Certification certification) {
+		List<Certification> certificates = certDao.findAllByUserId(certification.getUserId());
+		for(Certification cert: certificates) {
+			if(cert.getCertificate().equals(certification.getCertificate())) {
+				if(cert.getScore() < certification.getScore()) {
+					cert.setScore(certification.getScore());
+					return certDao.save(cert);
+				}
+				return cert;
+			}
+		}
+		
 		return certDao.save(certification);
 	}
 
