@@ -12,6 +12,7 @@ import ManagementComponent from './ManagementComponent';
 import ForgotPasswordComponent from './ForgotPassword';
 import ResetPasswordComponent from './ResetPassword';
 import ResumeViewer from './ResumeViewer';
+import Certifications from './Certifications';
 
 class AppRouting extends Component {
     render() {
@@ -26,6 +27,8 @@ class AppRouting extends Component {
                             <Route path="/dash/:search"         component = {Dashboard}/>
                             <Route path="/login"                component = {LoginComponent}/>
                             <Route path="/register"             component = {RegisterComponent}/>
+                            <Route path="/certify"              component = {Certifications}/>
+                            <Route path="/certify/:certId"      component = {Certifications}/>
                             <Route path="/postjob"              component = {CreateJob}/>
                             <Route path="/manage"               component = {ManagementComponent}/>
                             <Route path="/profile/:name"        component = {ProfileComponent}/>

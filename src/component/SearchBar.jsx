@@ -67,8 +67,6 @@ class SearchBar extends Component{
             },
             button: {
                 margin: '0 20px',
-                backgroundColor: 'var(--light-blue)',
-                color: 'black'
             }
         };
         return (

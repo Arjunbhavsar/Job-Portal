@@ -13,6 +13,7 @@ import LoadingComponent from './LoadingComponent';
 import ResumeUploader from './ResumeUploader';
 import ProfileUploader from './ProfileUploader';
 import ProfileJobList from './ProfileJobList';
+import ViewCertificates from './ViewCertificates';
 
 import UserService from '../api/UserService';
 import AuthenticationService from '../api/AuthenticationService';
@@ -189,7 +190,13 @@ class ProfileComponent extends Component {
 			<div className="container">
 				<Grid container direction="row">
 					<Grid container justify="center">
-						<Grid item sm={3}></Grid>
+						<Grid item sm={3}>
+							<Grid container direction="row" justify="flex-end">
+								<Paper style={style.Paper}>
+									<ViewCertificates userId={this.state.userObj.id}/>
+								</Paper>
+							</Grid>
+						</Grid>
 						<Grid item sm={6}>
 							<Paper style={style.Paper}>
 								<Grid container>

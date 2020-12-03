@@ -139,8 +139,8 @@ class LandingComponent extends Component {
             },
             button: {
                 margin: '0 20px',
-                backgroundColor: 'var(--light-blue)',
-                color: 'black'
+                // backgroundColor: 'var(--light-blue)',
+                // color: 'black'
             }
         };
 		return(
@@ -151,7 +151,7 @@ class LandingComponent extends Component {
                     <form onSubmit={this.searchClicked}>
                         <Grid container justify="center" alignItems="center" direction="column" style={style.searchSection} spacing={3}>
                             <Grid container justify="center" alignItems="center">
-                                <h1 style={{color: "var(--yellow-color)", fontSize: 70, textShadow: "1px 1px 10px var(--light-shadow)"}}>Quick-Pick</h1>
+                                <h1 style={{color: "var(--yellow-color)", fontSize: 70, textShadow: "1px 1px 10px var(--light-shadow)"}}>Quck-Pick</h1>
                             </Grid>
                             <Grid container justify="center" alignItems="center" direction="row" spacing={3}>
                                 <Grid item xs={12} sm={3} >
