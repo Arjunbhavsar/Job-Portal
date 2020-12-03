@@ -38,6 +38,11 @@ public class CertificationController {
 		return certService.getAllByCertificate(certificate);
 	}
 	
+	@GetMapping("/checkCertified/{userId}/{certificate}")
+	public Certification checkCertified(@PathVariable String userId, @PathVariable String certificate) {
+		return certService.checkCertified(userId, certificate);
+	}
+	
 //	@PostMapping("/updateCertification")
 //	public String updateCertification(@RequestBody Certification certification) {
 //		certService.updateCertification(certification);

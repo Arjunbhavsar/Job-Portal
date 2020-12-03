@@ -40,4 +40,17 @@ public class CertificationService {
 	public List<Certification> getAllByCertificate(String certificate) {
 		return certDao.findAllByCertificate(certificate);
 	}
+	
+	@Transactional
+	public Certification checkCertified(String userId, String certificate) {
+		List<Certification> userCerts = certDao.findAllByUserId(userId);
+		if(userCerts != null) {
+			for(Certification cert : userCerts) {
+				if(cert.getCertificate().equals(certificate)) {
+					return cert;
+				}
+			}
+		}
+		return null;
+	}
 }
