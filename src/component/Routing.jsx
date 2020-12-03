@@ -28,7 +28,6 @@ class AppRouting extends Component {
                             <Route path="/login"                component = {LoginComponent}/>
                             <Route path="/register"             component = {RegisterComponent}/>
                             <Route path="/certify"              component = {Certifications}/>
-                            <Route path="/certify/:certId"      component = {Certifications}/>
                             <Route path="/postjob"              component = {CreateJob}/>
                             <Route path="/manage"               component = {ManagementComponent}/>
                             <Route path="/profile/:name"        component = {ProfileComponent}/>

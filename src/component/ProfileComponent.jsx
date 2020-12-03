@@ -193,6 +193,9 @@ class ProfileComponent extends Component {
 						<Grid item sm={3}>
 							<Grid container direction="row" justify="flex-end">
 								<Paper style={style.Paper}>
+									<ListItem>
+										<ListItemText primary="Certifications" />
+									</ListItem>
 									<ViewCertificates userId={this.state.userObj.id}/>
 								</Paper>
 							</Grid>

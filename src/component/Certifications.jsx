@@ -6,13 +6,12 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import CertifyService from '../api/CertifyService';
 import quizes from './certs';
+import { CertItem } from './ViewCertificates';
 
 class Certifications extends Component {
     constructor() {
         super();
         this.state = {
-            userObj: null,
-            certificates: null,
             quizes: []
         }
     }
@@ -20,16 +19,9 @@ class Certifications extends Component {
     async componentDidMount(){
         let qs = []
         for(let i = 0; i < quizes.length; i++){
-            qs.push(<Certificate quiz={quizes[i]}/>)
+            qs.push(<Certificate quiz={quizes[i]} key={i}/>)
         }
-        const certificates = await CertifyService
-            .executeGetCertifications(sessionStorage.getItem('authenticatedUserId'))
-            .then(result => result.data);
-        console.log('loading data ...');
-        this.setState({
-            certificates: certificates,
-            quizes: qs
-        })
+        this.setState({ quizes: qs })
     }
 
     render(){
@@ -62,7 +54,7 @@ class Certifications extends Component {
 const theme = createMuiTheme({
     palette: {
         primary: {
-            light: '#757ce8',
+            // light: '#757ce8',
             main: '#77ccfd',
             dark: '#406ab3',
             contrastText: '#fff'
@@ -80,7 +72,7 @@ class Certificate extends Component{
             quetions: [],
             userAnswers: [],
             open: false,
-            submitted: false,
+            submitted: null,
             result: 0
         }
         this.handleClick = this.handleClick.bind(this)
@@ -88,11 +80,25 @@ class Certificate extends Component{
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-    componentDidMount(){
+    async componentDidMount(){
+        const data = await CertifyService.executeCheckCertified(sessionStorage.getItem('authenticatedUserId'), this.props.quiz[0].certId).then(res => res.data);
+        let hoverText = ''
+        if(data.score === 100) {
+            hoverText = 'Perfect Score'
+        }else if(data.score >= 80){
+            hoverText = 'Passed'
+        }else{
+            hoverText = 'Not Passed'
+        }
+        if(data !== ''){
+            this.setState({
+                submitted: (<CertItem cert={data} message={hoverText}/>)
+            })
+        }
         let qs = []
         let us = []
         for(let j = 1; j <= this.props.quiz[0].qCount; j++){
-            qs.push(<Question question={this.props.quiz[j]} select={this.handleChange} complete={this.state.submitted} index={j - 1}/>)
+            qs.push(<Question question={this.props.quiz[j]} select={this.handleChange} index={j - 1}/>)
             us.push(0)
         }
         this.setState({
@@ -100,7 +106,8 @@ class Certificate extends Component{
             certId: this.props.quiz[0].certId,
             qCount: this.props.quiz[0].qCount,
             questions: qs,
-            userAnswers: us
+            userAnswers: us,
+            open: false
         })
     }
 
@@ -136,19 +143,16 @@ class Certificate extends Component{
             certificate: this.state.certId,
             score: score
         }
-        console.log(certification)
-        const res = await CertifyService
-            .executeAddCertification(certification)
-            .then(result => result.data);
-        console.log(res)
+        await CertifyService.executeAddCertification(certification);
+        this.componentDidMount()
     }
 
     render(){
         return(
             <>
                 <ListItem button onClick={this.handleClick}>
-                    {/* <ListItemIcon title={hoverText}></ListItemIcon> */}
-                    <ListItemText primary={this.state.title} />
+                    <ListItemText primary={this.state.title} width="fit-content" />
+                    {this.state.submitted}
                     {this.state.open ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 <Collapse in={this.state.open} timeout="auto" unmountOnExit>
@@ -197,10 +201,15 @@ class Question extends Component{
     }
 
     componentDidMount(){
+        let qs = []
+        for(let i = 0; i < this.props.question.options.length; i++){
+            qs.push(<FormControlLabel value={i.toString()} control={<Radio />} label={this.props.question.options[i]} />)
+        }
+
         this.setState({
             index: this.props.index,
             question: this.props.question.question,
-            options: this.props.question.options,
+            options: qs,
             answer: this.props.question.answer,
             complete: this.props.complete
         })
@@ -238,10 +247,11 @@ class Question extends Component{
                 </ListItem>
                 <ListItem>
                     <RadioGroup aria-label="gender" name="gender1" value={this.state.userAnswer} onChange={this.handleClick} style={style.item} >
-                        <FormControlLabel value={'0'} control={<Radio />} label={this.state.options[0]} />
+                        {this.state.options}
+                        {/* <FormControlLabel value={'0'} control={<Radio />} label={this.state.options[0]} />
                         <FormControlLabel value={'1'} control={<Radio />} label={this.state.options[1]} />
                         <FormControlLabel value={'2'} control={<Radio />} label={this.state.options[2]} />
-                        <FormControlLabel value={'3'} control={<Radio />} label={this.state.options[3]} />
+                        <FormControlLabel value={'3'} control={<Radio />} label={this.state.options[3]} /> */}
                     </RadioGroup>
                 </ListItem>
             </List>

@@ -11,52 +11,46 @@ class ViewCertificates extends Component {
     constructor(){
         super();
         this.state = {
-            certificates: []
+            certificates: [],
+            direction: ''
         }
     }
 
     async componentDidMount(){
+        let directionSet = 'column'
+        if(this.props.row){
+            directionSet = 'row'
+        }else if(this.props.column){
+            directionSet = 'column'
+        }
         const data = await CertifyService.executeGetCertifications(this.props.userId).then(result => result.data)
         let certObjects = []
         for(let i = 0; i < data.length; i++){
             certObjects.push(<CertItem cert={data[i]} />)
         }
         this.setState({
-            certificates: certObjects
+            certificates: certObjects,
+            direction: directionSet
         })
     }
 
     render(){
         const style = {
-            Paper : {
-                padding:20, 
-                marginTop:10, 
-                marginBottom:10
+            List : {
+                display: 'flex',
+                flexDirection: this.state.direction,
+                flexWrap: 'wrap'
             }
         };
         return(
-                <List>
-                    <ListItem>
-                        <ListItemText primary="Certifications" />
-                    </ListItem>
+                <List style={style.List}>
                     {this.state.certificates}
                 </List>
         )
     }
 }
 
-class CertItem extends Component {
-    // constructor(){
-    //     super();
-    //     this.state = {
-    //         passed: false
-    //     }
-    // }
-
-    // componentDidMount(){
-        
-    // }
-
+export class CertItem extends Component {
     render(){
         let responseDisplay = null
         let hoverText = ''
@@ -71,9 +65,9 @@ class CertItem extends Component {
             hoverText = 'Not Passed'
         }
         return(
-            <ListItem>
+            <ListItem style={{width: 'fit-content'}}>
                 <ListItemIcon title={hoverText}>{responseDisplay}</ListItemIcon>
-                <ListItemText primary={this.props.cert.certificate} />
+                <ListItemText primary={this.props.message === undefined ? this.props.cert.certificate : this.props.message} />
             </ListItem>
         )
     }

@@ -19,7 +19,7 @@ import AuthenticationService from '../api/AuthenticationService';
 import JobService from '../api/JobService';
 import RichTextInput from './RichTextInput';
 import ApplicationService from '../api/ApplicationService';
-import output from '../api/connections';
+import ViewCertificates from './ViewCertificates';
 import ProfileJobDelete from './ProfileJobDelete';
 import ErrorMessage from './ErrorMessage';
 
@@ -507,20 +507,6 @@ class AppList extends Component {
 					</Paper>):
 					<ErrorMessage severity='info' text='No applicants yet'/>
 				}</>
-                // <Paper style={style.paper}>
-                //     <List>
-                //         {this.state.applicants.length > 0 ?
-                //         this.state.applicants.map( function(app, index) {
-                //             return (
-                //                 <Application application={app} key={index}/>
-                //             );
-                //         }, this):
-                //         <ListItem>
-                //             <ListItemText primary="No applicants yet" style={{textAlign: "center"}}/>
-                //         </ListItem>
-                //         }
-                //     </List>
-                // </Paper>
             )
         }
     }
@@ -612,6 +598,10 @@ class Application extends Component {
                         <ListItemText primary={this.state.application.firstName + ' has not uploaded a resume.'} />
                     </ListItem>
                     }
+                    <ListItem>
+                        <ListItemIcon title="cert"><EmailIcon /></ListItemIcon>
+						<ViewCertificates userId={this.state.application.userId} row/>
+                    </ListItem>
                     <ListItem style={{justifyContent: "center"}}>
                         {this.state.application.status === "Pending" &&
                         <ButtonGroup aria-label="manage secion">
@@ -629,6 +619,7 @@ class Application extends Component {
 						    <ListItemText primary={this.state.application.status} style={{color: red[500]}}/>
                         </>}
                     </ListItem>
+
                 </Collapse>
             </>
         )
