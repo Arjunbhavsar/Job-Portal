@@ -32,6 +32,20 @@ class CertifyService{
                 authorization: basicAuthHeader
             }
         })
+    }
+    
+    executeCheckCertified(userId, certification){
+		const {certTag} = this.state;
+        let username = 'user'
+		let password =  'password'
+        let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
+
+        return axios.get(certTag +`checkCertified/${userId}/${certification}`,
+        {
+            headers:{
+                authorization: basicAuthHeader
+            }
+        })
 	}
 }
 
