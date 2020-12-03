@@ -20,7 +20,7 @@ export default class ErrorMessage extends Component {
 
 		return (
 			<Grid container justify={this.props.justify === undefined ? "center" : this.props.justify} direction="row">
-				<Grid item sm={this.props.sm !== undefined ? this.props.sm : ''}>
+				<Grid item sm={this.props.sm === undefined ? '' : this.props.sm}>
 					<Paper style={{'width' : '100%'}}>
 						<Alert severity={severity}>{text}</Alert>
 					</Paper>
