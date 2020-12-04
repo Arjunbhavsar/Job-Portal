@@ -10,8 +10,8 @@ import com.backend.model.Shift;
 
 @Repository
 public interface ShiftDao extends JpaRepository<Shift, String> {
-	
+
 	Optional<Shift> findById(String id);
-	
+
 	List<Shift> findByApplicationId(String applicationId);
 }

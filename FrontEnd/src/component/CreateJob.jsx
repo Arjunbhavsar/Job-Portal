@@ -48,11 +48,9 @@ class CreateJob extends Component {
             pageUrl: '',
             jobSalary: '',
             sector: '',
-            isSubmitted: false
+            isSubmitted: false,
+            required: false
         }
-        // const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
-        // let user = sessionStorage.getItem('authenticatedUser');
-        // this.handleNext = this.handleNext.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleFirst = this.handleFirst.bind(this);
         this.handleSecond = this.handleSecond.bind(this);
@@ -106,6 +104,10 @@ class CreateJob extends Component {
     }
 
     render(){
+        let temp = false
+        if(this.state.jobTitle !== '' && this.state.location !== '' && this.state.organization !== ''){
+            temp = true
+        }
 		const style = {
             container:{
                 backgroundColor: 'white',
@@ -132,7 +134,8 @@ class CreateJob extends Component {
         if(this.state.isSubmitted){
             return(
                 <div className='jobContainer'>
-                    <div className="registerBack">
+                    <div className="background-container"/>
+                    <div>
                         <Container component="main" maxWidth="sm" style={style.container}>
                             <Grid container spacing={3} direction="column" alignContent="center" justify="center">
                                 <Grid item></Grid>
@@ -151,12 +154,12 @@ class CreateJob extends Component {
         }else{
             return(
                 <div className='jobContainer'>
-                    <div className="registerBack"></div>
+                    <div className="background-container"/>
                     <form>
                         <Container component="main" maxWidth={this.state.page === 1 ? "md":"sm"} style={style.container}>
                             <Grid container justify="center" spacing={3} direction="column">
-                                {this.state.page === 0 && <StartCreate updateParent={this.handleFirst}/>}
-                                {this.state.page === 1 && <RichTextInput updateParent={this.handleSecond} starter='' />}
+                                {this.state.page === 0 && <StartCreate updateParent={this.handleFirst} load={this.state}/>}
+                                {this.state.page === 1 && <RichTextInput updateParent={this.handleSecond} starter={this.state.jobDescription} />}
                                 <Grid item></Grid>
                                 <Grid container spacing={3} justify="center" alignItems="center">
                                     <Grid item xs={2}>
@@ -168,7 +171,7 @@ class CreateJob extends Component {
                                         </Button>
                                     </Grid>
                                     <Grid item xs={2}>
-                                        <Button variant="contained" color="primary" onClick={this.handleSubmit}>
+                                        <Button variant="contained" color="primary" disabled={!temp} onClick={this.handleSubmit}>
                                             {this.state.page === 1 ? 'Finish' : 'Next'}
                                         </Button>
                                     </Grid>

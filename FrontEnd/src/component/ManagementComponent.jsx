@@ -8,18 +8,22 @@ import { LocationOn as LocationOnIcon,
          Email as EmailIcon,
          Note as NoteIcon,
          Edit as EditIcon,
-         Save as SaveIcon } from '@material-ui/icons';
+         Save as SaveIcon,
+         VerifiedUser as VerifiedUserIcon} from '@material-ui/icons';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { green, red } from '@material-ui/core/colors';
-// import { Alert } from '@material-ui/lab';
 import { Link } from 'react-router-dom';
+import Alert from '@material-ui/lab/Alert';
 
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import AuthenticationService from '../api/AuthenticationService';
 import JobService from '../api/JobService';
 import RichTextInput from './RichTextInput';
 import ApplicationService from '../api/ApplicationService';
-import output from '../api/connections';
+import ViewCertificates from './ViewCertificates';
+import ProfileJobDelete from './ProfileJobDelete';
+import ErrorMessage from './ErrorMessage';
+import CertifyService from '../api/CertifyService';
 
 class ManagementComponent extends Component {
     constructor(){
@@ -40,7 +44,7 @@ class ManagementComponent extends Component {
         let added = []
         let temp = []
         const check = await JobService.executeCheckByAuthor().then(result => result.data);
-        let jobData = await JobService.executeGetByAuthor().then(result => result.data);
+        let jobData = await JobService.executeGetByAuthor('').then(result => result.data);
         for(let i = 0; i < jobData.length; i++){
             added.push(<JobItem jobData={jobData[i]}/>)
             temp.push(jobData[i])
@@ -48,8 +52,13 @@ class ManagementComponent extends Component {
         this.setState({jobs: added, indexList: temp, exists: check, index: 0});
     }
 
+    componentDidUpdate(oldProps){
+        if(oldProps !== this.props){
+            this.componentDidMount()
+        }
+    }
+
     updateSelectedJob(newJob){
-        console.log(newJob)
         this.setState({
             index: newJob
         })
@@ -67,14 +76,12 @@ class ManagementComponent extends Component {
         }
     }
 
-    async changesMade(){
-        let added = []
-        let temp = []
-        let jobData = await JobService.executeGetByAuthor().then(result => result.data);
-        for(let i = 0; i < jobData.length; i++){
-            added.push(<JobItem jobData={jobData[i]}/>)
-            temp.push(jobData[i])
-        }
+    async changesMade(jobId){
+        let added = this.state.jobs
+        let temp = this.state.indexList
+        let jobData = await JobService.executeGetJob(jobId).then(result => result.data);
+        temp[this.state.index] = jobData
+        added[this.state.index] = (<JobItem jobData={jobData}/>)
         this.setState({jobs: added, indexList: temp});
     }
 
@@ -103,13 +110,12 @@ class ManagementComponent extends Component {
         if(isUserLoggedIn && this.state.exists){
             return(
                 <div className="container">
+                    <div className="background-container"/>
                     <Grid container direction="row" spacing={3} style={style.container} justify="center">
                         <Grid item xs={2} className="content-sections">
-                            {/* style={{overflowY: "scroll", position: "relative", height: "100%"}} > */}
                             <JobList update={this.updateSelectedJob} jobs={this.state.jobs}/>
                         </Grid>
                         <Grid item xs={7} className="content-sections">
-                            {/* style={{overflowY: "scroll", position: "relative", height: "100%"}}> */}
                             <Grid container item xs={12} alignItems="center" justify="center">
                                 <ButtonGroup aria-label="manage secion">
                                     <Button onClick={() => { this.changeManage("jobs") }} style={this.state.manageState === 0 ? style.active : style.inert}>Manage Job</Button>
@@ -130,30 +136,34 @@ class ManagementComponent extends Component {
         }else if(!this.state.exists){
             return (
 				<Grid container direction="row">
+					<div className="background-container"/>
 					<Grid container justify="center">
 						<Grid item sm={3}></Grid>
 						<Grid item sm={6}>
-							<Paper style={style.Paper}>
+							<Paper style={{marginTop:20, marginBottom:20}}>
 								<Grid container>
-									<Grid item sm> No jobs posted. </Grid>
+									<Alert style={{'width' : '100%'}}severity='info'>No jobs posted</Alert>
 								</Grid>
 							</Paper>
 						</Grid>
+						<Grid item sm={3}></Grid>
 					</Grid>
 				</Grid>
 			)
         }else{
             return (
 				<Grid container direction="row">
+					<div className="background-container"/>
 					<Grid container justify="center">
 						<Grid item sm={3}></Grid>
 						<Grid item sm={6}>
-							<Paper style={style.Paper}>
+							<Paper style={{marginTop:20, marginBottom:20}}>
 								<Grid container>
-									<Grid item sm> Not Logged In </Grid>
+									<Alert style={{'width' : '100%'}}severity='error'>Not logged in</Alert>
 								</Grid>
 							</Paper>
 						</Grid>
+						<Grid item sm={3}></Grid>
 					</Grid>
 				</Grid>
 			)
@@ -166,19 +176,18 @@ class JobList extends Component {
         super();
         this.state = {
             jobs: [],
-            index: 0
+            activeIndex: 0
         }
+        this.inactive = {
+            borderBottom: '1px #0000001a solid'
+        };
+        this.active = {
+            backgroundColor: "var(--light-blue-transparent)",
+            backdropFilter: 'blur(2px)',
+            borderBottom: '1px #0000001a solid'
+        };
     }
 
-    componentDidUpdate(prevProps){
-        if (this.props !== prevProps) {
-            this.setState({
-                jobs: this.props.jobs
-            })
-            // console.log(this.state)
-        }
-    }
-    
     componentDidMount(){
         this.setState({
             jobs: this.props.jobs
@@ -187,6 +196,7 @@ class JobList extends Component {
 
     updateCurrent(index){
         this.props.update(index);
+        this.setState({activeIndex: index})
     }
 
     render(){
@@ -199,9 +209,10 @@ class JobList extends Component {
                 <List component="div" direction="column" style={style.list}>
                     {
                         this.state.jobs && this.state.jobs.map( function(job, index) {
+                            const active = this.state.activeIndex === index ? this.active : this.inactive;
                             return(
-                            <ListItem button style={style.nested} onClick={this.updateCurrent.bind(this, index)} key={index}>
-                                {job}
+                            <ListItem button style={active} onClick={this.updateCurrent.bind(this, index)} key={index}>
+                        		{job}
                             </ListItem>
                             );
                         }, this)
@@ -230,6 +241,7 @@ class JobItem extends Component{
         )
     }
 }
+
 // Add editing to this component
 class SelectedManage extends Component {
     constructor(){
@@ -257,30 +269,14 @@ class SelectedManage extends Component {
         this.handleDescription = this.handleDescription.bind(this)
         this.updateJob = this.updateJob.bind(this)
     }
+
     async componentDidUpdate(prevProps){
-        if(prevProps !== this.props){
-            this.setState({
-                id: this.props.job.id,
-                country: this.props.job.country,
-                dateAdded: this.props.job.dateAdded,
-                hasExpired: this.props.job.hasExpired,
-                jobBoard: this.props.job.jobBoard,
-                jobDescription: this.props.job.jobDescription,
-                jobTitle: this.props.job.jobTitle,
-                jobType: this.props.job.jobType,
-                location: this.props.job.location,
-                organization: this.props.job.organization,
-                pageUrl: this.props.job.pageUrl,
-                jobSalary: this.props.job.jobSalary,
-                sector: this.props.job.sector,
-                author: this.props.job.author,
-                newJobDescription: this.props.job.jobDescription,
-                edit: false
-            })
+        if(prevProps.job !== this.props.job){
+            this.componentDidMount();
         }
     }
     async componentDidMount(){
-        if(this.props.job !== null){
+        if(this.props.job !== undefined){
             this.setState({
                 id: this.props.job.id,
                 country: this.props.job.country,
@@ -301,14 +297,16 @@ class SelectedManage extends Component {
             })
         }
     }
+
     editing() {
         if(this.state.edit) {
             this.updateJob();
-            this.setState({edit: false});
+			this.setState({edit: false});
         }else{
             this.setState({edit: true});
-        }
+		}
     }
+
     async updateJob(){
         const job = {
             id: this.state.id,
@@ -326,11 +324,10 @@ class SelectedManage extends Component {
             sector: this.props.job.sector,
             author: this.props.job.author
         }
-        console.log(job)
         const data = await JobService.executeUpdateJobService(job);
-        console.log(data)
-        this.props.update()
+        await this.props.update(job.id)
     }
+
     handleChange(event) {
 		const value = event.target.value;
 		this.setState({
@@ -352,11 +349,10 @@ class SelectedManage extends Component {
         };
         if(this.state.job === null){
             return(
-                <Paper style={style.paper2}>
-                    <p>No job selected.</p>
-                </Paper>
+                <ErrorMessage severity='info' text='No job selected'/>
             )
         }else {
+
             return(
                 <Paper style={style.paper}>
                     <Grid container>
@@ -371,36 +367,37 @@ class SelectedManage extends Component {
                                     <p style={{padding: 0, margin: 0}}>Job Information</p>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <TextField  label={this.state.jobTitle}
+                                    <TextField  label="Job Title"
                                                 defaultValue={this.state.jobTitle}
                                                 fullWidth
+                                                required
                                                 variant="outlined"
                                                 placeholder={this.state.jobTitle} name="jobTitle"
                                                 onChange={this.handleChange}/>
                                 </Grid>
                                 <Grid item xs={12} sm={4}>
-                                    <TextField  label={this.state.jobSalary}
+                                    <TextField  label="Salary"
                                                 defaultValue={this.state.jobSalary}
                                                 fullWidth
                                                 variant="outlined"
-                                                placeholder="Salary" name="jobSalary"
+                                                placeholder={this.state.jobSalary} name="jobSalary"
                                                 onChange={this.handleChange}/>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <TextField  label={this.state.location}
+                                    <TextField  label="Job Location"
                                                 defaultValue={this.state.location}
                                                 fullWidth
+                                                required
                                                 variant="outlined"
-                                                placeholder="Job Location" name="location"
+                                                placeholder={this.state.location} name="location"
                                                 onChange={this.handleChange}/>
                                 </Grid>
                                 <Grid item xs={12} sm={4}>
-                                    <TextField  label={this.state.country}
+                                    <TextField  label="Job Country"
                                                 defaultValue={this.state.country}
                                                 fullWidth
                                                 variant="outlined"
-                                                placeholder="Job Country" 
-                                                name="country"
+                                                placeholder={this.state.country} name="country"
                                                 onChange={this.handleChange}/>
                                 </Grid>
                                 <Grid item xs={12} style={{textAlign: "center"}}>
@@ -408,25 +405,29 @@ class SelectedManage extends Component {
                                     <p style={{padding: 0, margin: 0}}>Company Information</p>
                                 </Grid>
                                 <Grid item xs={12} sm={5}>
-                                    <TextField  label={this.state.organization}
+                                    <TextField  label="Company Name"
                                                 defaultValue={this.state.organization}
                                                 fullWidth
+                                                required
                                                 variant="outlined"
-                                                placeholder="Company" name="organization"
+                                                placeholder={this.state.organization} name="organization"
                                                 onChange={this.handleChange}/>
                                 </Grid>
                                 <Grid item xs={12} sm={5}>
-                                    <TextField  label={this.state.pageUrl}
+                                    <TextField  label="Page URL"
                                                 defaultValue={this.state.pageUrl}
                                                 fullWidth
                                                 variant="outlined"
-                                                placeholder="Page URL" name="pageUrl"
+                                                placeholder={this.state.pageUrl} name="pageUrl"
                                                 onChange={this.handleChange}/>
                                 </Grid>
                             </Grid>
                             <Grid item xs={12} style={{border: "rgba(0, 0, 0, 0.42) 1px solid", marginTop: 15, borderRadius: 5, padding: 10}}>
                                 <RichTextInput updateParent={this.handleDescription} starter={this.state.jobDescription}/>
                             </Grid>
+							<Grid style={{border: "#FFF 1px solid", marginTop: 15, borderRadius: 5, padding: 10}} justify="center" alignItems="center">
+								<ProfileJobDelete jobData={this.props.job} jobType='created' update={this.componentDidMount}/>
+							</Grid>
                         </Grid>:
                         <Grid item>
                             <h2>{this.state.jobTitle}</h2>
@@ -443,6 +444,7 @@ class SelectedManage extends Component {
         }
     }
 }
+
 class AppList extends Component {
     constructor(){
         super()
@@ -450,50 +452,39 @@ class AppList extends Component {
             applicants: []
         }
     }
+
     async componentDidMount(){
-        const data = await ApplicationService.getAllApplicants(this.props.job.id).then(result => result.data);
-        let userList = []
-        for(let i = 0; i < data[0].length; i++){
-            let application = {
-                jobId: data[0][i].jobId,
-                status: data[0][i].status,
-                userId: data[0][i].userId,
-                firstName: data[1][i].firstName,
-                lastName: data[1][i].lastName,
-                resumeFileId: data[1][i].resumeFileId,
-                emailId: data[1][i].emailId,
-                username: data[1][i].username
+        if(this.props.job !== undefined){
+            const data = await ApplicationService.getAllApplicants(this.props.job.id).then(result => result.data);
+            let userList = []
+            for(let i = 0; i < data[0].length; i++){
+                let application = {
+                    jobId: data[0][i].jobId,
+                    status: data[0][i].status,
+                    userId: data[0][i].userId,
+                    firstName: data[1][i].firstName,
+                    lastName: data[1][i].lastName,
+                    resumeFileId: data[1][i].resumeFileId,
+                    emailId: data[1][i].emailId,
+                    username: data[1][i].username
+                }
+                userList.push(application)
             }
-            userList.push(application)
+            this.setState({
+                applicants: userList
+            })
         }
-        this.setState({
-            applicants: userList
-        })
     }
-    async componentWillReceiveProps(newProps){
-        const data = await ApplicationService.getAllApplicants(newProps.job.id).then(result => result.data);
-        let userList = []
-        for(let i = 0; i < data[0].length; i++){
-            let application = {
-                jobId: data[0][i].jobId,
-                status: data[0][i].status,
-                userId: data[0][i].userId,
-                firstName: data[1][i].firstName,
-                lastName: data[1][i].lastName,
-                resumeFileId: data[1][i].resumeFileId,
-                emailId: data[1][i].emailId,
-                username: data[1][i].username
-            }
-            userList.push(application)
-            
+
+    componentDidUpdate(oldProps){
+        if(oldProps.job !== this.props.job){
+            this.componentDidMount()
         }
-        this.setState({
-            applicants: userList
-        })
     }
+
     render(){
         const style = {
-            paper : {padding:20, margin:20, flexGrow: 1}
+            paper  : {padding:20, margin:20, flexGrow: 1},
         };
         if(this.props.job === null){
             return(
@@ -501,49 +492,64 @@ class AppList extends Component {
             )
         }else {
             return(
-                <Paper style={style.paper}>
-                    <List>
-                        {this.state.applicants.length > 0 ?
-                        this.state.applicants.map( function(app, index) {
-                            return (
-                                <Application application={app} key={index}/>
-                            );
-                        }, this):
-                        <ListItem>
-                            <ListItemText primary="No applicants yet" style={{textAlign: "center"}}/>
-                        </ListItem>
-                        }
-                    </List>
-                </Paper>
+				<>
+				{this.state.applicants.length > 0 ?
+					<Paper style={style.paper}>
+						<List>
+							{this.state.applicants.map( function(app, index) {
+								return (
+									<Application application={app} key={index}/>
+								);
+							}, this)}
+						</List>
+                    </Paper>:
+                    <Paper style={style.paper}>
+                        <ErrorMessage severity='info' text='No applicants yet' sm={6}/>
+                    </Paper>
+				}</>
             )
         }
     }
 }
+
 class Application extends Component {
     constructor(props){
         super()
         this.state = {
             open: false,
-            application: props.application
+            application: props.application,
+            certsExist: false
         }
         this.handleClick = this.handleClick.bind(this);
         this.decide = this.decide.bind(this);
     }
+
     async componentDidMount(){
-        this.setState({
-            application: this.props.application
-        })
+        const data = await CertifyService.executeGetCertifications(this.props.application.userId).then(res => res.data)
+        console.log(data)
+        if(data.length !== 0){
+            this.setState({
+                application: this.props.application,
+                certsExist: true
+            })
+        }else{
+            this.setState({
+                application: this.props.application
+            })
+        }
     }
-    async componentWillReceiveProps(newProps){
-        this.setState({
-            application: newProps.application
-        })
+
+    async componentDidUpdate(oldProps){
+        if(oldProps.application !== this.props.application){
+            this.componentDidMount()
+        }
     }
+
     handleClick() {
 		this.setState({open : !this.state.open});
     }
+
     async decide(event){
-        console.log(event)
         if(event === 'accept'){
             const ids = [this.state.application.jobId, this.state.application.userId]
             const res = await ApplicationService.acceptApplication(ids)
@@ -555,7 +561,6 @@ class Application extends Component {
         }else if(event === 'deny'){
             const ids = [this.state.application.jobId, this.state.application.userId]
             const res = await ApplicationService.denyApplication(ids)
-            console.log(res)
             let temp = this.state.application
             temp.status = res.data.status
             this.setState({
@@ -567,6 +572,7 @@ class Application extends Component {
     render(){
         let hoverText = this.state.application.firstName + ' ' + this.state.application.lastName
         let resumeExists = this.state.application.resumeFileId !== null
+
         return(
             <>
                 <Divider style={{backgroundColor: "rgba(0, 0, 0, 0.5)"}} />
@@ -588,11 +594,23 @@ class Application extends Component {
                             <ListItemText primary="Profile Page" />
                         </ListItem>
                     </Link>
+                    {resumeExists? 
+                    <Link to={'/resume/' + this.state.application.username} target="_blank">
+                        <ListItem>
+                            <ListItemIcon title="resume"><NoteIcon /></ListItemIcon>
+                            <ListItemText primary={this.state.application.firstName + "'s resume"} />
+                        </ListItem>
+                    </Link>:
                     <ListItem>
                         <ListItemIcon title="resume"><NoteIcon /></ListItemIcon>
-                        {resumeExists? 
-                        <a href={output + '/load/' + this.state.link}><ListItemText primary="Download Resume" /></a>:
-                        <ListItemText primary={this.state.application.firstName + ' has not uploaded a resume.'} />
+                        <ErrorMessage severity='info' text={this.state.application.firstName + ' has not uploaded a resume.'} justify='flex-start'/>
+                    </ListItem>
+                    }
+                    <ListItem>
+                        <ListItemIcon title="certification"><VerifiedUserIcon /></ListItemIcon>
+                        {this.state.certsExist ?
+                            <ViewCertificates userId={this.state.application.userId} row/>:
+                            <ErrorMessage severity='info' text='No certifications completed' justify='flex-start'/>
                         }
                     </ListItem>
                     <ListItem style={{justifyContent: "center"}}>
@@ -612,9 +630,11 @@ class Application extends Component {
 						    <ListItemText primary={this.state.application.status} style={{color: red[500]}}/>
                         </>}
                     </ListItem>
+
                 </Collapse>
             </>
         )
     }
 }
+
 export default ManagementComponent;

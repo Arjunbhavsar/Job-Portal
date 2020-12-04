@@ -24,13 +24,15 @@ public class JobService implements JobServiceInterface {
 		return jobDao.save(jobDetails);
 	}
 
+	@Transactional
 	@Override
 	public List<Job> getJobs() {
 		return (List<Job>) jobDao.findAll();
 	}
 
+	@Transactional
 	@Override
-	public Job getJobByID(String id) {
+	public Job getJobById(String id) {
 		
 		if(id != null) { 
 			Job result = jobDao.findById(id).orElse(null);

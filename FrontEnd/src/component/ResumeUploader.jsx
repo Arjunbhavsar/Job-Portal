@@ -1,23 +1,22 @@
 import React, { Component } from "react";
-import { Button } from '@material-ui/core/';
 
-import ProgressBar from './ProgressBar';
-import FileService from "../../api/FileService";
-import UserService from '../../api/UserService';
-
-import {ListItem, List} from '@material-ui/core';
+import {ListItem, List, Button} from '@material-ui/core';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-
+import {FindInPageOutlined as FindInPageOutlinedIcon, 
+		AnnouncementOutlined as AnnouncementOutlinedIcon} from '@material-ui/icons';
 import Alert from '@material-ui/lab/Alert';
 
-import FindInPageOutlinedIcon from '@material-ui/icons/FindInPageOutlined';
-import AnnouncementOutlinedIcon from '@material-ui/icons/AnnouncementOutlined';
-import LoadingComponent from '../LoadingComponent';
+import ProgressBar from './ProgressBar';
+import LoadingComponent from './LoadingComponent';
+
+import FileService from "../api/FileService";
+import UserService from '../api/UserService';
+
 
 export default class ResumeUploader extends Component {
-	constructor(props) {
-		super(props);
+	constructor() {
+		super();
 		
 		this.state = {
 			urlTag: window.location.href.split('profile/')[0]+'resume/',

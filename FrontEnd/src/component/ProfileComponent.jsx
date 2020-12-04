@@ -5,18 +5,21 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import Alert from '@material-ui/lab/Alert';
+
 import LocationAutofill from './LocationAutofill';
 import ErrorMessage from './ErrorMessage';
-import LoadingComponent from '../LoadingComponent';
-
+import LoadingComponent from './LoadingComponent';
 import ResumeUploader from './ResumeUploader';
 import ProfileUploader from './ProfileUploader';
 import ProfileJobList from './ProfileJobList';
-import UserService from '../../api/UserService';
-import AuthenticationService from '../../api/AuthenticationService';
-import '../../css/RegisterComponent.css'
-import Alert from '@material-ui/lab/Alert';
+import ViewCertificates from './ViewCertificates';
+import CertifyService from '../api/CertifyService';
 
+import UserService from '../api/UserService';
+import AuthenticationService from '../api/AuthenticationService';
+import '../css/RegisterComponent.css'
+import '../css/ProfileComponent.css'
 
 class ProfileComponent extends Component {
 	constructor() {
@@ -38,6 +41,7 @@ class ProfileComponent extends Component {
 			editable: false,
 			userTag: window.location.href.split('profile/')[0] + 'profile/',
 			exists: false,
+			certsExist: false
 		}
 		this.editing = this.editing.bind(this);
 		this.updateUser = this.updateUser.bind(this);
@@ -55,7 +59,8 @@ class ProfileComponent extends Component {
 		if(pathUser === sessionStorage.getItem('authenticatedUser')){
 			edit = true
 		}
-		this.setState({userObj : data, isLoading : false, editable : edit});
+		const certData = await CertifyService.executeGetCertifications(data.id).then(res => res.data)
+		this.setState({userObj : data, isLoading : false, editable : edit, certsExist: certData.length > 0});
 		var evt = document.createEvent('Event');
 		evt.initEvent('load', false, false);
 		window.dispatchEvent(evt);
@@ -73,7 +78,8 @@ class ProfileComponent extends Component {
 		if(pathUser === sessionStorage.getItem('authenticatedUser')){
 			edit = true
 		}
-		this.setState({userObj : data, isLoading : false, editable : edit});
+		const certData = await CertifyService.executeGetCertifications(data.id).then(res => res.data)
+		this.setState({userObj : data, isLoading : false, editable : edit, certsExist: certData.length > 0});
 		var evt = document.createEvent('Event');
 		evt.initEvent('load', false, false);
 		window.dispatchEvent(evt);
@@ -132,14 +138,21 @@ class ProfileComponent extends Component {
 	render() {
 		const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
 		const style = {
-			Paper : {padding:20, marginTop:10, marginBottom:10},
+			Paper : {padding:20, marginTop:20, marginRight:20},
 			image : {'borderRadius':'50%', width:"200px", height:"200px", "objectfit":"cover"}
 		}
 		if(this.state.isLoading)
-			return (<LoadingComponent/>);
+			return (
+				<div>
+					<div className="profile-background-container"/>
+					<LoadingComponent/>
+				</div>);
 		if(!isUserLoggedIn || !this.state.exists)
 			return (
-				<ErrorMessage text={!isUserLoggedIn ? "Not Logged In" : "User Not Found"}/>
+				<div>
+					<div className="profile-background-container"/>
+					<ErrorMessage text={!isUserLoggedIn ? "Not Logged In" : "User Not Found"}/>
+				</div>
 			)
 		const editingFalse = () => (
 			<List>
@@ -187,9 +200,22 @@ class ProfileComponent extends Component {
 		);
 		return (
 			<div className="container">
+				<div className="profile-background-container"/>
 				<Grid container direction="row">
 					<Grid container justify="center">
-						<Grid item sm={3}></Grid>
+						<Grid item sm={3}>
+							{/* <Grid container direction="row" justify="flex-end">
+								<Paper style={style.Paper}>
+									<ListItem>
+										<ListItemText primary="Certifications" />
+									</ListItem>
+									{this.state.certsExist ? 
+										<ViewCertificates userId={this.state.userObj.id}/>:
+										<Alert variant="outlined" severity='info' style={{'width':'fit-content'}}>no certifications completed</Alert>
+									}
+								</Paper>
+							</Grid> */}
+						</Grid>
 						<Grid item sm={6}>
 							<Paper style={style.Paper}>
 								<Grid container>
@@ -234,7 +260,7 @@ class ProfileComponent extends Component {
 										</Grid>
 									</>
 								</Grid>
-								<span style={{'display' : 'inline', 'position':'absolute', 'right':'26%', 'top' : '5%'}}>
+								<span style={{'display' : 'inline', 'position':'absolute', 'right':'27%', 'top' : '5%'}}>
 									{this.state.editable && (!this.state.edit_mode ? <EditIcon style={{cursor: "pointer"}} onClick={this.editing}/> : <SaveIcon style={{cursor: "pointer"}} onClick={this.editing}/>)}
 								</span>
 							</Paper>
@@ -243,6 +269,19 @@ class ProfileComponent extends Component {
 							<Grid container direction="row">
 								<Paper style={style.Paper}>
 									<ResumeUploader key={this.state.userObj.username} username={this.state.userObj.username}/>
+								</Paper>
+							</Grid>
+							<Grid container direction="row" justify="flex-start">
+								<Paper style={style.Paper}>
+									<ListItem>
+										<ListItemText primary="Certifications" />
+									</ListItem>
+									{this.state.certsExist ?
+										// I added key to have it so that the component will update on userObj update
+										// I added showFailed bc no one wants other people to see that they failed something (so shows passed and perfect score)
+										<ViewCertificates key={this.state.userObj.username} showFailed={this.state.editable ? 'true' : 'false'} userId={this.state.userObj.id}/>:
+										<Alert variant="outlined" severity='info' style={{'width':'fit-content'}}>no certifications completed</Alert>
+									}
 								</Paper>
 							</Grid>
 						</Grid>

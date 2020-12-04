@@ -3,14 +3,7 @@ import { Paper, Grid } from '@material-ui/core/';
 import Alert from '@material-ui/lab/Alert';
 
 export default class ErrorMessage extends Component {
-	constructor(props) {
-		super(props);
-	}
-	
 	render() {
-		const style = {
-			Paper : {marginTop:20, marginBottom:20},
-		}
 		let text = "Error";
 		if(this.props.text !== null)
 		text = this.props.text;
@@ -26,17 +19,11 @@ export default class ErrorMessage extends Component {
 		}
 
 		return (
-			<Grid container direction="row">
-				<Grid container justify="center">
-					<Grid item sm={3}></Grid>
-					<Grid item sm={6}>
-						<Paper style={style.Paper}>
-							<Grid container>
-								<Alert style={{'width' : '100%'}}severity={severity}>{text}</Alert>
-							</Grid>
-						</Paper>
-					</Grid>
-					<Grid item sm={3}></Grid>
+			<Grid container justify={this.props.justify === undefined ? "center" : this.props.justify} direction="row">
+				<Grid item sm={this.props.sm === undefined ? '' : this.props.sm}>
+					<Paper style={{'width' : '100%'}}>
+						<Alert severity={severity}>{text}</Alert>
+					</Paper>
 				</Grid>
 			</Grid>
 		)

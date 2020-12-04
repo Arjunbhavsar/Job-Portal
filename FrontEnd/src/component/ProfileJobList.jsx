@@ -17,18 +17,20 @@ import {Description as DescriptionIcon,
 		NotInterested as NotInterestedIcon,
 		} from '@material-ui/icons';
 import { green, red, orange } from '@material-ui/core/colors';
-import LoadingComponent from '../LoadingComponent';
-
-import output from '../../api/connections';
-import JobService from '../../api/JobService';
-import UserService from '../../api/UserService';
-import ApplicationService from '../../api/ApplicationService';
-import ProfileJobDelete from './ProfileJobDelete';
 import Alert from '@material-ui/lab/Alert';
 
+import LoadingComponent from './LoadingComponent';
+import ProfileJobDelete from './ProfileJobDelete';
+
+import output from '../api/connections';
+import JobService from '../api/JobService';
+import UserService from '../api/UserService';
+import ApplicationService from '../api/ApplicationService';
+import Badge from '@material-ui/core/Badge';
+
 export default class ProfileJobList extends Component{
-	constructor(props) {
-		super(props);
+	constructor() {
+		super();
 		this.state = {
 			urlTag: output + '/load/',
 			isLoading: true,
@@ -43,11 +45,21 @@ export default class ProfileJobList extends Component{
 		this.componentDidMount();
 	}
 
+	componentDidUpdate(oldProps){
+		if(oldProps.username !== this.props.username){
+			this.componentDidMount();
+		}
+	}
+
 	async componentDidMount(){
 		const data = await	UserService
 							.executeGetUserService(this.props.username)
 							.then(result => result.data);
 							console.log('loading data ...');
+		let getJobsId = ''
+		if(data.id !== sessionStorage.getItem('authenticatedUserId')){
+			getJobsId = data.id
+		}
 		this.setState({userObj : data});
 		let added = [];
 		if(this.props.jobType != null && this.props.jobType.toLowerCase() === 'applied') {
@@ -60,7 +72,7 @@ export default class ProfileJobList extends Component{
 			}
 		} else {
 			// Push created jobs
-			let jobData = await JobService.executeGetByAuthor().then(result => result.data);
+			let jobData = await JobService.executeGetByAuthor(getJobsId).then(result => result.data);
 			this.setState({jobType : "created"});
 			for(let i = 0; i < jobData.length; i++)
 				added.push(<JobElement jobType={this.state.jobType} jobData={jobData[i]} update={this.update}/>)
@@ -103,15 +115,22 @@ class JobElement extends Component {
 		super();
 		this.state = {
 			open: false,
+			// notify: true,
+			notify: false,
 		}
 		this.handleClick = this.handleClick.bind(this);
 	}
 
 	handleClick() {
-		this.setState({open : !this.state.open});
+		this.setState({	open : !this.state.open,
+						notify : false});
 	}
 
 	render(){
+		let notify = this.state.notify;
+		if(this.props.jobType !== 'applied')
+			notify = false;
+
 		const style = {
 			nested : {"paddingLeft": "5%"},
 		}
@@ -131,14 +150,26 @@ class JobElement extends Component {
 				break;
 			}
 		}
+		let mainIcon = () => (
+			<ListItemIcon title={hoverText}>
+				{jobIcon()}
+			</ListItemIcon>
+		);
+		if(notify) {
+			mainIcon = () => (
+				<ListItemIcon title={hoverText}>
+					<Badge color="secondary" variant="dot">
+							{jobIcon()}
+					</Badge>
+				</ListItemIcon>
+			)
+		}
 		return(
 			<div>
 				{this.props.jobData != null && (
 					<>
 						<ListItem button onClick={this.handleClick}>
-							<ListItemIcon title={hoverText}>
-								{jobIcon()}
-							</ListItemIcon>
+							{mainIcon()}
 							<ListItemText primary={this.props.jobData.jobTitle} />
 							{this.state.open ? <ExpandLess /> : <ExpandMore />}
 						</ListItem>
@@ -146,7 +177,7 @@ class JobElement extends Component {
 							<List component="div" disablePadding>
 								{this.props.jobData.organization &&
 								<ListItem button style={style.nested}>
-									<ListItemIcon title="ogranization"><BusinessIcon /></ListItemIcon>
+									<ListItemIcon title="organization"><BusinessIcon /></ListItemIcon>
 									<ListItemText primary={this.props.jobData.organization} />
 								</ListItem>}
 								{this.props.jobData.country && this.props.jobData.location &&
@@ -177,7 +208,9 @@ class JobElement extends Component {
 								<ListItem button style={style.nested}>
 									{this.props.jobType === 'applied' ?
 										<ProfileJobDelete jobData={this.props.jobData} update={this.props.update} appData={this.props.appData} jobType='applied'/> :
-										<ProfileJobDelete jobData={this.props.jobData} update={this.props.update} jobType='created'/>
+										(sessionStorage.getItem('authenticatedUserId') === this.props.jobData.author &&
+												<ProfileJobDelete jobData={this.props.jobData} update={this.props.update} jobType='created'/>
+										)
 									}
 								</ListItem>
 								<hr/>

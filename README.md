@@ -1,22 +1,13 @@
 
-# Quick-Pick-Sprint 5-Byun (v2) (tested Heroku, it works!!)
+# Quick-Pick-Sprint 5-Byun (v3) (tested locally and it's really jank)
 
-***please keep my file structure for the profile folder***
-## New Features (the ones I can remember)
-- PDF viewing added
-	- New page added with that uses 'path/resume/user'
-- Component for deleting Jobs/Applications added
-	- When a job is deleted all associated applications get deleted as well
-	- The backend has been updated as well to do this
-- Profile page address uses google places API for autofilling locations
-	- Don't spam it, idk when it's gonna charge me...
-## Updates/Bug Fixes (the ones I can remember)
-- ProfileUploader.js UI update
-	- No longer clips into the username
-	- Has tinted background on hover
-- ResumeUploader.js UI update
-	- It looks better
-- Fixed bug with ProfileJobList.js because it was pulling wrong information for AppliedJobList
+***I didn't sleep, I'm gonna go sleep now..***
+## New Features
+- Reworked the shift model many times and hopefully this one is finalized
+- Added new shift page with interactive UI.
+	- It is completely private and is not like how profile and resume can be viewed
+	- You can add and delete shifts.
+	- I'm trying to remove the edit button b/c of how buggy it is already so you can click it, but it will basically pull up another form
 ## Known Bugs
 - Profile locks you out if there is a space in the username
 	- This is because it is pulling the name from the url and if there is a space there it will show as "%20"
@@ -25,12 +16,6 @@
 		- Have a username with a space
 		- Go to profile once logged in
 		- Observe that you can't edit anymore and applied jobs no longer shows
-- Inconsistent font from landing page to other pages
-	- Replicate:
-		- Go to landing page
-		- Go to any other page
-		- Click refresh and observe the font
-			- It is most noticeable for the navbar or the '+' for the upload profile
 - Profile Image uploading spam in backend
 	- Replicate:
 		- Replace an existing image on profile
@@ -51,5 +36,3 @@
 		- Go to register
 		- Enter an username that already exists
 		- Sign up
-## Suggestions
-- searching should only disappear when on the landing page, I feel people should be able to search whenever

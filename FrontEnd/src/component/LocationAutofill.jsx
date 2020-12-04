@@ -4,6 +4,7 @@ geocodeByAddress,
 getLatLng
 } from "react-places-autocomplete";
 import TextField from '@material-ui/core/TextField';
+import LoadingComponent from './LoadingComponent';
 
 export default function LocationAutofill(props) {
 	const [prevAddress, setPrevAddress] = React.useState("");
@@ -26,11 +27,19 @@ export default function LocationAutofill(props) {
 		props.update(event);
 	}
 
-	if(prevAddress != address) {
+	if(prevAddress !== address) {
 		setPrevAddress(address)
 		props.update(address);
 	}
 	
+	const st = {
+		// 'font-size': '1rem',
+		// 'font-family': 'sans-serif',
+		// 'font-weight': '400',
+		// 'font': 'inherit',
+		'line-height': '1.5',
+		'letter-spacing': '0.00938em'
+	}
 	return (
 		<PlacesAutocomplete
 			value={address}
@@ -42,13 +51,19 @@ export default function LocationAutofill(props) {
 				<TextField inputProps={{autocomplete: 'new-password', form: {autocomplete: 'off',},}} label={props.text} {...getInputProps({ placeholder: "address" })}/>
 
 				<div>
-					{loading ? <div>...loading</div> : null}
-
+					{loading ? <LoadingComponent/> : null}
+					{/* <div style={ {'backgroundColor': "#E0E0E0", 'line-height': '1.5', 'letter-spacing': '0.00938em'} }>
+						One Two Three Four
+					</div>
+					<div style={ {'backgroundColor': "#fff"},st }>
+						One Two Three Four
+					</div> */}
 					{suggestions.map(suggestion => {
 						const style = {
-						backgroundColor: suggestion.active ? "#E0E0E0" : "#fff"
+							lineHeight : '1.5',
+							letterSpacing : '0.00938em',
+							backgroundColor: suggestion.active ? "#E0E0E0" : "#fff"
 						};
-
 						return (
 						<div {...getSuggestionItemProps(suggestion, { style })}>
 							{suggestion.description}

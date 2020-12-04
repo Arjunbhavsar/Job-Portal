@@ -5,7 +5,7 @@ class getJobListService{
 	state = {  
 		jobTag : output + '/job/'
 	}
-// UNIQUE_ID  	COUNTRY  	DATE_ADDED  	HAS_EXPIRED  	JOB_BOARD  	JOB_DESCRIPTION  	JOB_SALARY  	JOB_TITLE  	JOB_TYPE  	LOCATION  	ORGANIZATION  	PAGE_URL  	SECTOR
+
     executeGetJob(jobId){
 		const {jobTag} = this.state;
 		
@@ -66,12 +66,12 @@ class getJobListService{
         })
 	}
 
-	executeGetByAuthor(currentUserId = sessionStorage.getItem('authenticatedUserId')){
+	executeGetByAuthor(userId){
 		const {jobTag} = this.state;
         let username = 'user'
 		let password =  'password'
         let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
-		// let currentUserId = sessionStorage.getItem('authenticatedUserId');
+		let currentUserId = userId === '' ? sessionStorage.getItem('authenticatedUserId'): userId
 
         return axios.get(jobTag+'getByAuthor/' + currentUserId,
         {
@@ -107,8 +107,7 @@ class getJobListService{
 			headers:{
 				authorization: basicAuthHeader
 			}
-		}
-		)
+		})
     }
 	
 	executeDeleteJob(jobId){
@@ -118,15 +117,13 @@ class getJobListService{
 		let passwordAuth =  'password'
 		let basicAuthHeader = 'Basic '+window.btoa(usernameAuth+':'+passwordAuth)
 
-	return axios.delete(`${jobTag}deleteJob/${jobId}`,{
-		headers:{
-			authorization: basicAuthHeader
-		}
-	})
+		return axios.delete(`${jobTag}deleteJob/${jobId}`,
+		{
+			headers:{
+				authorization: basicAuthHeader
+			}
+		})
 	}
 }
-
-
-
 
 export default new getJobListService();

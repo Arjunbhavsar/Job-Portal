@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import output from '../../api/connections';
 import PDFViewer from 'pdf-viewer-reactjs';
-import UserService from '../../api/UserService';
+
 import ErrorMessage from './ErrorMessage';
-import LoadingComponent from '../LoadingComponent';
+import LoadingComponent from './LoadingComponent';
+
+import output from '../api/connections';
+import UserService from '../api/UserService';
 
 export default class ResumeViewer extends Component {
-	constructor(props) {
-		super(props);
+	constructor() {
+		super();
 		
 		this.state = {
 			isLoading: true,
@@ -34,11 +36,11 @@ export default class ResumeViewer extends Component {
 
 	render() {
 		if(this.state.userObj !== null)
-		console.log(this.state.userObj.length)
+		console.log(this.state.userObj.resumeFileId)
 		// console.log(Object.values(this.state.userObj))
 		if(this.state.isLoading)
 			return (<LoadingComponent/>);
-		if(this.state.userObj.length <= 0)
+		if(this.state.userObj === undefined || this.state.userObj.resumeFileId === null || this.state.userObj.length <= 0)
 			return (
 				<ErrorMessage text="Resume Not Found" severity='error'/>
 			)

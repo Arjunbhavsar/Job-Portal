@@ -18,12 +18,25 @@ class ApplicationService{
         })
     }
 
+    getApplication(id){
+		const {appsTag} = this.state;
+        let username = 'user'
+		let password = 'password'
+        let basicAuthHeader = 'Basic '+ window.btoa(username+':'+password)
+		return axios.get(appsTag+'getApplication/'+ id, {
+				headers:{
+					authorization: basicAuthHeader
+				}
+			}
+        )
+	}
+	
     getAllApplied(){
 		const {appsTag} = this.state;
         let username = 'user'
 		let password = 'password'
 		let currentUserId = sessionStorage.getItem('authenticatedUserId');
-		let basicAuthHeader = 'Basic '+ window.btoa(username+':'+password);
+        let basicAuthHeader = 'Basic '+ window.btoa(username+':'+password)
 		return axios.get(appsTag+'userApplications/'+ currentUserId, {
 				headers:{
 					authorization: basicAuthHeader
@@ -82,7 +95,7 @@ class ApplicationService{
                 authorization: basicAuthHeader
             }
         })
-	}
+    }
 	
 	deleteApplication(id){
 		const {appsTag} = this.state;

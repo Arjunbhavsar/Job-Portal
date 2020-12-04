@@ -5,13 +5,16 @@ import Navgiation from './Navigation';
 import RegisterComponent from './RegisterComponent';
 import LoginComponent from './LoginComponent';
 import ErrorComponent from './ErrorComponent';
-import ProfileComponent from './profile/ProfileComponent';
+import ProfileComponent from './ProfileComponent';
 import CreateJob from './CreateJob';
 import LandingComponent from './LandingComponent';
 import ManagementComponent from './ManagementComponent';
 import ForgotPasswordComponent from './ForgotPassword';
 import ResetPasswordComponent from './ResetPassword';
-import ResumeViewer from './profile/ResumeViewer';
+import ResumeViewer from './ResumeViewer';
+import Certifications from './Certifications';
+import ShiftSelect from './shift/ShiftSelect';
+import ShiftTest from './shift/ShiftTest';
 
 class AppRouting extends Component {
     render() {
@@ -26,8 +29,10 @@ class AppRouting extends Component {
                             <Route path="/dash/:search"         component = {Dashboard}/>
                             <Route path="/login"                component = {LoginComponent}/>
                             <Route path="/register"             component = {RegisterComponent}/>
+                            <Route path="/certify"              component = {Certifications}/>
                             <Route path="/postjob"              component = {CreateJob}/>
                             <Route path="/manage"               component = {ManagementComponent}/>
+                            <Route path="/shift"                component = {ShiftTest}/>
                             <Route path="/profile/:name"        component = {ProfileComponent}/>
                             <Route path="/resume/:name"         component = {ResumeViewer}/>
                             <Route path="/ForgotPassword"       component = {ForgotPasswordComponent}/>

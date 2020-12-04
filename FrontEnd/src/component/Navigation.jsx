@@ -89,9 +89,7 @@ function Nav() {
     };
 
     const handleMenuClose = () => {
-		// if you are viewing someone's profile and click on profile, it wont update
-		// window.location.replace(window.location.href.split('/')[0] + '/profile/' + sessionStorage.getItem('authenticatedUser'));
-		setAnchorEl(null);
+        setAnchorEl(null);
     };
     const handleMenuCloseLogout = () => {
         setAnchorEl(null);
@@ -117,7 +115,7 @@ function Nav() {
 
     if (isUserLoggedIn === true){
         spanStyles = {
-            color: "#00a2ff"
+            color: "var(--light-blue)"
         };
         renderMenu = (
             // Add information here to check if already logged in and have a seperate menu with if conditionals
@@ -131,6 +129,8 @@ function Nav() {
             onClose={handleMenuClose}
             >
                 <Link to={"/profile/"+user} className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Profile</MenuItem></Link>
+                <Link to="/certify" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Certifications</MenuItem></Link>
+                <Link to="/shift" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Shift Selection</MenuItem></Link>
                 <Link to="/" className="profileMenuLink"><MenuItem onClick={handleMenuCloseLogout} id="accountIconMenuItem">Log Out</MenuItem></Link>
             </Menu>
         );
@@ -147,4 +147,5 @@ function Nav() {
         </>
     )
 }
+
 export default withRouter(Navgiation)

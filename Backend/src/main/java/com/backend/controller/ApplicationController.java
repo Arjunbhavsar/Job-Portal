@@ -43,6 +43,11 @@ public class ApplicationController {
 		}
 	}
 	
+	@GetMapping("/getApplication/{id}")
+	public Application getApplication(@PathVariable String id) {
+		return appService.getApplication(id);
+	}
+	
 	@GetMapping("/userApplications/{userId}")
 	public List<Application> getApplied(@PathVariable String userId) {
 		return appService.getUserApps(userId);
@@ -54,7 +59,7 @@ public class ApplicationController {
 	}
 	
 	@PostMapping("/checkIfApplied")
-	public String checkIfUsernameExists(@RequestBody Application app){
+	public String checkIfApplied(@RequestBody Application app){
 		return appService.checkIfApplied(app);
 	}
 	
@@ -62,7 +67,7 @@ public class ApplicationController {
 	public String deleteApplicaionById(@PathVariable String id) {
 		return appService.deleteApplicaionById(id);
 	}
-	
+
 	@DeleteMapping("/deleteApplicaionByJobId/{jobId}")
 	public String deleteApplicaionByJobId(@PathVariable String jobId) {
 		return appService.deleteApplicaionByJobId(jobId);

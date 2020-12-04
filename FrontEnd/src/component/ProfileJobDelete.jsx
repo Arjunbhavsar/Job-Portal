@@ -7,27 +7,35 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Alert from '@material-ui/lab/Alert';
-import JobService from '../../api/JobService';
-import ApplicationService from '../../api/ApplicationService';
+
+import JobService from '../api/JobService';
+import ApplicationService from '../api/ApplicationService';
 
 //	props.jobData [Required]
 //		- must contain information of valid job model
-//	props.jobType (optional)
+//	props.jobType [Required]
 //		- if props.jobType === 'applied'
 //			- delete given application based off of its id
-//		- else
+//		- else props.jobType === 'created'
 //			- delete given job based off of its id
 //	props.appData (required if props.jobType === 'applied')
 //		- must contain information of valid application model
 export default class ProfileJobDelete extends Component {
 	constructor(props) {
-		super(props);
+		super();
 		this.state = {
 			open: false,
 			deleteConfirmation: '',
 		};
 		this.handleChange = this.handleChange.bind(this);
+		this.handleClose = this.handleClose.bind(this);
 		this.deleteJob = this.deleteJob.bind(this);
+	}
+
+	handleClose() {
+		this.setState({
+			open : false
+		})
 	}
 
 	handleChange(event) {
@@ -39,7 +47,7 @@ export default class ProfileJobDelete extends Component {
 	}
 
 	async deleteJob() {
-		if(this.props.jobType !== null && this.props.jobType.toLowerCase() === 'applied') {
+		if(this.props.jobType !== null && this.props.jobType !== undefined && this.props.jobType.toLowerCase() === 'applied') {
 			await ApplicationService.deleteApplication(this.props.appData.id);
 			this.setState({open : false});
 			this.props.update();
@@ -55,7 +63,7 @@ export default class ProfileJobDelete extends Component {
 
 	render() {
 		let activateDelete = this.state.deleteConfirmation !== this.props.jobData.jobTitle;
-		
+
 		const WarningMessage = () => (
 			<>
 				{this.props.jobType.toLowerCase() === 'applied' ? 

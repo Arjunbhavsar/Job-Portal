@@ -37,7 +37,6 @@ public class ApplicationService {
 		for(Application app : apps) {
 			User user = userDao.findById(app.getUserId()).orElse(null);
 			if(user != null) {
-				user.setPassword("");
 				users.add(user);
 			}
 		}
@@ -51,6 +50,7 @@ public class ApplicationService {
 		return appDao.findAllByUserId(userId);
 	}
 	
+	@Transactional
 	public Application acceptApplicant(String jobId, String userId) {
 		List<Application> appList = appDao.findAllByJobId(jobId);
 		for(Application app : appList) {
@@ -87,7 +87,6 @@ public class ApplicationService {
 		}
 		return null;
 	}
-
 	@Transactional
 	public String deleteApplicaionByJobId(String jobId) {
 		try {
@@ -108,5 +107,9 @@ public class ApplicationService {
 		catch(Exception e) {
 			return "could not delete application " + id;
 		}
+	}
+
+	public Application getApplication(String id) {
+		return appDao.findById(id).orElse(null);
 	}
 }
