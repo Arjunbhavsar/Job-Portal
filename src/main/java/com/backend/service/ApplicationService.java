@@ -108,4 +108,9 @@ public class ApplicationService {
 			return "could not delete application " + id;
 		}
 	}
+	
+	@Transactional
+	public Application getApplication(String id) {
+		return appDao.findById(id).orElse(null);
+	}
 }

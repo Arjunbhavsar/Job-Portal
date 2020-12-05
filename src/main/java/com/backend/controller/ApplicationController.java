@@ -43,6 +43,11 @@ public class ApplicationController {
 		}
 	}
 	
+	@GetMapping("/getApplication/{id}")
+	public Application getApplication(@PathVariable String id) {
+		return appService.getApplication(id);
+	}
+	
 	@GetMapping("/userApplications/{userId}")
 	public List<Application> getApplied(@PathVariable String userId) {
 		return appService.getUserApps(userId);
