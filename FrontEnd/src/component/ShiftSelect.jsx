@@ -41,6 +41,8 @@ import UserService from '../api/UserService';
 import ShiftService from '../api/ShiftService';
 import ApplicationService from '../api/ApplicationService';
 import JobService from '../api/JobService';
+import ErrorMessage from './ErrorMessage';
+import AuthenticationService from '../api/AuthenticationService';
 
 export const appointments = [];
 
@@ -247,7 +249,11 @@ class AppointmentFormContainerBasic extends React.PureComponent {
 			...this.getAppointmentChanges(),
 		};
 		if(this.state.isLoading)
-		return (<LoadingComponent/>)
+			return (
+				<div style={{marginTop:'20px', marginRight: '20px'}}>
+					<LoadingComponent/>
+				</div>
+			)
 		const {
 		classes,
 		visible,
@@ -320,7 +326,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
 					<div className={classes.wrapper}>
 					<Create className={classes.icon} color="action" />
 					<FormControl variant="outlined" style={{minWidth: '40%',position: 'absolute', left: '56px', 'paddingBottom':0}}>
-						<InputLabel id="demo-simple-select-outlined-label">Job</InputLabel>
+						<InputLabel id="demo-simple-select-outlined-label">Applied Jobs</InputLabel>
 						<Select
 						labelId="demo-simple-select-outlined-label"
 						id="demo-simple-select-outlined"
@@ -776,9 +782,19 @@ class ShiftSelect extends React.PureComponent {
 	}
 
 	render() {
+		const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
 		if(this.state.isLoading)
 			return (
-				<LoadingComponent/>
+				<div style={{marginTop:'20px', marginRight: '20px'}}>
+					<LoadingComponent/>
+				</div>
+			)
+		if(!isUserLoggedIn)
+			return (
+				<div style={{marginTop : '20px'}}>
+					<div className="profile-background-container"/>
+					<ErrorMessage text="Not Logged In"/>
+				</div>
 			)
 		// console.log("USER:\t" + JSON.stringify(this.state.userObj));
 		// console.log("APP:\t" + JSON.stringify(this.state.appObj));

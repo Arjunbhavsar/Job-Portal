@@ -51,7 +51,11 @@ export default function LocationAutofill(props) {
 				<TextField inputProps={{autocomplete: 'new-password', form: {autocomplete: 'off',},}} label={props.text} {...getInputProps({ placeholder: "address" })}/>
 
 				<div>
-					{loading ? <LoadingComponent/> : null}
+					{loading
+					? <div style={{marginTop:'20px', marginRight: '20px'}}>
+						<LoadingComponent/>
+					</div>
+					: null}
 					{/* <div style={ {'backgroundColor': "#E0E0E0", 'line-height': '1.5', 'letter-spacing': '0.00938em'} }>
 						One Two Three Four
 					</div>

@@ -87,7 +87,11 @@ export default class ProfileJobList extends Component{
 		if(jobType != null)
 			jobType = jobType.slice(0,1).toUpperCase() + jobType.slice(1).toLowerCase();
 		if(this.state.isLoading)
-			return(<LoadingComponent/>)
+			return(
+				<div style={{marginRight: '20px'}}>
+					<LoadingComponent/>
+				</div>
+			)
 		return (
 			<Grid container direction="column">
 				<Grid >

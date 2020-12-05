@@ -24,11 +24,13 @@ import ViewCertificates from './ViewCertificates';
 import ProfileJobDelete from './ProfileJobDelete';
 import ErrorMessage from './ErrorMessage';
 import CertifyService from '../api/CertifyService';
+import LoadingComponent from './LoadingComponent';
 
 class ManagementComponent extends Component {
     constructor(){
         super();
         this.state = {
+			isLoading: true,
             manageState: 0,
             exists: false,
             jobs: [],
@@ -49,7 +51,7 @@ class ManagementComponent extends Component {
             added.push(<JobItem jobData={jobData[i]}/>)
             temp.push(jobData[i])
         }
-        this.setState({jobs: added, indexList: temp, exists: check, index: 0});
+        this.setState({jobs: added, indexList: temp, exists: check, index: 0, isLoading: false});
     }
 
     componentDidUpdate(oldProps){
@@ -86,6 +88,12 @@ class ManagementComponent extends Component {
     }
 
     render(){
+		if(this.state.isLoading)
+			return (
+				<div style={{marginTop:'20px', marginRight: '20px'}}>
+					<LoadingComponent/>
+				</div>
+			)
         const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
         const style = {
             Paper : {

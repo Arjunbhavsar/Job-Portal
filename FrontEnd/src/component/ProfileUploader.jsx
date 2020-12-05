@@ -101,7 +101,11 @@ export default class ProfileUploader extends Component {
 			this.setState({uploaded: true});
 		}
 		if(this.state.isLoading)
-			return (<LoadingComponent/>);
+			return (
+				<div style={{marginTop:'20px', marginRight: '20px'}}>
+					<LoadingComponent/>
+				</div>
+			);
 		if(!this.state.uploadable)
 			return (
 				<div>

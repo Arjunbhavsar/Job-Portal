@@ -145,7 +145,9 @@ class ProfileComponent extends Component {
 			return (
 				<div>
 					<div className="profile-background-container"/>
-					<LoadingComponent/>
+					<div style={{marginTop:'20px', marginRight: '20px'}}>
+						<LoadingComponent/>
+					</div>
 				</div>);
 		if(!isUserLoggedIn || !this.state.exists)
 			return (

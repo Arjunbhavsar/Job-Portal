@@ -200,7 +200,9 @@ class JobListItems extends Component {
         console.log();
         if(this.state.isLoading){
             return(
-                <LoadingComponent/>
+				<div style={{marginTop:'20px', marginRight: '20px'}}>
+					<LoadingComponent/>
+				</div>
             )
         }else{
             if(this.state.jobs.length === 0){
@@ -379,7 +381,9 @@ class SelectedJob extends Component {
         } else {
             if(this.props.loading){
                 return(
-                    <LoadingComponent/>
+					<div style={{marginTop:'20px', marginRight: '20px'}}>
+						<LoadingComponent/>
+					</div>
                 )
             }else{
                 // console.log(this.state.appStatus)

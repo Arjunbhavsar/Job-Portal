@@ -38,7 +38,11 @@ export default class ResumeViewer extends Component {
 	render() {
 		const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
 		if(this.state.isLoading)
-			return (<LoadingComponent/>);
+			return (
+				<div style={{marginTop:'20px', marginRight: '20px'}}>
+					<LoadingComponent/>
+				</div>
+			);
 		if(!isUserLoggedIn)
 			return (
 				<div style={{marginTop : '20px'}}>

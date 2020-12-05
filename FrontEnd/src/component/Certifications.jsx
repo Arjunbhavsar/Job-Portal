@@ -7,12 +7,13 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import CertifyService from '../api/CertifyService';
 import quizes from './certs';
 import { CertItem } from './ViewCertificates';
+import LoadingComponent from './LoadingComponent';
 
 class Certifications extends Component {
     constructor() {
         super();
         this.state = {
-            quizes: []
+			quizes: []
         }
     }
 
@@ -66,6 +67,7 @@ class Certificate extends Component{
     constructor(){
         super();
         this.state = {
+			isLoading: true,
             title: '',
             certId: '',
             qCount: 0,
@@ -102,6 +104,7 @@ class Certificate extends Component{
             us.push(0)
         }
         this.setState({
+			isLoading: false,
             title: this.props.quiz[0].title,
             certId: this.props.quiz[0].certId,
             qCount: this.props.quiz[0].qCount,
@@ -148,6 +151,12 @@ class Certificate extends Component{
     }
 
     render(){
+		if(this.state.isLoading)
+			return (
+				<div style={{marginRight:'20px'}}>
+					<LoadingComponent/>
+				</div>
+			)
         return(
             <>
                 <ListItem button onClick={this.handleClick}>
