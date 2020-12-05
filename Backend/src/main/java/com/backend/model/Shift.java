@@ -50,12 +50,16 @@ public class Shift {
 		return	isValidMonth() && isValidDay() && isValidHour() && isValidMonth();
 	}
 	
+	// js date object is weird, im just gonna store whatever they give me
 	public boolean isValidMonth() {
-		return startMonth >= 1 && startMonth <= 12 && endMonth >= 1 && endMonth <= 12;
+		return true;
+//		return startMonth >= 0 && startMonth <= 11 && endMonth >= 0 && endMonth <= 11;
 	}
 	
+	// js date object is weird, im just gonna store whatever they give me
 	public boolean isValidDay() {
-		return startDay >= 1 && startDay <= 31 && endDay >= 1 && endDay <= 31;
+		return true;
+//		return startDay >= 1 && startDay <= 31 && endDay >= 1 && endDay <= 31;
 	}
 	
 	public boolean isValidHour() {

@@ -18,6 +18,7 @@ import {HourglassEmpty as HourglassEmptyIcon,
 		CheckCircleOutline as CheckCircleOutlineIcon,
 		NotInterested as NotInterestedIcon,
 		AccessTime as AccessTimeIcon,
+		CodeOutlined,
 	} from '@material-ui/icons';
 import { withStyles, makeStyles, fade } from "@material-ui/core/styles";
 import { green, red, orange, blue } from '@material-ui/core/colors';
@@ -177,15 +178,26 @@ class AppointmentFormContainerBasic extends React.PureComponent {
 		console.log(this.state.startDate + " " + this.state.endDate);
 		if(this.state.title !== "") {
 			if(type === 'added') {
+				console.log(this.state.timeStart.getFullYear(),
+							this.state.timeStart.getMonth(),
+							this.state.timeStart.getDate(),
+							this.state.timeStart.getHours(),
+							this.state.timeStart.getMinutes(),
+							" and ",
+							this.state.timeEnd.getFullYear(),
+							this.state.timeEnd.getMonth(),
+							this.state.timeEnd.getDate(),
+							this.state.timeEnd.getHours(),
+							this.state.timeEnd.getMinutes(),)
 				let shift = {
 					"startYear"		:this.state.timeStart.getFullYear(),
 					"startMonth"	:this.state.timeStart.getMonth(),
-					"startDay"		:this.state.timeStart.getDay(),
+					"startDay"		:this.state.timeStart.getDate(),
 					"startHour"		:this.state.timeStart.getHours(),
 					"startMinute"	:this.state.timeStart.getMinutes(),
 					"endYear"		:this.state.timeEnd.getFullYear(),
 					"endMonth"		:this.state.timeEnd.getMonth(),
-					"endDay"		:this.state.timeEnd.getDay(),
+					"endDay"		:this.state.timeEnd.getDate(),
 					"endHour"		:this.state.timeEnd.getHours(),
 					"endMinute"		:this.state.timeEnd.getMinutes(),
 				}
@@ -260,10 +272,10 @@ class AppointmentFormContainerBasic extends React.PureComponent {
 		};
 		if(this.state.isLoading)
 		return (<LoadingComponent/>)
-		if(this.state.timeStart === null)
-			this.setState({timeStart : appointment.timeStart})
-		if(this.state.timeEnd === null)
-			this.setState({timeEnd : appointment.timeEnd})
+		// if(this.state.timeStart === null)
+		// 	this.setState({timeStart : appointment.timeStart})
+		// if(this.state.timeEnd === null)
+		// 	this.setState({timeEnd : appointment.timeEnd})
 		const {
 		classes,
 		visible,
@@ -706,6 +718,9 @@ class ShiftTest extends React.PureComponent {
 				endDate: new Date(s.endYear, s.endMonth, s.endDay, s.endHour, s.endMinute),
 				status: s.status
 			}
+			console.log(s.startYear, s.startMonth, s.startDay, s.startHour, s.startMinute)
+			console.log(s.endYear, s.endMonth, s.endDay, s.endHour, s.endMinute)
+			console.log(JSON.stringify(j))
 			console.log("pushing " + j)
 			tmpData.push(j);
 		}
@@ -830,14 +845,14 @@ class ShiftTest extends React.PureComponent {
 				endDayHour={endDayHour}
 			/>
 			{/* <MonthView /> */}
-			{/* <EditRecurrenceMenu /> */}
+			<EditRecurrenceMenu />
 			<Appointments
 				appointmentComponent={CustomAppointment}
 				appointmentContentComponent={AppointmentContent}
 			/>
 			<AppointmentTooltip
 				contentComponent={TooltipContent}
-				showOpenButton
+				// showOpenButton
 				showCloseButton
 				showDeleteButton
 			/>
