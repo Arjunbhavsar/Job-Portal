@@ -26,6 +26,7 @@ import output from '../api/connections';
 import JobService from '../api/JobService';
 import UserService from '../api/UserService';
 import ApplicationService from '../api/ApplicationService';
+import Badge from '@material-ui/core/Badge';
 
 export default class ProfileJobList extends Component{
 	constructor() {
@@ -45,7 +46,7 @@ export default class ProfileJobList extends Component{
 	}
 
 	componentDidUpdate(oldProps){
-		if(oldProps.username != this.props.username){
+		if(oldProps.username !== this.props.username){
 			this.componentDidMount();
 		}
 	}
@@ -86,7 +87,11 @@ export default class ProfileJobList extends Component{
 		if(jobType != null)
 			jobType = jobType.slice(0,1).toUpperCase() + jobType.slice(1).toLowerCase();
 		if(this.state.isLoading)
-			return(<LoadingComponent/>)
+			return(
+				<div style={{marginRight: '20px'}}>
+					<LoadingComponent/>
+				</div>
+			)
 		return (
 			<Grid container direction="column">
 				<Grid >
@@ -114,15 +119,22 @@ class JobElement extends Component {
 		super();
 		this.state = {
 			open: false,
+			// notify: true,
+			notify: false,
 		}
 		this.handleClick = this.handleClick.bind(this);
 	}
 
 	handleClick() {
-		this.setState({open : !this.state.open});
+		this.setState({	open : !this.state.open,
+						notify : false});
 	}
 
 	render(){
+		let notify = this.state.notify;
+		if(this.props.jobType !== 'applied')
+			notify = false;
+
 		const style = {
 			nested : {"paddingLeft": "5%"},
 		}
@@ -142,14 +154,26 @@ class JobElement extends Component {
 				break;
 			}
 		}
+		let mainIcon = () => (
+			<ListItemIcon title={hoverText}>
+				{jobIcon()}
+			</ListItemIcon>
+		);
+		if(notify) {
+			mainIcon = () => (
+				<ListItemIcon title={hoverText}>
+					<Badge color="secondary" variant="dot">
+							{jobIcon()}
+					</Badge>
+				</ListItemIcon>
+			)
+		}
 		return(
 			<div>
 				{this.props.jobData != null && (
 					<>
 						<ListItem button onClick={this.handleClick}>
-							<ListItemIcon title={hoverText}>
-								{jobIcon()}
-							</ListItemIcon>
+							{mainIcon()}
 							<ListItemText primary={this.props.jobData.jobTitle} />
 							{this.state.open ? <ExpandLess /> : <ExpandMore />}
 						</ListItem>
@@ -188,10 +212,11 @@ class JobElement extends Component {
 								<ListItem button style={style.nested}>
 									{this.props.jobType === 'applied' ?
 										<ProfileJobDelete jobData={this.props.jobData} update={this.props.update} appData={this.props.appData} jobType='applied'/> :
-										(sessionStorage.getItem('authenticatedUserId') === this.props.jobData.author && <ProfileJobDelete jobData={this.props.jobData} update={this.props.update} jobType='created'/>)
+										(sessionStorage.getItem('authenticatedUserId') === this.props.jobData.author &&
+												<ProfileJobDelete jobData={this.props.jobData} update={this.props.update} jobType='created'/>
+										)
 									}
 								</ListItem>
-								
 								<hr/>
 							</List>
 						</Collapse>

@@ -19,6 +19,7 @@ import CertifyService from '../api/CertifyService';
 import UserService from '../api/UserService';
 import AuthenticationService from '../api/AuthenticationService';
 import '../css/RegisterComponent.css'
+import '../css/ProfileComponent.css'
 
 class ProfileComponent extends Component {
 	constructor() {
@@ -67,7 +68,7 @@ class ProfileComponent extends Component {
 
 	async componentDidMount() {
 		const pathUser = window.location.href.split('profile/')[1];
-		let exist = await UserService.userExists(pathUser);
+		let exist = await UserService.usernameExists(pathUser);
 		this.setState({exists : exist});
 		const data = await	UserService
 							.executeGetUserService(pathUser)
@@ -137,14 +138,23 @@ class ProfileComponent extends Component {
 	render() {
 		const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
 		const style = {
-			Paper : {padding:20, marginTop:10, marginBottom:10},
+			Paper : {padding:20, marginTop:20, marginRight:20},
 			image : {'borderRadius':'50%', width:"200px", height:"200px", "objectfit":"cover"}
 		}
 		if(this.state.isLoading)
-			return (<LoadingComponent/>);
+			return (
+				<div>
+					<div className="profile-background-container"/>
+					<div style={{marginTop:'20px', marginRight: '20px'}}>
+						<LoadingComponent/>
+					</div>
+				</div>);
 		if(!isUserLoggedIn || !this.state.exists)
 			return (
-				<ErrorMessage text={!isUserLoggedIn ? "Not Logged In" : "User Not Found"}/>
+				<div style={{marginTop : '20px'}}>
+					<div className="profile-background-container"/>
+					<ErrorMessage text={!isUserLoggedIn ? "Not Logged In" : "User Not Found"}/>
+				</div>
 			)
 		const editingFalse = () => (
 			<List>
@@ -192,20 +202,21 @@ class ProfileComponent extends Component {
 		);
 		return (
 			<div className="container">
+				<div className="profile-background-container"/>
 				<Grid container direction="row">
 					<Grid container justify="center">
 						<Grid item sm={3}>
-							<Grid container direction="row" justify="flex-end">
+							{/* <Grid container direction="row" justify="flex-end">
 								<Paper style={style.Paper}>
 									<ListItem>
 										<ListItemText primary="Certifications" />
 									</ListItem>
 									{this.state.certsExist ? 
 										<ViewCertificates userId={this.state.userObj.id}/>:
-										<ErrorMessage severity='info' text='No certifications completed' justify='flex-start'/>
+										<Alert variant="outlined" severity='info' style={{'width':'fit-content'}}>no certifications completed</Alert>
 									}
 								</Paper>
-							</Grid>
+							</Grid> */}
 						</Grid>
 						<Grid item sm={6}>
 							<Paper style={style.Paper}>
@@ -251,7 +262,7 @@ class ProfileComponent extends Component {
 										</Grid>
 									</>
 								</Grid>
-								<span style={{'display' : 'inline', 'position':'absolute', 'right':'26%', 'top' : '5%'}}>
+								<span style={{'display' : 'inline', 'position':'absolute', 'right':'27%', 'top' : '5%'}}>
 									{this.state.editable && (!this.state.edit_mode ? <EditIcon style={{cursor: "pointer"}} onClick={this.editing}/> : <SaveIcon style={{cursor: "pointer"}} onClick={this.editing}/>)}
 								</span>
 							</Paper>
@@ -260,6 +271,19 @@ class ProfileComponent extends Component {
 							<Grid container direction="row">
 								<Paper style={style.Paper}>
 									<ResumeUploader key={this.state.userObj.username} username={this.state.userObj.username}/>
+								</Paper>
+							</Grid>
+							<Grid container direction="row" justify="flex-start">
+								<Paper style={style.Paper}>
+									<ListItem>
+										<ListItemText primary="Certifications" />
+									</ListItem>
+									{this.state.certsExist ?
+										// I added key to have it so that the component will update on userObj update
+										// I added showFailed bc no one wants other people to see that they failed something (so shows passed and perfect score)
+										<ViewCertificates key={this.state.userObj.username} showFailed={this.state.editable ? 'true' : 'false'} userId={this.state.userObj.id}/>:
+										<Alert variant="outlined" severity='info' style={{'width':'fit-content'}}>no certifications completed</Alert>
+									}
 								</Paper>
 							</Grid>
 						</Grid>

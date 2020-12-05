@@ -50,12 +50,18 @@ class RegisterComponenet extends Component {
 			firstName: '',
 			username:'',
 			lastName:'',
-			address: "",
+			address: '',
 			emailId: '',
 			password: '',
 			retype_password: '',
 			status: '',
-			errorMessage : ''
+			errorMessage : '',
+			usernameError: false,
+			firstNameError: false,
+			lastNameError: false,
+			addressError: false,
+			emailError: false,
+			passwordError: false,
 		};
 		
 		this.update = this.update.bind(this);
@@ -68,25 +74,48 @@ class RegisterComponenet extends Component {
 		let name = e.target.name;
 		let value = e.target.value;
 		this.setState({
-			[name]: value
+			[name]: value,
+			[name + 'Error']: false
 		});
+		if(name === 'retype_password' && this.state.passwordError){
+			console.log(name + ' | ' + this.state.passwordError)
+			this.setState({
+				passwordError: false
+			})
+		}
 	}
 
-	registerClicked(){
-		
-		const user = {
-			username:this.state.username,
-			firstName: this.state.firstName,
-			lastName: this.state.lastName,
-			address: this.state.address,
-			emailId: this.state.emailId,
-			password: this.state.password
-		};
-		console.log(`before-${user}`);
-		console.log(user);
-		UserService.executePostUserRegisterService(user)
-		.then(response=>this.handleSuccessResponse(response))
-		.catch(error => this.handleError(error))
+	async registerClicked(){
+		let uError = await UserService.usernameExists(this.state.username).then(res => res.data === 'registered')
+		let fError = this.state.firstName === ''
+		let lError = this.state.lastName === ''
+		let aError = this.state.address === ''
+		let eError = await UserService.emailExists(this.state.emailId).then(res => res.data === 'registered')
+		let pError = this.state.password === '' || this.state.password !== this.state.retype_password
+		this.setState({
+			usernameError: uError,
+			firstNameError: fError,
+			lastNameError: lError,
+			addressError: aError,
+			emailError: eError,
+			passwordError: pError
+		})
+
+		if(!uError && !fError && !lError && !aError && !eError && !pError){
+			const user = {
+				username: this.state.username,
+				firstName: this.state.firstName,
+				lastName: this.state.lastName,
+				address: this.state.address,
+				emailId: this.state.emailId,
+				password: this.state.password
+			};
+			console.log(`before-${user}`);
+			console.log(user);
+			UserService.executePostUserRegisterService(user)
+			.then(response=>this.handleSuccessResponse(response))
+			.catch(error => this.handleError(error))
+		}
 	}
 	handleSuccessResponse(response){
 		console.log(response)
@@ -131,6 +160,8 @@ class RegisterComponenet extends Component {
 				{this.state.registerFailure && <Alert severity="error">User Not Registered. Try using diffrent Username!!</Alert>}
 				{this.state.registerSuccess && <Alert severity="success">User Successfully Registered !!</Alert>}
 					<TextField
+						error={ this.state.usernameError}
+						helperText={this.state.usernameError? (this.state.username === '' ? "Please enter a username" :"Username already registered") : ""}
 						variant="outlined"
 						margin="normal"
 						required
@@ -148,6 +179,8 @@ class RegisterComponenet extends Component {
 						}}
 					/>
 					<TextField
+						error={ this.state.firstNameError}
+						helperText={this.state.firstNameError? "Please enter your first name" : ""}
 						variant="outlined"
 						margin="normal"
 						required
@@ -165,6 +198,8 @@ class RegisterComponenet extends Component {
 						}}
 					/>
 					<TextField
+						error={ this.state.lastNameError}
+						helperText={this.state.lastNameError? "Please enter your last name" : ""}
 						variant="outlined"
 						margin="normal"
 						required
@@ -182,6 +217,8 @@ class RegisterComponenet extends Component {
 						}}
 					/>
 					<TextField
+						error={ this.state.addressError}
+						helperText={this.state.addressError? "Please enter your address" : ""}
 						variant="outlined"
 						margin="normal"
 						required
@@ -199,6 +236,8 @@ class RegisterComponenet extends Component {
 						}}
 					/>
 					<TextField
+						error={ this.state.emailError}
+						helperText={this.state.emailError? (this.state.emailId === '' ? "Please enter an email address" :"Email address already registered") : ""}
 						variant="outlined"
 						margin="normal"
 						required
@@ -216,6 +255,8 @@ class RegisterComponenet extends Component {
 						}}
 					/>
 					<TextField
+						error={ this.state.passwordError}
+						helperText={this.state.passwordError? (this.state.password === ''? "Please enter a password": "Passwords do not match") : ""}
 						variant="outlined"
 						margin="normal"
 						required
@@ -233,6 +274,8 @@ class RegisterComponenet extends Component {
 						}}
 					/>
 					<TextField
+						error={ this.state.passwordError}
+						helperText={this.state.passwordError? (this.state.retype_password === ''? "Please retype your password" : "Passwords do not match") : ""}
 						variant="outlined"
 						margin="normal"
 						required

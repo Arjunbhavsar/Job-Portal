@@ -28,7 +28,14 @@ export default class ProfileJobDelete extends Component {
 			deleteConfirmation: '',
 		};
 		this.handleChange = this.handleChange.bind(this);
+		this.handleClose = this.handleClose.bind(this);
 		this.deleteJob = this.deleteJob.bind(this);
+	}
+
+	handleClose() {
+		this.setState({
+			open : false
+		})
 	}
 
 	handleChange(event) {
