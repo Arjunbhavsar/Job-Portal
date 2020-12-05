@@ -1,7 +1,9 @@
 
-# Quick-Pick-Sprint 5-Byun (v3) (tested locally and it's really jank)
+# Quick-Pick-Sprint 5-Byun (v3) (Tested on Heroku | It works!)
 
 ***I didn't sleep, I'm gonna go sleep now..***
+## TODO
+- Add shift approve/deny on management page
 ## New Features
 - Reworked the shift model many times and hopefully this one is finalized
 - Added new shift page with interactive UI.
