@@ -1,5 +1,6 @@
 
-# Quick-Pick-Sprint 5-Byun (v3) (Tested on Heroku | It works!)
+# (Tested on Heroku | It works!)
+# Quick-Pick-Sprint 5-Byun (v3)
 
 ***I didn't sleep, I'm gonna go sleep now..***
 ## TODO
