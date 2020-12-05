@@ -3,14 +3,11 @@ import Paper from '@material-ui/core/Paper';
 import { ViewState, EditingState } from '@devexpress/dx-react-scheduler';
 import {Scheduler,
 		Toolbar,
-		MonthView,
 		WeekView,
 		DateNavigator,
-		ViewSwitcher,
 		Appointments,
 		AppointmentTooltip,
 		AppointmentForm,
-		// DragDropProvider,
 		EditRecurrenceMenu,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import {ListItem, List, Grid, MenuItem, ListItemText, ListItemIcon, FormControl, InputLabel, Select} from '@material-ui/core';
@@ -18,9 +15,8 @@ import {HourglassEmpty as HourglassEmptyIcon,
 		CheckCircleOutline as CheckCircleOutlineIcon,
 		NotInterested as NotInterestedIcon,
 		AccessTime as AccessTimeIcon,
-		CodeOutlined,
 	} from '@material-ui/icons';
-import { withStyles, makeStyles, fade } from "@material-ui/core/styles";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 import { green, red, orange, blue } from '@material-ui/core/colors';
 import { connectProps } from '@devexpress/dx-react-core';
 import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -35,19 +31,18 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import Notes from '@material-ui/icons/Notes';
 import Close from '@material-ui/icons/Close';
 import CalendarToday from '@material-ui/icons/CalendarToday';
 import Create from '@material-ui/icons/Create';
 
-import LoadingComponent from '../LoadingComponent';
-import UserService from '../../api/UserService';
-import ShiftService from '../../api/ShiftService';
-import ApplicationService from '../../api/ApplicationService';
-import { appointments } from './ShiftData';
-import JobService from '../../api/JobService';
+import LoadingComponent from './LoadingComponent';
+import UserService from '../api/UserService';
+import ShiftService from '../api/ShiftService';
+import ApplicationService from '../api/ApplicationService';
+import JobService from '../api/JobService';
+
+export const appointments = [];
 
 const containerStyles = theme => ({
 	container: {
@@ -224,25 +219,6 @@ class AppointmentFormContainerBasic extends React.PureComponent {
 				}
 			}
 		}
-		// else if(type === 'deleted') {}
-		// else if(type === 'changed') {}
-		// console.log("commit " + type)
-		// const { commitChanges } = this.props;
-		// const appointment = {
-		// ...this.getAppointmentData(),
-		// ...this.getAppointmentChanges(),
-		// };
-		// console.log("id " +appointment.id);
-		// if (type === 'deleted') {
-		// commitChanges({ [type]: appointment.id });
-		// } else if (type === 'changed') {
-		// commitChanges({ [type]: { [appointment.id]: appointment } });
-		// } else {
-		// commitChanges({ [type]: appointment });
-		// }
-		// this.setState({
-		// appointmentChanges: {},
-		// });
 	}
 
 	handleChange(event) {
@@ -272,10 +248,6 @@ class AppointmentFormContainerBasic extends React.PureComponent {
 		};
 		if(this.state.isLoading)
 		return (<LoadingComponent/>)
-		// if(this.state.timeStart === null)
-		// 	this.setState({timeStart : appointment.timeStart})
-		// if(this.state.timeEnd === null)
-		// 	this.setState({timeEnd : appointment.timeEnd})
 		const {
 		classes,
 		visible,
@@ -621,7 +593,7 @@ const AppointmentContent = ({ style, ...restProps }) => {
 	);
 };
 
-class ShiftTest extends React.PureComponent {
+class ShiftSelect extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -637,8 +609,8 @@ class ShiftTest extends React.PureComponent {
 			editingAppointment: undefined,
 			previousAppointment: undefined,
 			addedAppointment: {},
-			startDayHour: 8,
-			endDayHour: 22,
+			startDayHour: 0,
+			endDayHour: 24,
 			// isNewAppointment: false,
 			isNewAppointment: true,
 		};
@@ -823,9 +795,9 @@ class ShiftTest extends React.PureComponent {
 		// for (let i = 0; i < data.length; i++) {
 		// 	console.log(data[i])
 		// }
-
+		document.getElementById('root')
 		return (
-		<Paper>
+		<Paper id='schedule'>
 			<Scheduler
 			data={data}
 			height="100%"
@@ -932,4 +904,4 @@ class ShiftTest extends React.PureComponent {
 		);
 	}
 }
-export default withStyles(styles, { name: 'ShiftTest' })(ShiftTest);
+export default withStyles(styles, { name: 'ShiftSelect' })(ShiftSelect);

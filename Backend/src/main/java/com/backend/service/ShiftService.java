@@ -25,8 +25,6 @@ public class ShiftService {
 
 	@Transactional
 	public String postShift(String applicationId, Shift shift) {
-		System.out.println("\n\n" + shift + " " + shift.isValid() + "\n");
-		System.out.println("\n\n" + applicationId + " " +applicationDao.existsById(applicationId) + "\n");
 		if(shift != null && applicationDao.existsById(applicationId)) {
 			Application currentApplication = applicationDao.findById(applicationId).orElse(null);
 			if(currentApplication != null && shift.isValid()) {

@@ -6,6 +6,7 @@ import LoadingComponent from './LoadingComponent';
 
 import output from '../api/connections';
 import UserService from '../api/UserService';
+import AuthenticationService from '../api/AuthenticationService';
 
 export default class ResumeViewer extends Component {
 	constructor() {
@@ -35,27 +36,38 @@ export default class ResumeViewer extends Component {
 	}
 
 	render() {
-		if(this.state.userObj !== null)
-		console.log(this.state.userObj.resumeFileId)
-		// console.log(Object.values(this.state.userObj))
+		const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
 		if(this.state.isLoading)
 			return (<LoadingComponent/>);
+		if(!isUserLoggedIn)
+			return (
+				<div style={{marginTop : '20px'}}>
+					<div className="profile-background-container"/>
+					<ErrorMessage text="Not Logged In"/>
+				</div>
+			)
 		if(this.state.userObj === undefined || this.state.userObj.resumeFileId === null || this.state.userObj.length <= 0)
 			return (
-				<ErrorMessage text="Resume Not Found" severity='error'/>
+				<div style={{marginTop : '20px'}}>
+					<div className="profile-background-container"/>
+					<ErrorMessage text="Resume Not Found" severity='error'/>
+				</div>
 			)
 		return (
-			<PDFViewer
-				// navbarOnTop='true'
-				// hideRotation='true'
-				canvasCss='div'
-				hideNavbar='true'
-				showThumbnail={{
-					scale: 1,
-					rotationAngle: 0,
-				}}
-				document={{url: (this.state.urlTag + this.state.userObj.resumeFileId)}}
-			/>
+			<div>
+				<div className="profile-background-container"/>
+				<PDFViewer
+					// navbarOnTop='true'
+					// hideRotation='true'
+					canvasCss='div'
+					hideNavbar='true'
+					showThumbnail={{
+						scale: 1,
+						rotationAngle: 0,
+					}}
+					document={{url: (this.state.urlTag + this.state.userObj.resumeFileId)}}
+				/>
+			</div>
 		)
 	}
 }

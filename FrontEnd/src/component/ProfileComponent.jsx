@@ -149,7 +149,7 @@ class ProfileComponent extends Component {
 				</div>);
 		if(!isUserLoggedIn || !this.state.exists)
 			return (
-				<div>
+				<div style={{marginTop : '20px'}}>
 					<div className="profile-background-container"/>
 					<ErrorMessage text={!isUserLoggedIn ? "Not Logged In" : "User Not Found"}/>
 				</div>

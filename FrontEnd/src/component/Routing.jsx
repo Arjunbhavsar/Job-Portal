@@ -13,8 +13,7 @@ import ForgotPasswordComponent from './ForgotPassword';
 import ResetPasswordComponent from './ResetPassword';
 import ResumeViewer from './ResumeViewer';
 import Certifications from './Certifications';
-import ShiftSelect from './shift/ShiftSelect';
-import ShiftTest from './shift/ShiftTest';
+import ShiftSelect from './ShiftSelect';
 
 class AppRouting extends Component {
     render() {
@@ -32,7 +31,7 @@ class AppRouting extends Component {
                             <Route path="/certify"              component = {Certifications}/>
                             <Route path="/postjob"              component = {CreateJob}/>
                             <Route path="/manage"               component = {ManagementComponent}/>
-                            <Route path="/shift"                component = {ShiftTest}/>
+                            <Route path="/shift"                component = {ShiftSelect}/>
                             <Route path="/profile/:name"        component = {ProfileComponent}/>
                             <Route path="/resume/:name"         component = {ResumeViewer}/>
                             <Route path="/ForgotPassword"       component = {ForgotPasswordComponent}/>
