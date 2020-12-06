@@ -11,6 +11,7 @@ import LandingComponent from './LandingComponent';
 import ManagementComponent from './ManagementComponent';
 import ForgotPasswordComponent from './ForgotPassword';
 import ResetPasswordComponent from './ResetPassword';
+import ChatHome from './ChatHome'
 
 class AppRouting extends Component {
     render() {
@@ -30,6 +31,7 @@ class AppRouting extends Component {
                             <Route path="/profile/:name"        component = {ProfileComponent}/>
                             <Route path="/ForgotPassword"       component = {ForgotPasswordComponent}/>
                             <Route path="/resetpassword/:token" component = {ResetPasswordComponent}/>
+                            <Route path="/chatHome"             component = {ChatHome}/>
                             {/* <AuthenticatedRoute path="/dashboard" component= {Dashboard}/> */}
                             <Route component = {ErrorComponent}/>
                         </Switch>
