@@ -86,7 +86,7 @@ class RegisterComponenet extends Component {
 	}
 
 	async registerClicked(){
-		let uError = await UserService.usernameExists(this.state.username).then(res => res.data === 'registered')
+		let uError = (await UserService.usernameExists(this.state.username).then(res => res.data === 'registered')) || this.state.username.includes(' ')
 		let fError = this.state.firstName === ''
 		let lError = this.state.lastName === ''
 		let aError = this.state.address === ''
@@ -142,6 +142,9 @@ class RegisterComponenet extends Component {
 		this.setState({errorMessage:errorM})
 	}
 
+	// handleCharCheck(){
+	// 	// const ignore
+	// }
 
 	render(){
 		const { classes } = this.props;
@@ -161,7 +164,10 @@ class RegisterComponenet extends Component {
 				{this.state.registerSuccess && <Alert severity="success">User Successfully Registered !!</Alert>}
 					<TextField
 						error={ this.state.usernameError}
-						helperText={this.state.usernameError? (this.state.username === '' ? "Please enter a username" :"Username already registered") : ""}
+						helperText={this.state.usernameError?
+										(this.state.username === '' ? 
+											"Please enter a username" : 
+											(this.state.username.includes(' ')? "Invalid character" : "Username already registered")) : ""}
 						variant="outlined"
 						margin="normal"
 						required

@@ -115,7 +115,16 @@ class ManagementComponent extends Component {
                 position: "relative"
             }
         };
-
+        if(!isUserLoggedIn) {
+			return (
+				<div>
+					<div className="background-container"/>
+					<div style={{marginTop : '20px'}}>
+						<ErrorMessage text="Not Logged In"/>
+					</div>
+				</div>
+			)
+		}
         if(isUserLoggedIn && this.state.exists){
             return(
                 <div className="container">
@@ -495,29 +504,23 @@ class AppList extends Component {
         const style = {
             paper  : {padding:20, margin:20, flexGrow: 1},
         };
-        if(this.props.job === null){
-            return(
-                <p>ugh</p>
-            )
-        }else {
-            return(
-				<>
-				{this.state.applicants.length > 0 ?
-					<Paper style={style.paper}>
-						<List>
-							{this.state.applicants.map( function(app, index) {
-								return (
-									<Application application={app} key={index}/>
-								);
-							}, this)}
-						</List>
-                    </Paper>:
-                    <Paper style={style.paper}>
-                        <ErrorMessage severity='info' text='No applicants yet' sm={6}/>
-                    </Paper>
-				}</>
-            )
-        }
+        return(
+            <>
+            {this.state.applicants.length > 0 ?
+                <Paper style={style.paper}>
+                    <List>
+                        {this.state.applicants.map( function(app, index) {
+                            return (
+                                <Application application={app} key={index}/>
+                            );
+                        }, this)}
+                    </List>
+                </Paper>:
+                <Paper style={style.paper}>
+                    <ErrorMessage severity='info' text='No applicants yet' sm={6}/>
+                </Paper>
+            }</>
+        )
     }
 }
 
@@ -616,7 +619,7 @@ class Application extends Component {
                     </ListItem>
                     }
                     <ListItem>
-                        <ListItemIcon title="cert"><VerifiedUserIcon /></ListItemIcon>
+                        <ListItemIcon title="certification"><VerifiedUserIcon /></ListItemIcon>
                         {this.state.certsExist ?
                             <ViewCertificates userId={this.state.application.userId} row/>:
                             <ErrorMessage severity='info' text='No certifications completed' justify='flex-start'/>
