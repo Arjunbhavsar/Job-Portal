@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Paper, Grid, List, ListItem, ListItemText, Divider, ButtonGroup, Button, ListItemIcon, Collapse, TextField } from '@material-ui/core/';
-import { LocationOn as LocationOnIcon, 
+import { LocationOn as LocationOnIcon,
          Business as BusinessIcon,
          Link as LinkIcon,
          NotInterested as NotInterestedIcon,
@@ -9,7 +9,10 @@ import { LocationOn as LocationOnIcon,
          Note as NoteIcon,
          Edit as EditIcon,
          Save as SaveIcon,
-         VerifiedUser as VerifiedUserIcon} from '@material-ui/icons';
+         VerifiedUser as VerifiedUserIcon,
+         FormatQuote as FormatQuoteIcon,
+         AttachMoney as AttachMoneyIcon,
+         Description as DescriptionIcon} from '@material-ui/icons';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { green, red } from '@material-ui/core/colors';
 import { Link } from 'react-router-dom';
@@ -130,10 +133,12 @@ class ManagementComponent extends Component {
                 <div className="container">
                     <div className="background-container"/>
                     <Grid container direction="row" spacing={3} style={style.container} justify="center">
-                        <Grid item xs={2} className="content-sections">
-                            <JobList update={this.updateSelectedJob} jobs={this.state.jobs}/>
+                        <Grid item container xs={3} className="content-sections" justify='flex-end'>
+                            <Grid item xs={12} sm={10}>
+                                <JobList update={this.updateSelectedJob} jobs={this.state.jobs}/>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={7} className="content-sections">
+                        <Grid item xs={6} className="content-sections">
                             <Grid container item xs={12} alignItems="center" justify="center">
                                 <ButtonGroup aria-label="manage secion">
                                     <Button onClick={() => { this.changeManage("jobs") }} style={this.state.manageState === 0 ? style.active : style.inert}>Manage Job</Button>
@@ -247,12 +252,12 @@ class JobItem extends Component{
             <>
                 <List component="div">
                     <ListItem>
-                        <ListItemIcon title="jobTitle"><BusinessIcon /></ListItemIcon>
+                        <ListItemIcon title="jobTitle"><FormatQuoteIcon /></ListItemIcon>
                         <ListItemText primary={this.props.jobData.jobTitle} />
                     </ListItem>
                     <ListItem>
                         <ListItemIcon title="country"><LocationOnIcon /></ListItemIcon>
-                        <ListItemText primary={this.props.jobData.location + " | " + this.props.jobData.country} />
+                        <ListItemText primary={this.props.jobData.location} />
                     </ListItem>
                 </List>
             </>
@@ -363,7 +368,18 @@ class SelectedManage extends Component {
     render(){
         const style = {
             paper : {padding:40, margin:20, textAlign: "left", flexGrow: 1},
-            paper2 : {padding:40, margin:20, textAlign: "center", flexGrow: 1}
+            paper2 : {padding:40, margin:20, textAlign: "center", flexGrow: 1},
+            listItem: {
+                padding: 0
+            },
+            salaryItem: {
+                padding: 0,
+                marginTop: 10
+            },
+            titleItem: {
+                padding: 0,
+                marginBottom: 20
+            }
         };
         if(this.state.job === null){
             return(
@@ -447,13 +463,47 @@ class SelectedManage extends Component {
 								<ProfileJobDelete jobData={this.props.job} jobType='created' update={this.componentDidMount}/>
 							</Grid>
                         </Grid>:
-                        <Grid item>
-                            <h2>{this.state.jobTitle}</h2>
+                        // <Grid item>
+                        <Grid item xs={12}>
+                                <List style={style.listItem}>
+                                    <ListItem style={style.titleItem}>
+                                        <ListItemIcon title="jobTitle"><FormatQuoteIcon /></ListItemIcon>
+                                        <h2 style={{margin: 0}}>{this.props.job.jobTitle}</h2>
+                                    </ListItem>
+                                    <ListItem style={style.listItem}>
+                                        <ListItemIcon title="jobTitle"><BusinessIcon /></ListItemIcon>
+                                        {this.props.job.pageUrl !== "" ?
+                                            <a href={this.props.job.pageUrl} target="_blank"><p style={{margin: 0}}>{this.props.job.organization}</p></a> :
+                                            <p>{this.props.job.organization}</p>
+                                        }
+                                    </ListItem>
+                                    <ListItem divider style={style.listItem}>
+                                        <ListItemIcon title="jobTitle"><LocationOnIcon /></ListItemIcon>
+                                        {this.props.job.country !== "" ?
+                                            <p>{this.props.job.location + " | " + this.props.job.country}</p> :
+                                            <p>{this.props.job.location}</p>
+                                        }
+                                        
+                                    </ListItem>
+                                    <ListItem style={style.salaryItem}>
+                                        <ListItemIcon title="jobTitle"><AttachMoneyIcon /></ListItemIcon>
+                                        {this.props.job.jobSalary !== "" ?
+                                            <p>{this.props.job.jobSalary}</p>:
+                                            <p>Unspecified</p>
+                                        }
+                                    </ListItem>
+                                    <ListItem style={style.listItem}>
+                                        <ListItemIcon title="jobTitle" style={{alignSelf: 'flex-start', marginTop: 20}}><DescriptionIcon /></ListItemIcon>
+                                        <div className="description" dangerouslySetInnerHTML={{ __html: this.props.job.jobDescription }} />
+                                    </ListItem>
+                                </List>
+                            {/* <h2>{this.state.jobTitle}</h2>
                             <p>{this.state.organization}</p>
                             <p>{this.state.location + " | " + this.state.country}</p>
                             <div className="description" dangerouslySetInnerHTML={{__html: this.state.jobDescription}} />
                             <p>{this.state.jobSalary}</p>
-                            <p>{this.state.pageUrl}</p>
+                            <p>{this.state.pageUrl}</p> */}
+                            
                         </Grid>
                         }
                     </Grid>
