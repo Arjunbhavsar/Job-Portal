@@ -91,7 +91,7 @@ class getUsersListService{
 		// let currentUsername = sessionStorage.getItem('authenticatedUser');
 		if(user.username.length <= 0)
 			user.username = sessionStorage.getItem('authenticatedUser');
-		let exist = await this.usernameExists(user.username);
+		let exist = await this.usernameExists(user.username).then(res => res.data === 'registered');
 		if(!exist)
 			AuthenticationService.updateUsername(user.username);
 		let basicAuthHeader = 'Basic '+window.btoa(username+':'+password);
