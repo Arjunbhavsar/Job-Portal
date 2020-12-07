@@ -82,7 +82,7 @@ const quiz2 = [
     },
     {
         question: 'You need to reference a value stored in an array named B in row 7 column 3. Which syntax is correct within Java for finding the value of this variable?',
-        options: ['B[3,7]','B[3][7]','B[7][3]','B[7,3]'],
+        options: ['B[3,7]','B[3][7]','B[7,3]','B[7][3]'],
         answer: 2
     },
     {
@@ -192,6 +192,34 @@ const quiz3 = [
         answer: 0
     }
 ]
+const quiz4 = [
+    { certId: 'Test', title: 'Example Certification', qCount: 5 },
+    {
+        question: 'Question 1',
+        options: ['Correct', 'Incorrect', 'Incorrect', 'Incorrect'],
+        answer: 0
+    },
+    {
+        question: 'Question 2',
+        options: ['Correct', 'Incorrect', 'Incorrect', 'Incorrect'],
+        answer: 0
+    },
+    {
+        question: 'Question 3',
+        options: ['Correct', 'Incorrect', 'Incorrect', 'Incorrect'],
+        answer: 0
+    },
+    {
+        question: 'Question 4',
+        options: ['Correct', 'Incorrect', 'Incorrect', 'Incorrect'],
+        answer: 0
+    },
+    {
+        question: 'Question 5',
+        options: ['Correct', 'Incorrect', 'Incorrect', 'Incorrect'],
+        answer: 0
+    }
+]
 
-const quizes = [quiz1, quiz2, quiz3]
+const quizes = [quiz1, quiz2, quiz3, quiz4]
 export default quizes;
