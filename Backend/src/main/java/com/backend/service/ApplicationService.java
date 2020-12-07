@@ -11,6 +11,7 @@ import com.backend.dao.ApplicationDao;
 import com.backend.dao.ShiftDao;
 import com.backend.dao.UserDao;
 import com.backend.model.Application;
+import com.backend.model.Shift;
 import com.backend.model.User;
 
 @Service
@@ -24,6 +25,9 @@ public class ApplicationService {
 	
 	@Autowired
 	private ShiftDao shiftDao;
+	
+	@Autowired
+	private ShiftService shiftService;
 	
 	@Transactional
 	public Application addApplication(Application app) {
@@ -72,6 +76,9 @@ public class ApplicationService {
 		for(Application app : appList) {
 			if(app.getUserId().equals(userId)) {
 				app.setStatus("Denied");
+				List<Shift> shifts = shiftDao.findByApplicationId(app.getId());
+				for(Shift shift : shifts)
+					shiftService.denyShift(shift.getId());
 				return appDao.save(app);
 			}
 		}
@@ -115,7 +122,8 @@ public class ApplicationService {
 			return "could not delete application " + id;
 		}
 	}
-
+	
+	@Transactional
 	public Application getApplication(String id) {
 		return appDao.findById(id).orElse(null);
 	}

@@ -23,26 +23,26 @@ class ApplicationService{
         let username = 'user'
 		let password = 'password'
         let basicAuthHeader = 'Basic '+ window.btoa(username+':'+password)
-		return axios.get(appsTag+'getApplication/'+ id, {
-				headers:{
-					authorization: basicAuthHeader
-				}
-			}
-        )
+        return axios.get(appsTag+'getApplication/'+ id,
+        {
+            headers:{
+                authorization: basicAuthHeader
+            }
+		})
 	}
-	
+
     getAllApplied(){
 		const {appsTag} = this.state;
         let username = 'user'
 		let password = 'password'
 		let currentUserId = sessionStorage.getItem('authenticatedUserId');
         let basicAuthHeader = 'Basic '+ window.btoa(username+':'+password)
-		return axios.get(appsTag+'userApplications/'+ currentUserId, {
-				headers:{
-					authorization: basicAuthHeader
-				}
-			}
-        )
+        return axios.get(appsTag+'userApplications/'+ currentUserId,
+        {
+            headers:{
+                authorization: basicAuthHeader
+            }
+		})
     }
     
     getAllApplicants(jobId){
@@ -50,12 +50,12 @@ class ApplicationService{
         let username = 'user'
 		let password = 'password'
         let basicAuthHeader = 'Basic '+ window.btoa(username+':'+password)
-		return axios.get(appsTag+'jobApplicants/'+ jobId, {
-				headers:{
-					authorization: basicAuthHeader
-				}
-			}
-        )
+        return axios.get(appsTag+'jobApplicants/'+ jobId,
+        {
+            headers:{
+                authorization: basicAuthHeader
+            }
+		})
 	}
     
     checkApplied(application){

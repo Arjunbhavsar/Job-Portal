@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +29,7 @@ public class ShiftController {
 		return shiftService.getShifts();
 	}
 	
-	@GetMapping("/getShiftById/{applicationId}")
+	@GetMapping("/getShiftById/{id}")
 	public Shift getShiftById(@PathVariable String id){
 		return shiftService.getShiftById(id);
 	}
@@ -48,12 +49,17 @@ public class ShiftController {
 		return shiftService.getShiftUser(userId);
 	}
 
-	@PostMapping("/approveShift/{id}")
+	@GetMapping("/approveShift/{id}")
 	public String approveShift(@PathVariable String id){
 		return shiftService.approveShift(id);
 	}
 	
-	@PostMapping("/denyShift/{id}")
+	@GetMapping("/pendingShift/{id}")
+	public String pendingShift(@PathVariable String id){
+		return shiftService.pendingShift(id);
+	}
+	
+	@GetMapping("/denyShift/{id}")
 	public String denyShift(@PathVariable String id){
 		return shiftService.denyShift(id);
 	}

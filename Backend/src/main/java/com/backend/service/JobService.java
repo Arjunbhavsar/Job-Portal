@@ -16,7 +16,7 @@ public class JobService implements JobServiceInterface {
 	private JobDao jobDao;
 	
 	@Autowired
-    private ApplicationService appService;
+	private ApplicationService appService;
 
 	@Override
 	public Job addNewJob(Job jobDetails) {

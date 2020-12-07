@@ -8,6 +8,7 @@ import { Paper, Grid, Container, Button} from '@material-ui/core/';
 import StartCreate from './StartCreate';
 import { withStyles } from "@material-ui/core/styles";
 import Alert from '@material-ui/lab/Alert';
+import ErrorMessage from './ErrorMessage';
 
 const styles = theme => ({
     paper: {
@@ -116,21 +117,13 @@ class CreateJob extends Component {
             }
         }
 		const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
-		if(!isUserLoggedIn) {
-			return( 
-                <Grid container justify="center">
-                    <Grid item sm={6}>
-                        <Paper style={style.Paper}>
-                            <Grid container>
-                                <Grid item sm>
-                                    <Alert severity="warning" variant="filled">Not Logged In</Alert>
-                                </Grid>
-                            </Grid>
-                        </Paper>
-                    </Grid>
-                </Grid>
-            )
-		}
+		if(!isUserLoggedIn)
+			return (
+				<div style={{marginTop : '20px'}}>
+					<div className="background-container"/>
+					<ErrorMessage text="Not Logged In"/>
+				</div>
+			)
         if(this.state.isSubmitted){
             return(
                 <div className='jobContainer'>
