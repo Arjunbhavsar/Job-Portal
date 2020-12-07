@@ -31,6 +31,20 @@ class ApplicationService{
 		})
 	}
 
+    getAllAppliedById(userId){
+		const {appsTag} = this.state;
+        let username = 'user'
+		let password = 'password'
+		let currentUserId = userId;
+        let basicAuthHeader = 'Basic '+ window.btoa(username+':'+password)
+        return axios.get(appsTag+'userApplications/'+ currentUserId,
+        {
+            headers:{
+                authorization: basicAuthHeader
+            }
+		})
+	}
+
     getAllApplied(){
 		const {appsTag} = this.state;
         let username = 'user'
