@@ -8,7 +8,9 @@ import {AccountCircle as ProfileIcon,
 		Message as MessageIcon,
 		VerifiedUser as VerifiedIcon,
 		Today as ShiftIcon,
-		ExitToApp as LogoutIcon,
+		MeetingRoom as LogoutIcon,
+		ExitToApp as LoginIcon,
+		PostAdd as RegisterIcon,
 } from '@material-ui/icons';
 import { withRouter } from "react-router";
 
@@ -65,6 +67,12 @@ class Navgiation extends Component {
     }
 
     render(){
+		const pathUser = window.location.href.split('/');
+		console.log(pathUser);
+		let selector = pathUser.length >= 4 ? pathUser[3] : undefined;
+		const styleManage = selector === 'manage' ? {borderBottom: '1px white solid'} : {};
+		const stylePost = selector === 'postjob' ? {borderBottom: '1px white solid'} : {};
+		const styleDash = selector === 'dash' ? {borderBottom: '1px white solid'} : {};
         return(
             <div className="navBar">
             <div className="nav-search-logo">
@@ -73,9 +81,9 @@ class Navgiation extends Component {
             </div>
             <div className="leftNav">
                 <nav className="navControls">
-                    { this.state.isUserLoggedIn && this.state.checkByAuthor && <Link className="navButton" to="/manage">Manage Posts</Link>}
-                    { this.state.isUserLoggedIn && <Link className="navButton" to="/postjob">Post Job</Link>}
-                    <Link className="navButton" to="/dash" >Dashboard</Link>
+                    { this.state.isUserLoggedIn && this.state.checkByAuthor && <Link style={styleManage} className="navButton" to="/manage">Manage Posts</Link>}
+                    { this.state.isUserLoggedIn && <Link style={stylePost} className="navButton" to="/postjob">Post Job</Link>}
+                    <Link style={styleDash} className="navButton" to="/dash" >Dashboard</Link>
                     <Nav/>
                 </nav>
             </div>
@@ -115,8 +123,8 @@ function Nav() {
 
         onClose={handleMenuClose}
         >
-            <Link to="/login" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Login</MenuItem></Link>
-            <Link to="/register" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Register</MenuItem></Link>
+            <Link to="/login" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><LoginIcon style={{marginRight:'10px'}}/>Login</MenuItem></Link>
+            <Link to="/register" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><RegisterIcon style={{marginRight:'10px'}}/>Register</MenuItem></Link>
         </Menu>
     );
 
