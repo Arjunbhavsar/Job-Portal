@@ -277,19 +277,19 @@ class BuildJobItem extends Component{
         return(
             <List>
                 <ListItem>
-                    <ListItemIcon title="jobTitle"><FormatQuoteIcon /></ListItemIcon>
+                    <ListItemIcon title="job title"><FormatQuoteIcon /></ListItemIcon>
                     <ListItemText>{this.props.jobInfo.jobTitle}</ListItemText>
                 </ListItem>
                 <ListItem>
-                    <ListItemIcon title="jobTitle"><BusinessIcon /></ListItemIcon>
+                    <ListItemIcon title="company"><BusinessIcon /></ListItemIcon>
                     <ListItemText>{this.props.jobInfo.organization}</ListItemText>
                 </ListItem>
                 <ListItem>
-                    <ListItemIcon title="jobTitle"><LocationOnIcon /></ListItemIcon>
+                    <ListItemIcon title="location"><LocationOnIcon /></ListItemIcon>
                     <ListItemText>{this.props.jobInfo.location}</ListItemText>
                 </ListItem>
                 <ListItem>
-                    <ListItemIcon title="jobTitle"><AttachMoneyIcon /></ListItemIcon>
+                    <ListItemIcon title="salary"><AttachMoneyIcon /></ListItemIcon>
                     <ListItemText>{this.props.jobInfo.jobSalary !== "" ? this.props.jobInfo.jobSalary : 'Unspecified'}</ListItemText>
                 </ListItem>
                 {/* <p className="company">{this.props.jobInfo.organization}</p>
@@ -453,11 +453,11 @@ class SelectedJob extends Component {
                             <Grid item xs={12}>
                                 <List style={style.listItem}>
                                     <ListItem style={style.titleItem}>
-                                        <ListItemIcon title="jobTitle"><FormatQuoteIcon /></ListItemIcon>
+                                        <ListItemIcon title="job title"><FormatQuoteIcon /></ListItemIcon>
                                         <h2 style={{margin: 0}}>{this.props.job.jobTitle}</h2>
                                     </ListItem>
                                     <ListItem style={style.listItem}>
-                                        <ListItemIcon title="jobTitle"><BusinessIcon /></ListItemIcon>
+                                        <ListItemIcon title="company"><BusinessIcon /></ListItemIcon>
                                         {this.props.job.pageUrl !== "" ?
                                             (this.props.job.pageUrl.includes('http')?
                                                 <a href={this.props.job.pageUrl} target="_blank"><p style={{margin: 0}}>{this.props.job.organization}</p></a>:
@@ -468,7 +468,7 @@ class SelectedJob extends Component {
                                         }
                                     </ListItem>
                                     <ListItem divider style={style.listItem}>
-                                        <ListItemIcon title="jobTitle"><LocationOnIcon /></ListItemIcon>
+                                        <ListItemIcon title="location"><LocationOnIcon /></ListItemIcon>
                                         {this.props.job.country !== "" ?
                                             <p>{this.props.job.location + " | " + this.props.job.country}</p> :
                                             <p>{this.props.job.location}</p>
@@ -476,14 +476,14 @@ class SelectedJob extends Component {
                                         
                                     </ListItem>
                                     <ListItem style={style.salaryItem}>
-                                        <ListItemIcon title="jobTitle"><AttachMoneyIcon /></ListItemIcon>
+                                        <ListItemIcon title="salary"><AttachMoneyIcon /></ListItemIcon>
                                         {this.props.job.jobSalary !== "" ?
                                             <p>{this.props.job.jobSalary}</p>:
                                             <p>Unspecified</p>
                                         }
                                     </ListItem>
                                     <ListItem style={style.listItem}>
-                                        <ListItemIcon title="jobTitle" style={{alignSelf: 'flex-start', marginTop: 20}}><DescriptionIcon /></ListItemIcon>
+                                        <ListItemIcon title="description" style={{alignSelf: 'flex-start', marginTop: 20}}><DescriptionIcon /></ListItemIcon>
                                         <div className="description" dangerouslySetInnerHTML={{ __html: this.props.job.jobDescription }} />
                                     </ListItem>
 
