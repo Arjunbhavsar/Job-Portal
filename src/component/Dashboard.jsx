@@ -319,7 +319,8 @@ class SelectedJob extends Component {
             sector: '',
             author: '',
             appiedResponse: '',
-            appiedStatus: false
+			appiedStatus: false,
+			isLoading: true
         }
         this.apply = this.apply.bind(this);
     }
@@ -357,7 +358,8 @@ class SelectedJob extends Component {
                 sector: this.props.job.sector,
                 author: this.props.job.author,
                 appiedResponse: appliedResponse,
-                appiedStatus: appliedStatus
+				appiedStatus: appliedStatus,
+				isLoading: false
             })
         }
     }
@@ -432,7 +434,7 @@ class SelectedJob extends Component {
                 </Paper>
             )
         } else {
-            if(this.props.loading){
+            if(this.props.loading || this.state.isLoading){
                 return(
                     <div style={{marginTop:'20px', marginRight: '20px'}}>
                         <LoadingComponent/>
