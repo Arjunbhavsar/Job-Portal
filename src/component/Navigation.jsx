@@ -7,7 +7,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import { withRouter } from "react-router";
 
 import JobService from '../api/JobService';
-import logo from '../img/quickpick-logo2-transparent-small.png';
+import logo from '../img/logoName.png';
 import AuthenticationService from '../api/AuthenticationService';
 import SearchBar from './SearchBar';
 import '../css/Navigation.css';
@@ -130,6 +130,8 @@ function Nav() {
             >
                 <Link to={"/profile/"+user} className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Profile</MenuItem></Link>
                 <Link to={"/chatHome"} className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Messages</MenuItem></Link>
+                <Link to="/certify" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Certifications</MenuItem></Link>
+                <Link to="/shift" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Shift Selection</MenuItem></Link>
                 <Link to="/" className="profileMenuLink"><MenuItem onClick={handleMenuCloseLogout} id="accountIconMenuItem">Log Out</MenuItem></Link>
             </Menu>
         );

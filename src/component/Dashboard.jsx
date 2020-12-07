@@ -1,15 +1,29 @@
 import React from 'react';
 import { Component } from 'react';
-import '../css/Dashboard.css'
+
+import { Paper, Grid, List, ListItem, Button, ListItemIcon, ListItemText } from '@material-ui/core/';
+import {HourglassEmpty as HourglassEmptyIcon,
+        CheckCircleOutline as CheckCircleOutlineIcon,
+        NotInterested as NotInterestedIcon,
+        LocationOn as LocationOnIcon, 
+        Business as BusinessIcon,
+        AttachMoney as AttachMoneyIcon,
+        Description as DescriptionIcon,
+        Note as NoteIcon,
+        Edit as EditIcon,
+        Save as SaveIcon,
+        VerifiedUser as VerifiedUserIcon,
+        FormatQuote as FormatQuoteIcon} from '@material-ui/icons';
+import { green, red, orange } from '@material-ui/core/colors';
+import { Alert } from '@material-ui/lab';
+
+import LoadingComponent from './LoadingComponent';
+
 import JobService from '../api/JobService';
 import ApplicationService from '../api/ApplicationService';
 import AuthenticationService from '../api/AuthenticationService';
-import { Paper, Grid, List, ListItem, Button } from '@material-ui/core/';
-import {HourglassEmpty as HourglassEmptyIcon,
-        CheckCircleOutline as CheckCircleOutlineIcon,
-        NotInterested as NotInterestedIcon } from '@material-ui/icons';
-import { green, red, orange } from '@material-ui/core/colors';
-import { Alert } from '@material-ui/lab';
+
+import '../css/Dashboard.css'
 
 class Dashboard extends Component {
     constructor() {
@@ -108,8 +122,10 @@ class Dashboard extends Component {
             <div className="container">
                 <div className="background-container"/>
                 <Grid container direction="row" spacing={3} style={style.container} justify="center">
-                    <Grid item xs={3} className="content-sections">
-                        <JobListItems update={this.updateSelectedJob} jobs={this.state.jobs}/>
+                    <Grid item container xs={3} className="content-sections" justify='flex-end'>
+                        <Grid item xs={12} sm={10}>
+                            <JobListItems update={this.updateSelectedJob} jobs={this.state.jobs}/>
+                        </Grid>
                     </Grid>
                     <Grid item xs={6} className="content-sections">
                         <SelectedJob job={this.state.indexList[this.state.index]} appResponse={this.state.appResponse} appStatus={this.state.appStatus}/>
@@ -139,7 +155,7 @@ class JobListItems extends Component {
         this.active = {
             backgroundColor: "var(--light-blue-transparent)",
             backdropFilter: 'blur(2px)',
-            borderBottom: '1px #0000001a solid'
+            borderBottom: '1px #0000001a solid',
         };
     }
 
@@ -195,18 +211,20 @@ class JobListItems extends Component {
         console.log();
         if(this.state.isLoading){
             return(
-                <p>Loading...</p>
+				<div style={{marginTop:'20px', marginRight: '20px'}}>
+					<LoadingComponent/>
+				</div>
             )
         }else{
             if(this.state.jobs.length === 0){
                 return(
-                    <div className="search-list-container">
-                        <div className="job-list">
-                            <div className="leftItem" style={this.inactive}>
-                                <p style={{'margin': '16px auto'}}>No jobs found</p>
-                            </div>
-                        </div>
-                    </div>
+                    <Paper style={style.paper}>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <p style={{margin: '20px auto', width: 'fit-content'}}>No jobs found</p>
+                            </Grid>
+                        </Grid>
+                    </Paper>
                 )
             }
             return(
@@ -236,21 +254,56 @@ class JobListItems extends Component {
 
 class BuildJobItem extends Component{
     render(){
+        const style = {
+            paper : {
+                padding: 40,
+                textAlign: "left",
+                flexGrow: 1,
+                backgroundColor: 'var(--white-transparent)',
+                backdropFilter: 'blur(10px)'
+            },
+            listItem: {
+                padding: 0
+            },
+            salaryItem: {
+                padding: 0,
+                marginTop: 10
+            },
+            titleItem: {
+                padding: 0,
+                marginBottom: 20
+            }
+        };
         return(
-            <div className="leftInner" >
-                <p className="title">{this.props.jobInfo.jobTitle}</p>
-                <p className="company">{this.props.jobInfo.organization}</p>
+            <List>
+                <ListItem>
+                    <ListItemIcon title="jobTitle"><FormatQuoteIcon /></ListItemIcon>
+                    <ListItemText>{this.props.jobInfo.jobTitle}</ListItemText>
+                </ListItem>
+                <ListItem>
+                    <ListItemIcon title="jobTitle"><BusinessIcon /></ListItemIcon>
+                    <ListItemText>{this.props.jobInfo.organization}</ListItemText>
+                </ListItem>
+                <ListItem>
+                    <ListItemIcon title="jobTitle"><LocationOnIcon /></ListItemIcon>
+                    <ListItemText>{this.props.jobInfo.location}</ListItemText>
+                </ListItem>
+                <ListItem>
+                    <ListItemIcon title="jobTitle"><AttachMoneyIcon /></ListItemIcon>
+                    <ListItemText>{this.props.jobInfo.jobSalary !== "" ? this.props.jobInfo.jobSalary : 'Unspecified'}</ListItemText>
+                </ListItem>
+                {/* <p className="company">{this.props.jobInfo.organization}</p>
                 <p className="location">{this.props.jobInfo.location}</p>
-                <p className="salary">{this.props.jobInfo.jobSalary}</p>
-            </div>
+                <p className="salary">{this.props.jobInfo.jobSalary}</p> */}
+            </List>
         )
     }
 }
 
 
 class SelectedJob extends Component {
-    constructor(props){
-        super(props);
+    constructor(){
+        super();
         this.state = {
             country: '',
             dateAdded: '',
@@ -339,13 +392,19 @@ class SelectedJob extends Component {
                 flexGrow: 1,
                 backgroundColor: 'var(--white-transparent)',
                 backdropFilter: 'blur(10px)'
+            },
+            listItem: {
+                padding: 0
+            },
+            salaryItem: {
+                padding: 0,
+                marginTop: 10
+            },
+            titleItem: {
+                padding: 0,
+                marginBottom: 20
             }
         };
-        let alert = {
-            border: '1px solid',
-            borderRadius: 4,
-            borderColor: '#ff990066'
-        }
         let responseDisplay = (<HourglassEmptyIcon style={{color: orange[500]}} />);
         let severity = 'info'
         if(this.state.appiedStatus) {
@@ -363,36 +422,68 @@ class SelectedJob extends Component {
 
         if (this.props.job == null){
             return(
-                <div className="content" id="selectJob">
-                    <p style={{margin: '20px auto', width: 'fit-content'}}>No jobs available</p>
-                </div>
+                <Paper style={style.paper}>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <h2 style={{margin: '20px auto', width: 'fit-content'}}>No jobs found</h2>
+                        </Grid>
+                    </Grid>
+                </Paper>
             )
         } else {
             if(this.props.loading){
                 return(
-                    <p>Loading...</p>
+                    <div style={{marginTop:'20px', marginRight: '20px'}}>
+                        <LoadingComponent/>
+                    </div>
                 )
             }else{
-                // console.log(this.state.appStatus)
                 return(
                     <Paper style={style.paper}>
-                        <Grid container>
-                                {!this.state.appiedStatus && isUserLoggedIn &&
-                                    <Button variant="contained" size="small" onClick={this.apply} style={{position: 'absolute', right: 40}}>Apply Now</Button>
-                                }
-                            <Grid item xs={12}>
-                                <h2 style={{marginTop: 0}}>{this.props.job.jobTitle}</h2>
-                                <p>{this.props.job.organization}</p>
-                                <p>{this.props.job.location + " | " + this.props.job.country}</p>
-                                <div className="description" dangerouslySetInnerHTML={{ __html: this.props.job.jobDescription }} />
-                                <p>{this.props.job.jobSalary}</p>
-                                <p>{this.props.job.pageUrl}</p>
-
-                            </Grid>
-                            <Grid item xs={12}>
-                                {this.state.appiedStatus && isUserLoggedIn && 
+                        <Grid container spacing={3}>
+                            {!this.state.appiedStatus && isUserLoggedIn &&
+                                <Button variant="contained" size="small" onClick={this.apply} style={{position: 'absolute', right: 40}}>Apply Now</Button>
+                            }
+                        
+                            {this.state.appiedStatus && isUserLoggedIn && 
+                                <Grid item xs={12}>
                                     <Alert icon={responseDisplay} severity={severity}>{this.state.appiedResponse}</Alert>
-                                }
+                                </Grid>
+                            }
+                            <Grid item xs={12}>
+                                <List style={style.listItem}>
+                                    <ListItem style={style.titleItem}>
+                                        <ListItemIcon title="jobTitle"><FormatQuoteIcon /></ListItemIcon>
+                                        <h2 style={{margin: 0}}>{this.props.job.jobTitle}</h2>
+                                    </ListItem>
+                                    <ListItem style={style.listItem}>
+                                        <ListItemIcon title="jobTitle"><BusinessIcon /></ListItemIcon>
+                                        {this.props.job.pageUrl !== "" ?
+                                            <a href={this.props.job.pageUrl} target="_blank"><p style={{margin: 0}}>{this.props.job.organization}</p></a> :
+                                            <p>{this.props.job.organization}</p>
+                                        }
+                                    </ListItem>
+                                    <ListItem divider style={style.listItem}>
+                                        <ListItemIcon title="jobTitle"><LocationOnIcon /></ListItemIcon>
+                                        {this.props.job.country !== "" ?
+                                            <p>{this.props.job.location + " | " + this.props.job.country}</p> :
+                                            <p>{this.props.job.location}</p>
+                                        }
+                                        
+                                    </ListItem>
+                                    <ListItem style={style.salaryItem}>
+                                        <ListItemIcon title="jobTitle"><AttachMoneyIcon /></ListItemIcon>
+                                        {this.props.job.jobSalary !== "" ?
+                                            <p>{this.props.job.jobSalary}</p>:
+                                            <p>Unspecified</p>
+                                        }
+                                    </ListItem>
+                                    <ListItem style={style.listItem}>
+                                        <ListItemIcon title="jobTitle" style={{alignSelf: 'flex-start', marginTop: 20}}><DescriptionIcon /></ListItemIcon>
+                                        <div className="description" dangerouslySetInnerHTML={{ __html: this.props.job.jobDescription }} />
+                                    </ListItem>
+
+                                </List>
                             </Grid>
                         </Grid>
                     </Paper>

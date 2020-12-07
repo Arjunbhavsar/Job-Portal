@@ -8,6 +8,7 @@ import { Avatar, Button, CssBaseline, TextField, Checkbox, Link, Grid, Box, Typo
 import { withStyles } from "@material-ui/core/styles";
 import { GoogleLogin } from 'react-google-login';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import ReCAPTCHA from "react-google-recaptcha";
 
 const styles = theme => ({
     body: {
@@ -36,8 +37,8 @@ const styles = theme => ({
 });
 
 class LoginComponenet extends Component {
-    constructor(props){
-        super(props)
+    constructor(){
+        super()
         this.state = {
             firstName: '',
 			username:'',
@@ -51,7 +52,11 @@ class LoginComponenet extends Component {
             noUserFound:false,
             externalCond: false,
             userObj: null,
-            incorrect: 0
+            incorrect: 0,
+            usernameError: false,
+            passwordError: false,
+            captchaError: false,
+			captcha: false
         }
         this.handleChange = this.handleChange.bind(this)
         this.loginClicked = this.loginClicked.bind(this)
@@ -61,6 +66,7 @@ class LoginComponenet extends Component {
         this.handleGoogleLogin = this.handleGoogleLogin.bind(this);
         this.registerGoogle = this.registerGoogle.bind(this);
         this.loginGoogle = this.loginGoogle.bind(this);
+        this.captcha = this.captcha.bind(this);
     }
 
     handleChange(event){
@@ -75,25 +81,36 @@ class LoginComponenet extends Component {
     }
 
     loginClicked(event){
-        console.log('check')
-        event.preventDefault()
-        const user = {
-            password: this.state.password,
-            username:this.state.username,
-            firstName: null,
-            lastName: null,
-            address: null,
-            emailId: null
-        }
-        console.log(user)
-        console.log('Inside the login function')
-        //let loginSccess = false;
-        UserService.registerLogin(user)
-        .then( response => this.handleSuccessResponse(response))
-		.catch((error) => {
-            console.log("ALLAL", error);
-            console.log("data", { user });
+        let uError = this.state.username === ''
+        let pError = this.state.password === ''
+        let cError = !this.state.captcha
+        
+        this.setState({
+            usernameError: uError,
+            passwordError: pError,
+            captchaError: cError
         })
+        if(!uError && !pError && !cError){
+            console.log('check')
+            event.preventDefault()
+            const user = {
+                password: this.state.password,
+                username:this.state.username,
+                firstName: null,
+                lastName: null,
+                address: null,
+                emailId: null
+            }
+            console.log(user)
+            console.log('Inside the login function')
+            //let loginSccess = false;
+            UserService.registerLogin(user)
+            .then( response => this.handleSuccessResponse(response))
+            .catch((error) => {
+                console.log("ALLAL", error);
+                console.log("data", { user });
+            })
+        }
     }
 
     handleSuccessResponse(response){
@@ -127,7 +144,7 @@ class LoginComponenet extends Component {
     }
 
     handleGoogleLogin(response){
-        UserService.executeCheckRegisteredExternal(response.profileObj.email)
+        UserService.emailExists(response.profileObj.email)
         .then((res) => {
             if(res.data === "registered"){
                 this.loginGoogle(response);
@@ -138,33 +155,40 @@ class LoginComponenet extends Component {
 		.catch(error => this.handleError(error));
     }
     
-    registerGoogle(event){
+    async registerGoogle(event){
         event.preventDefault()
-        const response = this.state.userObj
-        const user = {
-			password: response.profileObj.googleId,
-            emailId: response.profileObj.email,
-            firstName: response.profileObj.givenName,
-            address: null,
-            lastName: response.profileObj.familyName,
-            username: this.state.username
-        };
+        let uError = await UserService.usernameExists(this.state.username).then(res => res.data === 'registered')
+        console.log(uError)
         this.setState({
-            password: response.profileObj.googleId,
-            emailId: response.profileObj.email,
-            firstName: response.profileObj.givenName,
-            address: null,
-            lastName: response.profileObj.familyName,
-            username: this.state.username,
-        });
-		UserService.executePostUserRegisterService(user)
-        .then(res => {
-            if(res.status === 200) {
-                console.log('Register Successful')
-                this.loginGoogle(response)
-            }
+            usernameError: uError
         })
-        .catch(error => this.handleError(error))
+        if(!uError){
+            const response = this.state.userObj
+            const user = {
+                password: response.profileObj.googleId,
+                emailId: response.profileObj.email,
+                firstName: response.profileObj.givenName,
+                address: null,
+                lastName: response.profileObj.familyName,
+                username: this.state.username
+            };
+            this.setState({
+                password: response.profileObj.googleId,
+                emailId: response.profileObj.email,
+                firstName: response.profileObj.givenName,
+                address: null,
+                lastName: response.profileObj.familyName,
+                username: this.state.username,
+            });
+            UserService.executePostUserRegisterService(user)
+            .then(res => {
+                if(res.status === 200) {
+                    console.log('Register Successful')
+                    this.loginGoogle(response)
+                }
+            })
+            .catch(error => this.handleError(error))
+        }
     }
 
     loginGoogle(response){
@@ -189,9 +213,32 @@ class LoginComponenet extends Component {
         })
     }
 
-    render(){
+    captcha(){
+		this.setState({
+			captcha: true,
+			captchaError: false
+		})
+	}
 
+    render(){
         const { classes } = this.props;
+		const captchaStyles = {
+			normal: {
+				border: 'none',
+				width: 304,
+				height: 78,
+				borderRadius: 3,
+				margin: 'auto'
+			},
+			error: {
+				border: 'red solid 1px',
+				width: 304,
+				height: 78,
+				borderRadius: 3,
+				margin: 'auto'
+			}
+		}
+
         if (this.state.externalCond){
             return(
                 <Container component="main" maxWidth="xs">
@@ -204,6 +251,8 @@ class LoginComponenet extends Component {
                         <form className={`${classes.form} login-paper`} noValidate  onSubmit={this.registerGoogle}>
                             <Typography component="h1" variant="h5">Set Username</Typography>
                             <TextField
+                                error={ this.state.usernameError}
+                                helperText={this.state.usernameError? (this.state.username === '' ? "Please enter a username" :"Username already registered") : ""}
                                 variant="outlined"
                                 margin="normal"
                                 required
@@ -240,7 +289,7 @@ class LoginComponenet extends Component {
                         <form className={classes.form} noValidate  onSubmit={this.loginClicked} >
                             <Typography component="h1" variant="h5">Sign in</Typography>
                             <TextField
-                                error={ this.state.incorrect === 1 }
+                                error={ this.state.incorrect === 1 || this.state.usernameError}
                                 variant="outlined"
                                 margin="normal"
                                 required
@@ -249,7 +298,7 @@ class LoginComponenet extends Component {
                                 label="Username or Email"
                                 name="username"
                                 autoComplete="username"
-                                helperText={this.state.incorrect === 1 ? "Username or email not registered" : ""}
+                                helperText={(this.state.incorrect === 1 ? "Username or email not registered" : "") || (this.state.usernameError ? 'Please enter you username' : '')}
                                 value={this.state.username}
                                 autoFocus
                                 inputProps={{
@@ -258,7 +307,7 @@ class LoginComponenet extends Component {
                                     autoComplete: "off"
                                 }}/>
                             <TextField
-                                error={ this.state.incorrect > 0 }
+                                error={ this.state.incorrect > 0 || this.state.passwordError}
                                 variant="outlined"
                                 margin="normal"
                                 required
@@ -269,7 +318,7 @@ class LoginComponenet extends Component {
                                 id="password"
                                 value={this.state.password}
                                 autoComplete="current-password"
-                                helperText={this.state.incorrect === 2 ? "Incorrect password" : ""}
+                                helperText={(this.state.incorrect === 2 ? "Incorrect password" : "") || (this.state.passwordError ? 'Please enter you password' : '')}
                                 inputProps={{
                                     type: "password",
                                     onChange: this.handleChange,
@@ -278,6 +327,13 @@ class LoginComponenet extends Component {
                             <FormControlLabel
                                 control={<Checkbox value="remember" color="primary" />}
                                 label="Remember me" />
+                            <ReCAPTCHA 
+                                sitekey='6Le7D_wZAAAAAJMN-rZltYW2SHN4aFCBNDHVMg_N'
+                                onChange={this.captcha}
+                                style={this.state.captchaError ? captchaStyles.error : captchaStyles.normal }
+                                className="captch"
+                                size='normal'
+                                />
                             <Button type="Button" fullWidth variant="contained" color="primary"
                                 className={classes.submit}
                                 onClick={this.loginClicked}>
