@@ -54,6 +54,7 @@ public class ShiftService {
 			currentShift.setEndDay(shift.isValidDay() ? shift.getEndDay() : currentShift.getEndDay());
 			currentShift.setEndHour(shift.isValidHour() ? shift.getEndHour(): currentShift.getEndHour());
 			currentShift.setEndMinute(shift.isValidMinute() ? shift.getEndMinute() : currentShift.getEndMinute());
+			currentShift.setStatus(shift.getStatus() != null ? shift.getStatus() : currentShift.getStatus());
 			shiftDao.save(currentShift);
 			return "Updated";
 		} catch (Exception e) {
@@ -62,15 +63,36 @@ public class ShiftService {
 	}
 
 	public String approveShift(String id) {
-		Shift shift = new Shift();
-		shift.setStatus(Shift.Status.accepted);
-		return updateShift(id, shift);
+		try {
+			Shift currentShift = shiftDao.findById(id).orElse(null);
+			currentShift.setStatus(Shift.Status.accepted);
+			shiftDao.save(currentShift);
+			return "Updated";
+		} catch (Exception e) {
+			return "Could not update information";
+		}
+	}
+	
+	public String pendingShift(String id) {
+		try {
+			Shift currentShift = shiftDao.findById(id).orElse(null);
+			currentShift.setStatus(Shift.Status.pending);
+			shiftDao.save(currentShift);
+			return "Updated";
+		} catch (Exception e) {
+			return "Could not update information";
+		}
 	}
 	
 	public String denyShift(String id) {
-		Shift shift = new Shift();
-		shift.setStatus(Shift.Status.denied);
-		return updateShift(id, shift);
+		try {
+			Shift currentShift = shiftDao.findById(id).orElse(null);
+			currentShift.setStatus(Shift.Status.denied);
+			shiftDao.save(currentShift);
+			return "Updated";
+		} catch (Exception e) {
+			return "Could not update information";
+		}
 	}
 
 	public List<Shift> getShifts() {
@@ -106,5 +128,4 @@ public class ShiftService {
 	public Shift getShiftById(String id) {
 		return shiftDao.findById(id).orElse(null);
 	}
-
 } 

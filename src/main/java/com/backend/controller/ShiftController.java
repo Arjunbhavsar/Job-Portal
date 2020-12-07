@@ -48,12 +48,17 @@ public class ShiftController {
 		return shiftService.getShiftUser(userId);
 	}
 
-	@PostMapping("/approveShift/{id}")
+	@GetMapping("/approveShift/{id}")
 	public String approveShift(@PathVariable String id){
 		return shiftService.approveShift(id);
 	}
 	
-	@PostMapping("/denyShift/{id}")
+	@GetMapping("/pendingShift/{id}")
+	public String pendingShift(@PathVariable String id){
+		return shiftService.pendingShift(id);
+	}
+	
+	@GetMapping("/denyShift/{id}")
 	public String denyShift(@PathVariable String id){
 		return shiftService.denyShift(id);
 	}
