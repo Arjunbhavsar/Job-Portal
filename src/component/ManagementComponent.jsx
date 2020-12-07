@@ -481,7 +481,11 @@ class SelectedManage extends Component {
                                     <ListItem style={style.listItem}>
                                         <ListItemIcon title="jobTitle"><BusinessIcon /></ListItemIcon>
                                         {this.props.job.pageUrl !== "" ?
-                                            <a href={this.props.job.pageUrl} target="_blank"><p style={{margin: 0}}>{this.props.job.organization}</p></a> :
+                                            (this.props.job.pageUrl.includes('http')?
+                                                <a href={this.props.job.pageUrl} target="_blank"><p style={{margin: 0}}>{this.props.job.organization}</p></a>:
+                                                <a href={'https://' + this.props.job.pageUrl} target="_blank"><p style={{margin: 0}}>{this.props.job.organization}</p></a>
+                                                
+                                            ) :
                                             <p>{this.props.job.organization}</p>
                                         }
                                     </ListItem>
@@ -569,9 +573,9 @@ class AppList extends Component {
                     </List>
                 </Paper>:
                 <div style={{marginTop : '20px'}}>
-			<div className="background-container"/>
-			<ErrorMessage severity='info' text="No applicants yet" sm={6}/>
-		</div>
+                    <div className="background-container"/>
+                    <ErrorMessage severity='info' text="No applicants yet" sm={6}/>
+                </div>
             }</>
         )
     }
