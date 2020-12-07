@@ -53,8 +53,17 @@ if(user === null || user === '')
           name: 'Heather Ahmann' },
         userToken,
       );
-    }
-}
+    }else{
+        const userToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiSGVhdGhlckEifQ.-AX_Fm9VTtkXNLjs8yIs1NajS6m0zE1ZAE8Q5QkljbU';
+        chatClient.setUser(
+          {
+            id: 'HeatherA',
+            name: user},
+          userToken,
+        );
+      }
+  }
+ 
 
 const conversation1 = chatClient.channel('messaging', 'Quick-Pick', {
   name: 'Quick-Pick',

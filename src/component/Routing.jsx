@@ -11,7 +11,7 @@ import LandingComponent from './LandingComponent';
 import ManagementComponent from './ManagementComponent';
 import ForgotPasswordComponent from './ForgotPassword';
 import ResetPasswordComponent from './ResetPassword';
-import ChatHome from './ChatHome'
+import ChatHome from './ChatHome';
 import ResumeViewer from './ResumeViewer';
 import Certifications from './Certifications';
 import ShiftSelect from './ShiftSelect';
