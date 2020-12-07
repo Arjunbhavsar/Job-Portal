@@ -1,24 +1,31 @@
 import React, { Component } from 'react';
 import { Paper, Grid, List, ListItem, ListItemText, Divider, ButtonGroup, Button, ListItemIcon, Collapse, TextField } from '@material-ui/core/';
-import { LocationOn as LocationOnIcon,
-         Business as BusinessIcon,
-         Link as LinkIcon,
-         NotInterested as NotInterestedIcon,
-         CheckCircleOutline as CheckCircleOutlineIcon,
-         Email as EmailIcon,
-         Note as NoteIcon,
-         Edit as EditIcon,
-         Save as SaveIcon,
-         VerifiedUser as VerifiedUserIcon,
-         FormatQuote as FormatQuoteIcon,
-         AttachMoney as AttachMoneyIcon,
-         Description as DescriptionIcon} from '@material-ui/icons';
-import { ExpandLess, ExpandMore } from '@material-ui/icons';
-import { green, red } from '@material-ui/core/colors';
+import {LocationOn as LocationOnIcon,
+        Business as BusinessIcon,
+        Link as LinkIcon,
+        NotInterested as NotInterestedIcon,
+        CheckCircleOutline as CheckCircleOutlineIcon,
+        Email as EmailIcon,
+        Note as NoteIcon,
+        Edit as EditIcon,
+        Save as SaveIcon,
+        VerifiedUser as VerifiedUserIcon,
+        FormatQuote as FormatQuoteIcon,
+        AttachMoney as AttachMoneyIcon,
+        Description as DescriptionIcon,
+        Timer as StartIcon,
+        TimerOff as StopIcon,
+        EventAvailable as ApprovedIcon,
+        DateRange as PendingIcon,
+        EventBusy as DeniedIcon,
+        ExpandLess, ExpandMore } from '@material-ui/icons';
+import { green, red, orange } from '@material-ui/core/colors';
 import { Link } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
-
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+
 import AuthenticationService from '../api/AuthenticationService';
 import JobService from '../api/JobService';
 import RichTextInput from './RichTextInput';
@@ -28,6 +35,7 @@ import ProfileJobDelete from './ProfileJobDelete';
 import ErrorMessage from './ErrorMessage';
 import CertifyService from '../api/CertifyService';
 import LoadingComponent from './LoadingComponent';
+import ShiftService from '../api/ShiftService';
 
 class ManagementComponent extends Component {
     constructor(){
@@ -497,12 +505,6 @@ class SelectedManage extends Component {
                                         <div className="description" dangerouslySetInnerHTML={{ __html: this.props.job.jobDescription }} />
                                     </ListItem>
                                 </List>
-                            {/* <h2>{this.state.jobTitle}</h2>
-                            <p>{this.state.organization}</p>
-                            <p>{this.state.location + " | " + this.state.country}</p>
-                            <div className="description" dangerouslySetInnerHTML={{__html: this.state.jobDescription}} />
-                            <p>{this.state.jobSalary}</p>
-                            <p>{this.state.pageUrl}</p> */}
                             
                         </Grid>
                         }
@@ -580,7 +582,9 @@ class Application extends Component {
         this.state = {
             open: false,
             application: props.application,
-            certsExist: false
+            certsExist: false,
+            shiftsExist: false,
+            shiftData: undefined,
         }
         this.handleClick = this.handleClick.bind(this);
         this.decide = this.decide.bind(this);
@@ -599,6 +603,8 @@ class Application extends Component {
                 application: this.props.application
             })
         }
+		const shiftData = await ShiftService.getShiftsByUser(this.props.application.userId).then(result => result.data);
+		this.setState({shiftsExist : (shiftData.length !== 0), shiftData : shiftData})
     }
 
     async componentDidUpdate(oldProps){
@@ -658,23 +664,30 @@ class Application extends Component {
                     </Link>
                     {resumeExists? 
                     <Link to={'/resume/' + this.state.application.username} target="_blank">
-                        <ListItem>
+                        <ListItem button>
                             <ListItemIcon title="resume"><NoteIcon /></ListItemIcon>
                             <ListItemText primary={this.state.application.firstName + "'s resume"} />
                         </ListItem>
                     </Link>:
                     <ListItem>
                         <ListItemIcon title="resume"><NoteIcon /></ListItemIcon>
-                        <ErrorMessage severity='info' text={this.state.application.firstName + ' has not uploaded a resume.'} justify='flex-start'/>
+                        <Alert variant="outlined" severity='info' style={{'width':'fit-content'}}>{this.state.application.firstName + ' has not uploaded a resume.'}</Alert>
                     </ListItem>
                     }
                     <ListItem>
                         <ListItemIcon title="certification"><VerifiedUserIcon /></ListItemIcon>
                         {this.state.certsExist ?
                             <ViewCertificates userId={this.state.application.userId} row/>:
-                            <ErrorMessage severity='info' text='No certifications completed' justify='flex-start'/>
+                            <Alert variant="outlined" severity='info' style={{'width':'fit-content'}}>No certifications completed</Alert>
                         }
                     </ListItem>
+                    {this.state.shiftsExist ?
+						<ShiftList application={this.state.application} shiftData={this.state.shiftData}/>:
+						<ListItem>
+							<ListItemIcon title="shift"><PendingIcon /></ListItemIcon>
+							<Alert variant="outlined" severity='info' style={{'width':'fit-content'}}>no shifts created</Alert>
+						</ListItem>
+					}
                     <ListItem style={{justifyContent: "center"}}>
                         {this.state.application.status === "Pending" &&
                         <ButtonGroup aria-label="manage secion">
@@ -692,11 +705,155 @@ class Application extends Component {
 						    <ListItemText primary={this.state.application.status} style={{color: red[500]}}/>
                         </>}
                     </ListItem>
-
                 </Collapse>
             </>
         )
     }
+}
+
+class ShiftList extends Component {
+	constructor(props){
+		super()
+		this.state = {
+			open: false,
+			application: props.application,
+			shifts: undefined,
+			isLoading: true,
+			shiftData: props.shiftData,
+		}
+		this.handleClick = this.handleClick.bind(this);
+		// this.decide = this.decide.bind(this);
+	}
+
+	async componentDidMount(){
+		let application = this.props.application;
+		const appData = await ApplicationService.getAllApplied(application.userId).then(result => result.data);
+		let currentApp;
+		for(let i = 0; i < appData.length; i++) {
+			if(appData[i].jobId === application.jobId)
+				currentApp = appData[i];
+		}
+		let shifts = [];
+		if(currentApp !== undefined) {
+			const shiftData = this.state.shiftData;
+			for(let i = 0; i < shiftData.length; i++)
+				if(shiftData[i].applicationId === currentApp.id)
+					shifts.push(<ShiftListElement key={shiftData[i]} update={this.componentDidMount} shiftData={shiftData[i]} application={application} />);
+			this.setState({shifts : shifts, isLoading : false});
+		}
+	}
+
+	handleClick() {
+		this.setState({	open : !this.state.open});
+	}
+
+	render() {
+		return (
+			<>
+				<ListItem button onClick={this.handleClick}>
+					<ListItemIcon title="shifts">
+						<PendingIcon/>
+					</ListItemIcon>
+					<ListItemText primary={`Shifts`} />
+					{this.state.open ? <ExpandLess /> : <ExpandMore />}
+				</ListItem>
+				<Collapse in={this.state.open} timeout="auto">
+					<List component="div" disablePadding>
+						{this.state.shifts && this.state.shifts.map (shift =>
+							<>{shift}</>
+						)}
+					</List>
+				</Collapse>
+			</>
+		)
+	}
+}
+
+class ShiftListElement extends Component {
+	constructor() {
+		super();
+		this.state = {
+			status: 'pending',
+		}
+		this.formatAMPM = this.formatAMPM.bind(this);
+		this.handleStatus = this.handleStatus.bind(this);
+	}
+
+	componentDidMount() {
+		this.setState({status : this.props.shiftData.status.toLowerCase()});
+	}
+
+
+
+	formatAMPM(date) {
+		var hours = date.getHours();
+		var minutes = date.getMinutes();
+		var ampm = hours >= 12 ? 'PM' : 'AM';
+		hours = hours % 12;
+		hours = hours ? hours : 12; // the hour '0' should be '12'
+		minutes = minutes < 10 ? '0'+minutes : minutes;
+		var strTime = hours + ':' + minutes + ' ' + ampm;
+		return strTime;
+	}
+
+	async handleStatus(event, newStatus) {
+		if(newStatus !== null) {
+			this.setState({status : newStatus});
+			switch(newStatus) {
+			case 'accepted'	: await ShiftService.approveShift(this.props.shiftData.id).then(console.log('accepted')); break;
+			case 'denied'	: await ShiftService.denyShift(this.props.shiftData.id).then(console.log('denied')); break;
+			default			: await ShiftService.pendingShift(this.props.shiftData.id).then(console.log('pending')); break;
+			}
+		}
+	}
+
+	render() {
+		const style = {
+			nested : {"paddingLeft": "5%"},
+		}
+		let shiftData = this.props.shiftData;
+		let startDate = new Date(shiftData.startYear, shiftData.startMonth, shiftData.startDay, shiftData.startHour, shiftData.startMinute);
+		let endDate = new Date(shiftData.endYear, shiftData.endMonth, shiftData.endDay, shiftData.endHour, shiftData.endMinute)
+		return (
+			<div>
+				<ListItem style={style.nested}>
+					<ListItem style={style.nested}>
+						<ListItemIcon title="shift start"><StartIcon /></ListItemIcon>
+						<ListItemText primary={`${startDate.toDateString().split(' ')[1]} ${startDate.toDateString().split(' ')[2]} ${this.formatAMPM(startDate)}`} />
+					</ListItem>
+					<ListItem style={style.nested}>
+						<ListItemIcon title="shift end"><StopIcon /></ListItemIcon>
+						<ListItemText primary={`${endDate.toDateString().split(' ')[1]} ${endDate.toDateString().split(' ')[2]} ${this.formatAMPM(endDate)}`} />
+					</ListItem>
+					<ToggleButtonGroup
+					value={this.state.status}
+					exclusive
+					onChange={this.handleStatus}
+					aria-label="text alignment"
+					>
+					<ToggleButton value="denied" aria-label="left aligned">
+						{this.state.status === 'denied'
+						? <DeniedIcon style={{color: red[500]}} />
+						: <DeniedIcon style={{color: red[0]}} />
+						}
+					</ToggleButton>
+					<ToggleButton value="pending" aria-label="centered">
+						{this.state.status === 'pending'
+						? <PendingIcon style={{color: orange[500]}} />
+						: <PendingIcon style={{color: orange[0]}} />
+						}
+					</ToggleButton>
+					<ToggleButton value="accepted" aria-label="right aligned">
+						{this.state.status === 'accepted'
+						? <ApprovedIcon style={{color: green[500]}} />
+						: <ApprovedIcon style={{color: green[0]}} />
+						}
+					</ToggleButton>
+					</ToggleButtonGroup>
+				</ListItem>
+			</div>
+		)
+	}
 }
 
 export default ManagementComponent;

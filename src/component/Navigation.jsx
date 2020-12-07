@@ -42,8 +42,9 @@ class Navgiation extends Component {
         if(logged){
             check = await JobService.executeCheckByAuthor().then(result => result.data);
         }
+        let path = this.props.location.pathname.split('/');
         this.setState({
-            path: this.props.location.pathname.includes('dash'),
+            path: (path.length > 1 && path[1] === 'dash'),
             isUserLoggedIn: logged,
             checkByAuthor: check
         });

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AutheticationService from '../api/./AuthenticationService.js'
+import AuthenticationService  from '../api/./AuthenticationService.js'
 import UserService from '../api/UserService';
 // import Facebook from './Facebook'
 import '../css/LoginComponent.css'
@@ -9,6 +9,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { GoogleLogin } from 'react-google-login';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import ReCAPTCHA from "react-google-recaptcha";
+import ErrorMessage from './ErrorMessage';
 
 const styles = theme => ({
     body: {
@@ -117,7 +118,7 @@ class LoginComponenet extends Component {
         if (response.status === 200) {
             if (response.data.username === this.state.username || response.data.emailId === this.state.emailId || response.data.emailId === this.state.username){
                 console.log('Successful Login')
-                AutheticationService.registerSuccessfulLogin(response.data)
+                AuthenticationService .registerSuccessfulLogin(response.data)
                 this.props.history.push(`/`)
                 window.location.reload() // temp solution to user API call bug
             }else if (response.data.username === "Incorrect Password"){
@@ -221,6 +222,15 @@ class LoginComponenet extends Component {
 	}
 
     render(){
+        const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
+		if(isUserLoggedIn){
+			return (
+				<div style={{marginTop : '20px'}}>
+					<div className="registerBack"/>
+					<ErrorMessage severity='info' text="User Already Logged In"/>
+				</div>
+            )
+        }
         const { classes } = this.props;
 		const captchaStyles = {
 			normal: {
@@ -238,7 +248,6 @@ class LoginComponenet extends Component {
 				margin: 'auto'
 			}
 		}
-
         if (this.state.externalCond){
             return(
                 <Container component="main" maxWidth="xs">
