@@ -82,7 +82,7 @@ const quiz2 = [
     },
     {
         question: 'You need to reference a value stored in an array named B in row 7 column 3. Which syntax is correct within Java for finding the value of this variable?',
-        options: ['B[3,7]','B[3][7]','B[7,3]','B[7][3]'],
+        options: ['B[3,7]','B[3][7]','B[7][3]','B[7,3]'],
         answer: 2
     },
     {

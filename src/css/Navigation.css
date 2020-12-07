@@ -22,6 +22,28 @@
     z-index: 10;
 }
 
+.logOut {
+	display: 'flex';
+	align-items: 'center';
+	flex-wrap: wrap;
+	transition: all 0.25s ease;
+}
+
+.logOut:hover {
+	background-color: #FF4C4C;
+	display: 'flex';
+	align-items: 'center';
+	flex-wrap: wrap;
+}
+
+.logOut .logOutText {
+	transition: all 0.25s ease;
+}
+
+.logOut:hover .logOutText {
+	color: white;
+}
+
 .rightNav {
     display: flex;
     align-items: center;

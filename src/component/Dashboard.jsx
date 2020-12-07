@@ -384,6 +384,7 @@ class SelectedJob extends Component {
     }
 
     render(){
+		const currentUserId = sessionStorage.getItem('authenticatedUserId');
         const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
         const style = {
             paper : {
@@ -441,15 +442,14 @@ class SelectedJob extends Component {
                 return(
                     <Paper style={style.paper}>
                         <Grid container spacing={3}>
-                            {!this.state.appiedStatus && isUserLoggedIn &&
-                                <Button variant="contained" size="small" onClick={this.apply} style={{position: 'absolute', right: 40, zIndex: 5}}>Apply Now</Button>
-                            }
-                        
-                            {this.state.appiedStatus && isUserLoggedIn && 
-                                <Grid item xs={12}>
-                                    <Alert icon={responseDisplay} severity={severity}>{this.state.appiedResponse}</Alert>
-                                </Grid>
-                            }
+  							{(isUserLoggedIn && (currentUserId !== this.state.author)) &&
+								(!this.state.appiedStatus
+								?	<Button variant="contained" size="small" onClick={this.apply} style={{position: 'absolute', right: 40, zIndex: 5}}>Apply Now</Button>
+								
+								:	<Grid item xs={12}>
+										<Alert icon={responseDisplay} severity={severity}>{this.state.appiedResponse}</Alert>
+									</Grid>)
+							}
                             <Grid item xs={12}>
                                 <List style={style.listItem}>
                                     <ListItem style={style.titleItem}>
@@ -464,7 +464,7 @@ class SelectedJob extends Component {
                                                 <a href={'https://' + this.props.job.pageUrl} target="_blank"><p style={{margin: 0}}>{this.props.job.organization}</p></a>
                                                 
                                             ) :
-                                            <p>{this.props.job.organization}</p>
+                                            <p style={{margin: 0}}>{this.props.job.organization}</p>
                                         }
                                     </ListItem>
                                     <ListItem divider style={style.listItem}>

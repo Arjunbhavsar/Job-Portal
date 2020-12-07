@@ -102,6 +102,7 @@ class ManagementComponent extends Component {
         if(this.state.isLoading){
             return (
                 <div style={{marginTop:'20px', marginRight: '20px'}}>
+					<div className="background-container"/>
                     <LoadingComponent/>
                 </div>
             )
@@ -484,9 +485,8 @@ class SelectedManage extends Component {
                                             (this.props.job.pageUrl.includes('http')?
                                                 <a href={this.props.job.pageUrl} target="_blank"><p style={{margin: 0}}>{this.props.job.organization}</p></a>:
                                                 <a href={'https://' + this.props.job.pageUrl} target="_blank"><p style={{margin: 0}}>{this.props.job.organization}</p></a>
-                                                
                                             ) :
-                                            <p>{this.props.job.organization}</p>
+                                            <p style={{margin: 0}}>{this.props.job.organization}</p>
                                         }
                                     </ListItem>
                                     <ListItem divider style={style.listItem}>

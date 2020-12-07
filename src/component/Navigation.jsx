@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from "@material-ui/core/IconButton";
+import Grid from "@material-ui/core/Grid";
 import Menu from '@material-ui/core/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import {AccountCircle as ProfileIcon,
+		Message as MessageIcon,
+		VerifiedUser as VerifiedIcon,
+		Today as ShiftIcon,
+		ExitToApp as LogoutIcon,
+} from '@material-ui/icons';
 import { withRouter } from "react-router";
 
 import JobService from '../api/JobService';
@@ -129,11 +135,19 @@ function Nav() {
             open={isMenuOpen}
             onClose={handleMenuClose}
             >
-                <Link to={"/profile/"+user} className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Profile</MenuItem></Link>
-                <Link to={"/chatHome"} className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Messages</MenuItem></Link>
-                <Link to="/certify" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Certifications</MenuItem></Link>
-                <Link to="/shift" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem">Shift Selection</MenuItem></Link>
-                <Link to="/" className="profileMenuLink"><MenuItem onClick={handleMenuCloseLogout} id="accountIconMenuItem">Log Out</MenuItem></Link>
+                <Link to={"/profile/"+user} className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><ProfileIcon style={{marginRight:'10px'}}/>{user}</MenuItem></Link>
+                <Link to={"/chatHome"} className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><MessageIcon style={{marginRight:'10px'}}/>Messages</MenuItem></Link>
+                <Link to="/certify" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><VerifiedIcon style={{marginRight:'10px'}}/>Certifications</MenuItem></Link>
+                <Link to="/shift" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><ShiftIcon style={{marginRight:'10px'}}/>Shift Selection</MenuItem></Link>
+                <div className='logOut' >
+					<Link to="/" className="profileMenuLink">
+						<MenuItem onClick={handleMenuCloseLogout} id="accountIconMenuItem">
+							<Grid container direction="row" alignItems="center" className='logOutText'>
+								<LogoutIcon style={{marginRight:'10px'}}/>Log Out
+							</Grid>
+						</MenuItem>
+					</Link>
+				</div>
             </Menu>
         );
     }
@@ -142,7 +156,7 @@ function Nav() {
         <>
         <MenuItem onClick={handleProfileMenuOpen} className="account">
             <IconButton >
-                <AccountCircle id="accountIcon" style={spanStyles}/>
+                <ProfileIcon id="accountIcon" style={spanStyles}/>
             </IconButton>
         </MenuItem>
         {renderMenu}
