@@ -732,7 +732,7 @@ class ShiftList extends Component {
 
 	async componentDidMount(){
 		let application = this.props.application;
-		const appData = await ApplicationService.getAllApplied(application.userId).then(result => result.data);
+		const appData = await ApplicationService.getAllAppliedById(application.userId).then(result => result.data);
 		let currentApp;
 		for(let i = 0; i < appData.length; i++) {
 			if(appData[i].jobId === application.jobId)
