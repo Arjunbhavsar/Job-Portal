@@ -568,9 +568,10 @@ class AppList extends Component {
                         }, this)}
                     </List>
                 </Paper>:
-                <Paper style={style.paper}>
-                    <ErrorMessage severity='info' text='No applicants yet' sm={6}/>
-                </Paper>
+                <div style={{marginTop : '20px'}}>
+			<div className="background-container"/>
+			<ErrorMessage severity='info' text="No applicants yet" sm={6}/>
+		</div>
             }</>
         )
     }
