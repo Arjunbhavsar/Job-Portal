@@ -68,7 +68,6 @@ class Navgiation extends Component {
 
     render(){
 		const pathUser = window.location.href.split('/');
-		console.log(pathUser);
 		let selector = pathUser.length >= 4 ? pathUser[3] : undefined;
 		const styleManage = selector === 'manage' ? {borderBottom: '1px white solid'} : {};
 		const stylePost = selector === 'postjob' ? {borderBottom: '1px white solid'} : {};
@@ -131,7 +130,13 @@ function Nav() {
     if (isUserLoggedIn === true){
         spanStyles = {
             color: "var(--light-blue)"
-        };
+		};
+		const pathUser = window.location.href.split('/');
+		let selector = pathUser.length >= 4 ? pathUser[3] : undefined;
+		const styleProfile = selector === 'profile' ? {backgroundColor:'#DCDCDC'} : {};
+		const styleChat = selector === 'chatHome' ? {backgroundColor:'#DCDCDC'} : {};
+		const styleCertify = selector === 'certify' ? {backgroundColor:'#DCDCDC'} : {};
+		const styleShift = selector === 'shift' ? {backgroundColor:'#DCDCDC'} : {};
         renderMenu = (
             // Add information here to check if already logged in and have a seperate menu with if conditionals
             <Menu
@@ -143,10 +148,10 @@ function Nav() {
             open={isMenuOpen}
             onClose={handleMenuClose}
             >
-                <Link to={"/profile/"+user} className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><ProfileIcon style={{marginRight:'10px'}}/>{user}</MenuItem></Link>
-                <Link to={"/chatHome"} className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><MessageIcon style={{marginRight:'10px'}}/>Messages</MenuItem></Link>
-                <Link to="/certify" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><VerifiedIcon style={{marginRight:'10px'}}/>Certifications</MenuItem></Link>
-                <Link to="/shift" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><ShiftIcon style={{marginRight:'10px'}}/>Shift Selection</MenuItem></Link>
+                <div style={styleProfile}><Link to={"/profile/"+user} className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><ProfileIcon style={{marginRight:'10px'}}/>{user}</MenuItem></Link></div>
+				<div style={styleChat}><Link to={"/chatHome"} className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><MessageIcon style={{marginRight:'10px'}}/>Messages</MenuItem></Link></div>
+                <div style={styleCertify}><Link to="/certify" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><VerifiedIcon style={{marginRight:'10px'}}/>Certifications</MenuItem></Link></div>
+                <div style={styleShift}><Link to="/shift" className="profileMenuLink"><MenuItem onClick={handleMenuClose} id="accountIconMenuItem"><ShiftIcon style={{marginRight:'10px'}}/>Shift Selection</MenuItem></Link></div>
                 <div className='logOut' >
 					<Link to="/" className="profileMenuLink">
 						<MenuItem onClick={handleMenuCloseLogout} id="accountIconMenuItem">
