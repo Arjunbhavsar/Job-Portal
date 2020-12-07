@@ -442,7 +442,7 @@ class SelectedJob extends Component {
                     <Paper style={style.paper}>
                         <Grid container spacing={3}>
                             {!this.state.appiedStatus && isUserLoggedIn &&
-                                <Button variant="contained" size="small" onClick={this.apply} style={{position: 'absolute', right: 40}}>Apply Now</Button>
+                                <Button variant="contained" size="small" onClick={this.apply} style={{position: 'absolute', right: 40, zIndex: 5}}>Apply Now</Button>
                             }
                         
                             {this.state.appiedStatus && isUserLoggedIn && 
