@@ -696,7 +696,7 @@ class Application extends Component {
                     <ListItemIcon title={hoverText}>
                         <AccountCircleOutlinedIcon style={accountColor}/>
                     </ListItemIcon>
-					<ListItemText primary={this.state.application.firstName + ' ' + this.state.application.lastName} />}
+					<ListItemText primary={this.state.application.firstName + ' ' + this.state.application.lastName} />
                 </ListItem>
                 <Collapse in={this.state.open} timeout="auto" unmountOnExit>
                     <ListItem>
