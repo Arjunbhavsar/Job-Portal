@@ -223,7 +223,10 @@ class ProfileComponent extends Component {
 							<Paper style={style.Paper}>
 								<Grid container>
 									<>
-										<Grid container direction="row" spacing={3}>
+										<Grid style={{position:'relative'}} container direction="row" spacing={3}>
+											<Grid style={{zindex:'2', position:'absolute'}} item xs={12} container justify="flex-end">
+												{this.state.editable && (!this.state.edit_mode ? <EditIcon style={{cursor: "pointer"}} onClick={this.editing}/> : <SaveIcon style={{cursor: "pointer"}} onClick={this.editing}/>)}
+											</Grid>
 											<div style={{"paddingRight" : "2.5%"}}>
 												<ProfileUploader key={this.state.userObj.username} username={this.state.userObj.username}/>
 											</div>
@@ -263,9 +266,12 @@ class ProfileComponent extends Component {
 										</Grid>
 									</>
 								</Grid>
-								<span style={{'display' : 'inline', 'position':'absolute', 'right':'27%', 'top' : '5%'}}>
+								{/* <Grid item xs={12} container justify="flex-end">
 									{this.state.editable && (!this.state.edit_mode ? <EditIcon style={{cursor: "pointer"}} onClick={this.editing}/> : <SaveIcon style={{cursor: "pointer"}} onClick={this.editing}/>)}
-								</span>
+								</Grid> */}
+								{/* <span style={{'display' : 'inline', 'position':'absolute', 'right':'27%', 'top' : '5%'}}>
+									{this.state.editable && (!this.state.edit_mode ? <EditIcon style={{cursor: "pointer"}} onClick={this.editing}/> : <SaveIcon style={{cursor: "pointer"}} onClick={this.editing}/>)}
+								</span> */}
 							</Paper>
 						</Grid>
 						<Grid item sm={3}>
