@@ -3,8 +3,9 @@ import { Paper, Grid, List, ListItem, ListItemText, Divider, ButtonGroup, Button
 import {LocationOn as LocationOnIcon,
         Business as BusinessIcon,
         Link as LinkIcon,
-        NotInterested as NotInterestedIcon,
-        CheckCircleOutline as CheckCircleOutlineIcon,
+		HourglassEmpty as HourglassEmptyIcon,
+		CheckCircleOutline as CheckCircleOutlineIcon,
+		NotInterested as NotInterestedIcon,
         Email as EmailIcon,
         Note as NoteIcon,
         Edit as EditIcon,
@@ -592,6 +593,7 @@ class Application extends Component {
             shiftData: undefined,
         }
         this.handleClick = this.handleClick.bind(this);
+        this.handleStatus = this.handleStatus.bind(this);
         this.decide = this.decide.bind(this);
     }
 
@@ -620,7 +622,35 @@ class Application extends Component {
 
     handleClick() {
 		this.setState({open : !this.state.open});
-    }
+	}
+	
+	async handleStatus(event, newStatus) {
+		if(newStatus !== null) {
+			let ids = [this.state.application.jobId, this.state.application.userId];
+			let res;
+			let temp;
+			switch(newStatus) {
+			case 'Accepted'	:
+				res = await ApplicationService.acceptApplication(ids)
+				temp = this.state.application
+				temp.status = res.data.status
+				this.setState({application: temp})
+				break;
+			case 'Denied'	:
+				res = await ApplicationService.denyApplication(ids)
+				temp = this.state.application
+				temp.status = res.data.status
+				this.setState({application: temp})
+				break;
+			default			:
+				res = await ApplicationService.pendApplication(ids)
+				temp = this.state.application
+				temp.status = res.data.status
+				this.setState({application: temp})
+				break;
+			}
+		}
+	}
 
     async decide(event){
         if(event === 'accept'){
@@ -639,22 +669,34 @@ class Application extends Component {
             this.setState({
                 application: temp
             })
+        }else if(event === 'pend'){
+            const ids = [this.state.application.jobId, this.state.application.userId]
+            const res = await ApplicationService.pendApplication(ids)
+            let temp = this.state.application
+            temp.status = res.data.status
+            this.setState({
+                application: temp
+            })
         }
     }
     
     render(){
         let hoverText = this.state.application.firstName + ' ' + this.state.application.lastName
         let resumeExists = this.state.application.resumeFileId !== null
-
+		let accountColor;
+		switch(this.state.application.status) {
+		case 'Denied'	: accountColor = {color: red[500]}; break;
+		case 'Accepted'	: accountColor = {color: green[500]}; break;
+		default			: accountColor = {color: orange[500]}; break;
+		}
         return(
             <>
                 <Divider style={{backgroundColor: "rgba(0, 0, 0, 0.5)"}} />
                 <ListItem button onClick={this.handleClick}>
                     <ListItemIcon title={hoverText}>
-                        <AccountCircleOutlinedIcon />
+                        <AccountCircleOutlinedIcon style={accountColor}/>
                     </ListItemIcon>
-                    <ListItemText primary={this.state.application.firstName + ' ' + this.state.application.lastName} />
-                    {this.state.open ? <ExpandLess /> : <ExpandMore />}
+					<ListItemText primary={this.state.application.firstName + ' ' + this.state.application.lastName} />}
                 </ListItem>
                 <Collapse in={this.state.open} timeout="auto" unmountOnExit>
                     <ListItem>
@@ -676,14 +718,14 @@ class Application extends Component {
                     </Link>:
                     <ListItem>
                         <ListItemIcon title="resume"><NoteIcon /></ListItemIcon>
-                        <Alert variant="outlined" severity='info' style={{'width':'fit-content'}}>{this.state.application.firstName + ' has not uploaded a resume.'}</Alert>
+                        <Alert variant="outlined" severity='info' style={{'width':'fit-content'}}>{this.state.application.firstName + ' has not uploaded a resume'}</Alert>
                     </ListItem>
                     }
                     <ListItem>
                         <ListItemIcon title="certification"><VerifiedUserIcon /></ListItemIcon>
                         {this.state.certsExist ?
                             <ViewCertificates userId={this.state.application.userId} row/>:
-                            <Alert variant="outlined" severity='info' style={{'width':'fit-content'}}>No certifications completed</Alert>
+                            <Alert variant="outlined" severity='info' style={{'width':'fit-content'}}>no certifications completed</Alert>
                         }
                     </ListItem>
                     {this.state.shiftsExist ?
@@ -694,7 +736,32 @@ class Application extends Component {
 						</ListItem>
 					}
                     <ListItem style={{justifyContent: "center"}}>
-                        {this.state.application.status === "Pending" &&
+						<ToggleButtonGroup
+						value={this.state.application.status}
+						exclusive
+						onChange={this.handleStatus}
+						aria-label="text alignment"
+						>
+						<ToggleButton title='deny' value="Denied" aria-label="left aligned">
+							{this.state.application.status === 'Denied'
+							? <NotInterestedIcon style={{marginLeft:'20px', marginRight:'20px', color: red[500]}} />
+							: <NotInterestedIcon style={{marginLeft:'20px', marginRight:'20px', color: red[0]}} />
+							}
+						</ToggleButton>
+						<ToggleButton title='pending' value="Pending" aria-label="centered">
+							{this.state.application.status === 'Pending'
+							? <HourglassEmptyIcon style={{marginLeft:'20px', marginRight:'20px', color: orange[500]}} />
+							: <HourglassEmptyIcon style={{marginLeft:'20px', marginRight:'20px', color: orange[0]}} />
+							}
+						</ToggleButton>
+						<ToggleButton title='accept' value="Accepted" aria-label="right aligned">
+							{this.state.application.status === 'Accepted'
+							? <CheckCircleOutlineIcon style={{marginLeft:'20px', marginRight:'20px', color: green[500]}} />
+							: <CheckCircleOutlineIcon style={{marginLeft:'20px', marginRight:'20px', color: green[0]}} />
+							}
+						</ToggleButton>
+						</ToggleButtonGroup>
+                        {/* {this.state.application.status === "Pending" &&
                         <ButtonGroup aria-label="manage secion">
                             <Button onClick={() => { this.decide('accept') }} style={{backgroundColor: "#58fd52", fontWeight: 600}}>Accept</Button>
                             <Button onClick={() => { this.decide('deny') }} style={{backgroundColor: "#ff6464", fontWeight: 600}}>Deny</Button>
@@ -708,7 +775,7 @@ class Application extends Component {
                         <>
                             <ListItemIcon title="status"><NotInterestedIcon style={{color: red[500]}}/></ListItemIcon>
 						    <ListItemText primary={this.state.application.status} style={{color: red[500]}}/>
-                        </>}
+                        </>} */}
                     </ListItem>
                 </Collapse>
             </>
