@@ -97,6 +97,19 @@ class ApplicationService{
             }
         })
     }
+	
+	pendApplication(ids){
+        const {appsTag} = this.state;
+		let username = 'user'
+		let password =  'password'
+        let basicAuthHeader = 'Basic '+window.btoa(username+':'+password)
+		return axios.post(appsTag +'pendApp/', ids,
+        {
+            headers:{
+                authorization: basicAuthHeader
+            }
+        })
+    }
 
     denyApplication(ids){
         const {appsTag} = this.state;
