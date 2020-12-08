@@ -28,6 +28,11 @@ public class ApplicationController {
 		return appService.acceptApplicant(ids.get(0), ids.get(1));
 	}
 	
+	@PostMapping("/pendApp")
+	public Application pendApp(@RequestBody List<String> ids) {
+		return appService.pendApplicant(ids.get(0), ids.get(1));
+	}
+	
 	@PostMapping("/denyApp")
 	public Application denyApp(@RequestBody List<String> ids) {
 		return appService.denyApplicant(ids.get(0), ids.get(1));
