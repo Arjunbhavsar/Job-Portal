@@ -71,6 +71,18 @@ public class ApplicationService {
 	}
 	
 	@Transactional
+	public Application pendApplicant(String jobId, String userId) {
+		List<Application> appList = appDao.findAllByJobId(jobId);
+		for(Application app : appList) {
+			if(app.getUserId().equals(userId)) {
+				app.setStatus("Pending");
+				return appDao.save(app);
+			}
+		}
+		return null;
+	}
+	
+	@Transactional
 	public Application denyApplicant(String jobId, String userId) {
 		List<Application> appList = appDao.findAllByJobId(jobId);
 		for(Application app : appList) {
