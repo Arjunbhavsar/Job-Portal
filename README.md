@@ -1,4 +1,4 @@
-[<img src="https://i.imgur.com/XvRWSzB.png" title="When visiting our website keep in mind that it is deployed on Heroku for free so it will take some time to launch." height="150" />](https://quick-pick-job.herokuapp.com/)
+[<img src="screenshot/logo.png" title="When visiting our website keep in mind that it is deployed on Heroku for free so it will take some time to launch." height="150" />](https://quick-pick-job.herokuapp.com/)
 
 ### Click Logo For Demo
 
@@ -34,9 +34,9 @@ The website tracks availability to match the seekers and employers, and checks q
 #### Job Creation and Management
 - Any user can create a job and can manage applicants
 
-<img src="https://i.imgur.com/U7p70Gf.png" width="40%" style="margin-right:5%" /><img src="https://i.imgur.com/JlV645P.png" width="40%" /><br/>
-<img src="https://i.imgur.com/TYlQwWS.png" width="40%" style="margin-right:5%" /><img src="https://i.imgur.com/Y9nJF5n.png" width="40%" /><br/>
-<img src="https://i.imgur.com/zXtqu2N.png" width="40%" style="margin-right:5%" /><img src="https://i.imgur.com/5S3Aboo.png" width="40%" /><br/>
+<img src="screenshot/landing.png" width="40%" style="margin-right:5%" /><img src="screenshot/login.png" width="40%" /><br/>
+<img src="screenshot/dashboard.png" width="40%" style="margin-right:5%" /><img src="screenshot/profile.png" width="40%" /><br/>
+<img src="screenshot/timeselect.png" width="40%" style="margin-right:5%" /><img src="screenshot/manage.png" width="40%" /><br/>
 
 ---
 
